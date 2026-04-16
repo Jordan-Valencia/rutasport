@@ -1,0 +1,408 @@
+"use client"
+
+import Image from "next/image"
+import Link from "next/link"
+import { Search, Heart, ShoppingBag, User, ChevronRight, Menu, X, Play } from "lucide-react"
+import { useState } from "react"
+
+const teams = [
+  { name: "(Equipo 1)", country: "(País)" },
+  { name: "(Equipo 2)", country: "(País)" },
+  { name: "(Equipo 3)", country: "(País)" },
+  { name: "(Equipo 4)", country: "(País)" },
+  { name: "(Equipo 5)", country: "(País)" },
+  { name: "(Equipo 6)", country: "(País)" },
+]
+
+const products = [
+  { name: "(Modelo del Tenis)", price: "(Precio)", category: "Fútbol", image: "/images/product-running-1.jpg" },
+  { name: "(Modelo del Tenis)", price: "(Precio)", category: "Running", image: "/images/product-training-1.jpg" },
+  { name: "(Modelo del Tenis)", price: "(Precio)", category: "Basketball", image: "/images/product-basketball-1.jpg" },
+  { name: "(Modelo del Tenis)", price: "(Precio)", category: "Training", image: "/images/product-casual-1.jpg" },
+]
+
+const sports = ["Fútbol", "Running", "Basketball", "Training", "Tenis", "Golf"]
+
+export default function Page2() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [activeTeamTab, setActiveTeamTab] = useState("Selecciones")
+  const [activeSport, setActiveSport] = useState("Fútbol")
+
+  return (
+    <div className="min-h-screen bg-white text-black">
+      {/* Top Banner - Blue accent */}
+      <div className="bg-[#1a237e] text-white text-center py-2.5 text-xs font-medium tracking-wide">
+        HASTA 40% DE DESCUENTO EN SELECCIÓN DE PRODUCTOS
+      </div>
+
+      {/* Main Header */}
+      <header className="sticky top-0 z-50 bg-white shadow-sm">
+        <div className="flex items-center justify-between px-4 lg:px-8 py-4">
+          {/* Logo */}
+          <Link href="/" className="flex-shrink-0">
+            <span className="text-3xl font-black" style={{ fontFamily: 'var(--font-display)' }}>
+              (LOGO)
+            </span>
+          </Link>
+
+          {/* Desktop Navigation */}
+          <nav className="hidden lg:flex items-center gap-6">
+            <Link href="/" className="text-sm font-bold tracking-wide hover:text-[#1a237e] transition-colors">NOVEDADES</Link>
+            <Link href="/1" className="text-sm font-bold tracking-wide hover:text-[#1a237e] transition-colors">MUJER</Link>
+            <Link href="/2" className="text-sm font-bold tracking-wide text-[#1a237e] border-b-2 border-[#1a237e] pb-1">HOMBRE</Link>
+            <Link href="#" className="text-sm font-bold tracking-wide hover:text-[#1a237e] transition-colors">NIÑOS</Link>
+            <Link href="#" className="text-sm font-bold tracking-wide hover:text-[#1a237e] transition-colors">DEPORTE</Link>
+            <Link href="#" className="text-sm font-bold tracking-wide text-red-600 hover:text-red-700 transition-colors">OUTLET</Link>
+          </nav>
+
+          {/* Icons */}
+          <div className="flex items-center gap-4">
+            <div className="hidden lg:flex items-center border border-gray-300 px-4 py-2">
+              <input 
+                type="text" 
+                placeholder="Buscar" 
+                className="bg-transparent text-sm outline-none w-48"
+              />
+              <Search className="w-5 h-5 text-gray-400" />
+            </div>
+            <button className="hidden lg:block">
+              <User className="w-6 h-6" />
+            </button>
+            <button>
+              <Heart className="w-6 h-6" />
+            </button>
+            <button className="relative">
+              <ShoppingBag className="w-6 h-6" />
+              <span className="absolute -top-1 -right-1 w-5 h-5 bg-[#1a237e] text-white text-xs flex items-center justify-center rounded-full">0</span>
+            </button>
+            <button className="lg:hidden" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile Menu */}
+        {mobileMenuOpen && (
+          <nav className="lg:hidden bg-white border-t py-6">
+            <div className="flex flex-col px-4 gap-4">
+              <Link href="/" className="text-lg font-bold">NOVEDADES</Link>
+              <Link href="/1" className="text-lg font-bold">MUJER</Link>
+              <Link href="/2" className="text-lg font-bold text-[#1a237e]">HOMBRE</Link>
+              <Link href="#" className="text-lg font-bold">NIÑOS</Link>
+              <Link href="#" className="text-lg font-bold">DEPORTE</Link>
+              <Link href="#" className="text-lg font-bold text-red-600">OUTLET</Link>
+            </div>
+          </nav>
+        )}
+      </header>
+
+      {/* Hero - Video Style with Large Typography */}
+      <section className="relative h-[70vh] lg:h-[85vh] overflow-hidden">
+        <Image
+          src="/images/hero-lifestyle-2.jpg"
+          alt="Hero"
+          fill
+          className="object-cover"
+          priority
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#1a237e]/90 via-[#1a237e]/60 to-transparent" />
+        <div className="absolute inset-0 flex items-center">
+          <div className="px-4 lg:px-16 max-w-3xl">
+            <span className="inline-block border border-white/50 text-white px-4 py-1 text-xs font-bold tracking-widest mb-6">
+              (CATEGORÍA)
+            </span>
+            <h1 className="text-white text-5xl lg:text-8xl font-black mb-6" style={{ fontFamily: 'var(--font-display)' }}>
+              (NOMBRE DE LA CAMPAÑA DEPORTIVA)
+            </h1>
+            <p className="text-white/80 text-lg lg:text-xl mb-8 max-w-lg">
+              (Descripción inspiradora que conecte con el espíritu deportivo)
+            </p>
+            <div className="flex flex-wrap gap-4">
+              <button className="bg-white text-[#1a237e] px-8 py-4 font-bold text-sm tracking-wide hover:bg-gray-100 transition-colors flex items-center gap-2">
+                COMPRAR AHORA <ChevronRight className="w-4 h-4" />
+              </button>
+              <button className="border-2 border-white text-white px-8 py-4 font-bold text-sm tracking-wide hover:bg-white hover:text-[#1a237e] transition-colors flex items-center gap-3">
+                <Play className="w-5 h-5 fill-current" /> VER VIDEO
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Find Your Team Section */}
+      <section className="py-16 px-4 lg:px-8 border-b-4 border-black">
+        <h2 className="text-3xl lg:text-5xl font-black mb-8" style={{ fontFamily: 'var(--font-display)' }}>
+          ENCUENTRA TU EQUIPO
+        </h2>
+        
+        {/* Team Tabs */}
+        <div className="flex gap-2 mb-10">
+          {["Selecciones", "Clubes Locales", "Clubes"].map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTeamTab(tab)}
+              className={`px-5 py-2.5 text-sm font-bold border transition-colors ${
+                activeTeamTab === tab 
+                  ? 'bg-black text-white border-black' 
+                  : 'bg-white text-black border-gray-300 hover:border-black'
+              }`}
+            >
+              {tab}
+            </button>
+          ))}
+        </div>
+
+        {/* Teams Grid */}
+        <div className="grid grid-cols-3 lg:grid-cols-6 gap-4 lg:gap-8">
+          {teams.map((team, i) => (
+            <div key={i} className="group cursor-pointer text-center">
+              <div className="aspect-square border border-gray-200 flex items-center justify-center mb-3 group-hover:border-black transition-colors p-4">
+                <div className="w-16 h-16 lg:w-20 lg:h-20 bg-gray-100 rounded-full flex items-center justify-center">
+                  <span className="text-2xl font-bold text-gray-400">{team.name.charAt(1)}</span>
+                </div>
+              </div>
+              <p className="text-sm font-medium">{team.country}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Sport Categories */}
+      <section className="py-16 px-4 lg:px-8">
+        <h2 className="text-3xl lg:text-4xl font-black mb-8" style={{ fontFamily: 'var(--font-display)' }}>
+          COMPRAR POR DEPORTE
+        </h2>
+        <div className="flex gap-3 overflow-x-auto pb-4 mb-10">
+          {sports.map((sport) => (
+            <button
+              key={sport}
+              onClick={() => setActiveSport(sport)}
+              className={`px-6 py-3 text-sm font-bold whitespace-nowrap transition-colors ${
+                activeSport === sport 
+                  ? 'bg-[#1a237e] text-white' 
+                  : 'bg-gray-100 text-black hover:bg-gray-200'
+              }`}
+            >
+              {sport}
+            </button>
+          ))}
+        </div>
+
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          {products.map((product, i) => (
+            <div key={i} className="group cursor-pointer">
+              <div className="relative bg-[#ebedee] aspect-square mb-3">
+                <Image
+                  src={product.image}
+                  alt={product.name}
+                  fill
+                  className="object-contain p-4 group-hover:scale-105 transition-transform"
+                />
+                <button className="absolute top-3 right-3 w-9 h-9 bg-white rounded-full flex items-center justify-center shadow-sm opacity-0 group-hover:opacity-100 transition-opacity">
+                  <Heart className="w-4 h-4" />
+                </button>
+              </div>
+              <p className="text-xs text-gray-500 mb-1">{product.category}</p>
+              <h3 className="font-bold text-sm mb-1">{product.name}</h3>
+              <p className="font-bold text-sm">{product.price}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Two Feature Banners */}
+      <section className="grid lg:grid-cols-2 gap-1 px-1">
+        <div className="relative h-[450px] lg:h-[550px] bg-[#1a237e] overflow-hidden group">
+          <Image
+            src="/images/sneaker-2.jpg"
+            alt="Feature 1"
+            fill
+            className="object-cover opacity-80 group-hover:scale-105 transition-transform duration-700"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#1a237e] via-[#1a237e]/40 to-transparent" />
+          <div className="absolute bottom-8 left-8 right-8 text-white">
+            <span className="text-xs font-bold tracking-widest opacity-70">(COLABORACIÓN)</span>
+            <h3 className="text-3xl lg:text-4xl font-black mt-2 mb-4" style={{ fontFamily: 'var(--font-display)' }}>
+              (NOMBRE PRODUCTO / COLECCIÓN)
+            </h3>
+            <p className="text-white/70 mb-6 max-w-sm">
+              (Descripción breve de la colaboración o producto especial)
+            </p>
+            <button className="bg-white text-[#1a237e] px-6 py-3 font-bold text-sm tracking-wide hover:bg-gray-100 transition-colors">
+              DESCUBRIR
+            </button>
+          </div>
+        </div>
+        <div className="relative h-[450px] lg:h-[550px] bg-black overflow-hidden group">
+          <Image
+            src="/images/sneaker-1.jpg"
+            alt="Feature 2"
+            fill
+            className="object-cover opacity-70 group-hover:scale-105 transition-transform duration-700"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+          <div className="absolute bottom-8 left-8 right-8 text-white">
+            <span className="text-xs font-bold tracking-widest opacity-70">(INNOVACIÓN)</span>
+            <h3 className="text-3xl lg:text-4xl font-black mt-2 mb-4" style={{ fontFamily: 'var(--font-display)' }}>
+              (TECNOLOGÍA DEL PRODUCTO)
+            </h3>
+            <p className="text-white/70 mb-6 max-w-sm">
+              (Descripción de la tecnología o innovación destacada)
+            </p>
+            <button className="bg-white text-black px-6 py-3 font-bold text-sm tracking-wide hover:bg-gray-100 transition-colors">
+              EXPLORAR
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Best Sellers Grid */}
+      <section className="py-16 px-4 lg:px-8">
+        <div className="flex items-center justify-between mb-10">
+          <h2 className="text-3xl lg:text-4xl font-black" style={{ fontFamily: 'var(--font-display)' }}>
+            LOS MÁS VENDIDOS
+          </h2>
+          <Link href="#" className="text-sm font-bold underline underline-offset-4 hover:text-[#1a237e]">
+            Ver todo
+          </Link>
+        </div>
+        <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
+          {[...products, products[0]].map((product, i) => (
+            <div key={i} className="group cursor-pointer">
+              <div className="relative bg-[#ebedee] aspect-square mb-3">
+                <Image
+                  src={product.image}
+                  alt={product.name}
+                  fill
+                  className="object-contain p-4 group-hover:scale-105 transition-transform"
+                />
+                <button className="absolute top-3 right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm opacity-0 group-hover:opacity-100 transition-opacity">
+                  <Heart className="w-4 h-4" />
+                </button>
+                {i === 0 && (
+                  <span className="absolute top-3 left-3 bg-[#1a237e] text-white px-2 py-1 text-xs font-bold">
+                    BEST SELLER
+                  </span>
+                )}
+              </div>
+              <p className="text-xs text-gray-500 mb-1">{product.category}</p>
+              <h3 className="font-bold text-sm mb-1">{product.name}</h3>
+              <p className="font-bold text-sm">{product.price}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Full Width CTA */}
+      <section className="relative h-[500px] lg:h-[600px]">
+        <Image
+          src="/images/hero-lifestyle-3.jpg"
+          alt="CTA"
+          fill
+          className="object-cover"
+        />
+        <div className="absolute inset-0 bg-black/50" />
+        <div className="absolute inset-0 flex items-center justify-center text-center px-4">
+          <div className="max-w-3xl">
+            <span className="inline-block bg-white text-black px-4 py-1 text-xs font-bold tracking-widest mb-6">
+              MEMBRESÍA EXCLUSIVA
+            </span>
+            <h2 className="text-white text-4xl lg:text-7xl font-black mb-6" style={{ fontFamily: 'var(--font-display)' }}>
+              ÚNETE AL CLUB (NOMBRE)
+            </h2>
+            <p className="text-white/80 text-lg mb-8 max-w-xl mx-auto">
+              (Beneficios de unirse: descuentos exclusivos, acceso anticipado, envío gratis, etc.)
+            </p>
+            <button className="bg-white text-black px-10 py-4 font-bold text-sm tracking-wide hover:bg-[#1a237e] hover:text-white transition-colors">
+              REGISTRARSE GRATIS
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* More Products Carousel Style */}
+      <section className="py-16 px-4 lg:px-8 bg-gray-50">
+        <div className="flex items-center justify-between mb-10">
+          <h2 className="text-3xl lg:text-4xl font-black" style={{ fontFamily: 'var(--font-display)' }}>
+            NUEVOS LANZAMIENTOS
+          </h2>
+          <Link href="#" className="text-sm font-bold underline underline-offset-4">Ver todo</Link>
+        </div>
+        <div className="flex gap-4 overflow-x-auto pb-4">
+          {[...products, ...products].map((product, i) => (
+            <div key={i} className="flex-shrink-0 w-[260px] group cursor-pointer">
+              <div className="relative bg-white aspect-square mb-3">
+                <Image
+                  src={product.image}
+                  alt={product.name}
+                  fill
+                  className="object-contain p-4 group-hover:scale-105 transition-transform"
+                />
+                <button className="absolute top-3 right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md opacity-0 group-hover:opacity-100 transition-opacity">
+                  <Heart className="w-4 h-4" />
+                </button>
+              </div>
+              <p className="text-xs text-gray-500 mb-1">{product.category}</p>
+              <h3 className="font-bold text-sm mb-1">{product.name}</h3>
+              <p className="font-bold text-sm">{product.price}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-black text-white">
+        <div className="px-4 lg:px-8 py-16">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+            <div>
+              <h4 className="font-bold mb-5 text-sm tracking-wide">PRODUCTOS</h4>
+              <ul className="space-y-3 text-sm text-gray-400">
+                <li><Link href="#" className="hover:text-white transition-colors">Calzado</Link></li>
+                <li><Link href="#" className="hover:text-white transition-colors">Ropa</Link></li>
+                <li><Link href="#" className="hover:text-white transition-colors">Accesorios</Link></li>
+                <li><Link href="#" className="hover:text-white transition-colors">Outlet</Link></li>
+                <li><Link href="#" className="hover:text-white transition-colors">Nuevos Lanzamientos</Link></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-bold mb-5 text-sm tracking-wide">DEPORTES</h4>
+              <ul className="space-y-3 text-sm text-gray-400">
+                <li><Link href="#" className="hover:text-white transition-colors">Fútbol</Link></li>
+                <li><Link href="#" className="hover:text-white transition-colors">Running</Link></li>
+                <li><Link href="#" className="hover:text-white transition-colors">Basketball</Link></li>
+                <li><Link href="#" className="hover:text-white transition-colors">Training</Link></li>
+                <li><Link href="#" className="hover:text-white transition-colors">Outdoor</Link></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-bold mb-5 text-sm tracking-wide">AYUDA</h4>
+              <ul className="space-y-3 text-sm text-gray-400">
+                <li><Link href="#" className="hover:text-white transition-colors">Centro de Ayuda</Link></li>
+                <li><Link href="#" className="hover:text-white transition-colors">Estado del Pedido</Link></li>
+                <li><Link href="#" className="hover:text-white transition-colors">Devoluciones</Link></li>
+                <li><Link href="#" className="hover:text-white transition-colors">Guía de Tallas</Link></li>
+                <li><Link href="#" className="hover:text-white transition-colors">Contacto</Link></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-bold mb-5 text-sm tracking-wide">SOBRE NOSOTROS</h4>
+              <ul className="space-y-3 text-sm text-gray-400">
+                <li><Link href="#" className="hover:text-white transition-colors">Nuestra Historia</Link></li>
+                <li><Link href="#" className="hover:text-white transition-colors">Sostenibilidad</Link></li>
+                <li><Link href="#" className="hover:text-white transition-colors">Carreras</Link></li>
+                <li><Link href="#" className="hover:text-white transition-colors">Inversores</Link></li>
+                <li><Link href="#" className="hover:text-white transition-colors">Prensa</Link></li>
+              </ul>
+            </div>
+          </div>
+          <div className="border-t border-gray-800 pt-8">
+            <div className="flex flex-col lg:flex-row items-center justify-between gap-4">
+              <span className="text-3xl font-black" style={{ fontFamily: 'var(--font-display)' }}>(LOGO)</span>
+              <p className="text-sm text-gray-500">© 2026 (Nombre de la Empresa). Todos los derechos reservados.</p>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  )
+}

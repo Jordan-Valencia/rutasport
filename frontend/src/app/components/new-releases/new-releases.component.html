@@ -1,0 +1,33 @@
+<section class="py-16 px-4 lg:px-8 bg-gray-50">
+  <div class="flex items-center justify-between mb-10">
+    <h2 class="text-3xl lg:text-4xl font-black">
+      NUEVOS LANZAMIENTOS
+    </h2>
+    <a routerLink="/nuevos" class="text-sm font-bold underline underline-offset-4 hover:text-[#1a237e]">
+      Ver todo
+    </a>
+  </div>
+
+  <div class="flex gap-4 overflow-x-auto pb-4">
+    @for (product of products; track product.name; let i = $index) {
+      <div class="flex-shrink-0 w-[260px] group cursor-pointer">
+        <div class="relative bg-white aspect-square mb-3">
+          <img
+            [src]="product.image"
+            [alt]="product.name"
+            class="object-contain p-4 group-hover:scale-105 transition-transform w-full h-full"
+            onerror="this.parentElement.style.backgroundColor='#eee'"
+          />
+          <button class="absolute top-3 right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md opacity-0 group-hover:opacity-100 transition-opacity">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+            </svg>
+          </button>
+        </div>
+        <p class="text-xs text-gray-500 mb-1">{{ product.category }}</p>
+        <h3 class="font-bold text-sm mb-1">{{ product.name }}</h3>
+        <p class="font-bold text-sm">{{ product.price }}</p>
+      </div>
+    }
+  </div>
+</section>

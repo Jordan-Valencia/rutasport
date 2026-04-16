@@ -1,0 +1,33 @@
+<section class="grid lg:grid-cols-2 gap-1 px-1">
+  @for (banner of banners; track banner.title; let i = $index) {
+    <div
+      class="relative h-[450px] lg:h-[550px] overflow-hidden group"
+      [ngStyle]="{ 'background-color': banner.bgColor }"
+    >
+      <img
+        [src]="banner.image"
+        [alt]="banner.title"
+        class="absolute inset-0 w-full h-full object-cover opacity-70 group-hover:scale-105 transition-transform duration-700"
+        onerror="this.style.opacity='0.5'"
+      />
+
+      <div
+        class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"
+        [ngStyle]="{ 'from': banner.bgColor, 'via': banner.bgColor + '66' }"
+      ></div>
+
+      <div class="absolute bottom-8 left-8 right-8 text-white">
+        <span class="text-xs font-bold tracking-widest opacity-70">{{ banner.subtitle }}</span>
+        <h3 class="text-3xl lg:text-4xl font-black mt-2 mb-4">
+          {{ banner.title }}
+        </h3>
+        <p class="text-white/70 mb-6 max-w-sm">
+          {{ banner.description }}
+        </p>
+        <button class="bg-white text-black px-6 py-3 font-bold text-sm tracking-wide hover:bg-gray-100 transition-colors">
+          {{ banner.buttonText }}
+        </button>
+      </div>
+    </div>
+  }
+</section>
