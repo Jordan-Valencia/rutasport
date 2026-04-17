@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install *)",
+      "Bash(npx drizzle-kit *)",
+      "Bash(sqlite3 *)",
+      "mcp__plugin_everything-claude-code_sequential-thinking__sequentialthinking"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\Jordan\\Desktop\\trabajos\\RutaSport\\backend",
+      "C:\\Users\\Jordan\\Desktop\\trabajos\\RutaSport"
+    ]
+  }
+}
