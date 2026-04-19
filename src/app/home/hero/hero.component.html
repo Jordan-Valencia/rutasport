@@ -1,0 +1,73 @@
+<section class="relative h-[70vh] lg:h-[85vh] overflow-hidden bg-[#1a237e]">
+
+  @if (heroes().length > 0) {
+    @let hero = heroes()[activeIndex()];
+
+    <!-- Background image -->
+    <img
+      [src]="hero.imageUrl || '/images/hero-lifestyle-2.jpg'"
+      [alt]="hero.campaignName"
+      class="hero-img absolute inset-0 w-full h-full object-cover"
+    />
+
+    <!-- Gradient overlay -->
+    <div class="absolute inset-0 bg-linear-to-r from-[#1a237e]/90 via-[#1a237e]/55 to-transparent"></div>
+
+    <!-- Content -->
+    <div class="hero-slide-content absolute inset-0 flex items-center">
+      <div class="px-4 lg:px-16 max-w-3xl">
+        <span class="hero-badge inline-block border border-white/50 text-white px-4 py-1 text-xs font-bold tracking-widest mb-6">
+          {{ hero.category || 'LIFESTYLE' }}
+        </span>
+        <h1 class="hero-title text-white text-5xl lg:text-8xl font-black mb-6 leading-none">
+          {{ hero.campaignName }}
+        </h1>
+        @if (hero.description) {
+          <p class="hero-desc text-white/80 text-lg lg:text-xl mb-8 max-w-lg">
+            {{ hero.description }}
+          </p>
+        }
+        <div class="flex flex-wrap gap-4">
+          <button class="hero-btn bg-white text-[#1a237e] px-8 py-4 font-bold text-sm tracking-wide hover:bg-gray-100 transition-colors flex items-center gap-2">
+            {{ hero.ctaText || 'COMPRAR AHORA' }}
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+          </button>
+          @if (hero.videoUrl) {
+            <button class="hero-btn border-2 border-white text-white px-8 py-4 font-bold text-sm tracking-wide hover:bg-white hover:text-[#1a237e] transition-colors flex items-center gap-3">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              VER VIDEO
+            </button>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Arrows (only if multiple heroes) -->
+    @if (heroes().length > 1) {
+      <button (click)="prev()" class="cursor-pointer absolute left-4 lg:left-6 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/20 hover:bg-white/40 backdrop-blur-sm rounded-full flex items-center justify-center text-white transition-all z-10">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/>
+        </svg>
+      </button>
+      <button (click)="next()" class="cursor-pointer absolute right-4 lg:right-6 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/20 hover:bg-white/40 backdrop-blur-sm rounded-full flex items-center justify-center text-white transition-all z-10">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
+        </svg>
+      </button>
+
+      <!-- Dots -->
+      <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+        @for (h of heroes(); track h.id; let i = $index) {
+          <button (click)="goTo(i)" class="hero-nav-dot cursor-pointer h-2 rounded-full transition-all duration-300"
+            [class]="i === activeIndex() ? 'bg-white w-6' : 'bg-white/50 w-2 hover:bg-white/80'">
+          </button>
+        }
+      </div>
+    }
+  }
+</section>

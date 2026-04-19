@@ -1,0 +1,124 @@
+<!-- LOGIN -->
+@if (!svc.isAuthenticated()) {
+  <div class="min-h-screen flex items-center justify-center bg-[#060610] relative overflow-hidden">
+    <div class="absolute top-1/4 left-1/3 w-96 h-96 rounded-full bg-blue-600/10 blur-3xl pointer-events-none"></div>
+    <div class="absolute bottom-1/4 right-1/3 w-80 h-80 rounded-full bg-indigo-500/10 blur-3xl pointer-events-none"></div>
+
+    <div class="relative z-10 w-full max-w-sm mx-4">
+      <div class="text-center mb-8">
+        <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-linear-to-br from-blue-500 to-indigo-600 shadow-lg shadow-blue-500/30 mb-4">
+          <span class="text-2xl font-black text-white">RS</span>
+        </div>
+        <h1 class="text-white text-xl font-bold">Panel Admin</h1>
+        <p class="text-slate-400 text-sm mt-1">RutaSport</p>
+      </div>
+
+      <div class="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-2xl" >
+        <div class="flex items-center gap-2 mb-6">
+          <div class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
+          <span class="text-slate-300 text-sm">Sistema seguro</span>
+        </div>
+
+        <label class="block text-xs font-medium text-slate-400 mb-2">Clave de acceso</label>
+        <input
+          [(ngModel)]="passwordInput"
+          type="password"
+          (keydown.enter)="login()"
+          placeholder="••••••••••••"
+          class="w-full px-4 py-3 rounded-xl bg-white/8 border text-white text-sm placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+          [class.border-red-500]="passwordError()"
+          [class.border-white/10]="!passwordError()">
+
+        @if (passwordError()) {
+          <p class="text-red-400 text-xs mt-2">Clave incorrecta. Intenta de nuevo.</p>
+        }
+
+        <button
+          (click)="login()"
+          [disabled]="svc.authLoading()"
+          class="cursor-pointer mt-5 w-full py-3 rounded-xl bg-linear-to-r from-blue-600 to-indigo-600 text-white text-sm font-semibold shadow-lg shadow-blue-600/30 hover:shadow-blue-600/50 hover:opacity-90 transition-all disabled:opacity-50 flex items-center justify-center gap-2">
+          @if (svc.authLoading()) {
+            <div class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+            Verificando...
+          } @else {
+            Ingresar al panel
+          }
+        </button>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- DASHBOARD -->
+@if (svc.isAuthenticated()) {
+  <div class="flex h-screen overflow-hidden bg-slate-50">
+
+    <!-- Sidebar -->
+    <aside class="rs-sidebar flex flex-col w-60 shrink-0 bg-[#0b0f1a] text-white overflow-y-auto">
+      <div class="flex items-center gap-3 px-5 py-6 border-b border-white/6">
+        <div class="w-9 h-9 rounded-xl bg-linear-to-br from-blue-500 to-indigo-600 flex items-center justify-center font-black text-sm shadow-lg shadow-blue-500/30">RS</div>
+        <div>
+          <p class="font-bold text-sm">RutaSport</p>
+          <p class="text-slate-500 text-xs">Admin Panel</p>
+        </div>
+      </div>
+
+      <nav class="flex-1 px-3 py-4 space-y-0.5">
+        @for (tab of tabs; track tab.id) {
+          <button
+            (click)="setTab(tab.id)"
+            class="rs-nav-item cursor-pointer w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all"
+            [class]="activeTab() === tab.id
+              ? 'bg-blue-600 text-white shadow-lg'
+              : 'text-slate-400 hover:text-white hover:bg-white/6'">
+            <span class="text-base">{{ tab.icon }}</span>
+            <span class="flex-1 text-left">{{ tab.label }}</span>
+          </button>
+        }
+      </nav>
+
+      <div class="px-3 py-4 border-t border-white/6">
+        <button
+          (click)="svc.logout()"
+          class="cursor-pointer w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-500 hover:text-red-400 hover:bg-red-400/8 text-sm font-medium transition-all">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+          </svg>
+          Cerrar sesión
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+
+      <!-- Topbar -->
+      <header class="rs-topbar flex items-center px-8 py-4 bg-white border-b border-slate-100 shrink-0">
+        @for (tab of tabs; track tab.id) {
+          @if (tab.id === activeTab()) {
+            <div class="flex items-center gap-3">
+              <span class="text-2xl">{{ tab.icon }}</span>
+              <div>
+                <h1 class="font-bold text-slate-800 text-lg leading-tight">{{ tab.label }}</h1>
+                <p class="text-xs text-slate-400">Gestiona los registros de esta sección</p>
+              </div>
+            </div>
+          }
+        }
+      </header>
+
+      <!-- Tab content -->
+      <main class="flex-1 overflow-y-auto p-8">
+        @switch (activeTab()) {
+          @case ('products')   { <app-products-tab />   }
+          @case ('banners')    { <app-banners-tab />    }
+          @case ('heroes')     { <app-heroes-tab />     }
+          @case ('sports')     { <app-sports-tab />     }
+          @case ('brands')     { <app-brands-tab />     }
+          @case ('categories') { <app-categories-tab /> }
+          @case ('images')     { <app-images-tab />     }
+        }
+      </main>
+    </div>
+  </div>
+}

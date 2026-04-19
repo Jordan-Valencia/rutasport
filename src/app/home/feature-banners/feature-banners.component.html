@@ -1,0 +1,30 @@
+<section #featureBannersSection class="grid lg:grid-cols-2 gap-1 px-1">
+  @if (loading()) {
+    @for (i of [1,2]; track i) {
+      <div class="relative h-[450px] lg:h-[550px] bg-gray-200 animate-pulse"></div>
+    }
+  }
+  @for (banner of banners(); track banner.title) {
+    <div
+      class="banner-item relative h-[450px] lg:h-[550px] overflow-hidden group cursor-pointer"
+      [style.background-color]="banner.bgColor"
+    >
+      <img
+        [src]="banner.image"
+        [alt]="banner.title"
+        class="absolute inset-0 w-full h-full object-cover opacity-70 group-hover:scale-110 transition-transform duration-1000"
+        onerror="this.style.opacity='0.3'"
+      />
+      <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
+
+      <div class="banner-content absolute bottom-8 left-8 right-8 text-white">
+        <span class="text-xs font-bold tracking-widest opacity-70 uppercase">{{ banner.subtitle }}</span>
+        <h3 class="text-3xl lg:text-4xl font-black mt-2 mb-4 leading-tight">{{ banner.title }}</h3>
+        <p class="text-white/70 mb-6 max-w-sm text-sm lg:text-base">{{ banner.description }}</p>
+        <button class="bg-white text-black px-6 py-3 font-bold text-sm tracking-widest hover:bg-[#1a237e] hover:text-white transition-colors duration-300">
+          {{ banner.buttonText }}
+        </button>
+      </div>
+    </div>
+  }
+</section>

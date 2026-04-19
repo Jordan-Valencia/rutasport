@@ -1,0 +1,60 @@
+<header class="sticky top-0 z-50 bg-white shadow-sm">
+  <div class="flex items-center justify-between px-4 lg:px-8 py-4">
+
+    <a [routerLink]="['/']" class="flex-shrink-0 group">
+      <span class="text-3xl font-black tracking-tight group-hover:opacity-75 transition-opacity">RutaSport</span>
+    </a>
+
+    <nav class="hidden lg:flex items-center gap-6">
+      <a href="#" (click)="scrollTo('novedades', $event)" class="nav-link text-sm font-bold tracking-wide hover:text-[#1a237e] transition-colors">NOVEDADES</a>
+      <a href="#" (click)="scrollTo('mujer', $event)"     class="nav-link text-sm font-bold tracking-wide hover:text-[#1a237e] transition-colors">MUJER</a>
+      <a href="#" (click)="scrollTo('hombre', $event)"    class="nav-link text-sm font-bold tracking-wide hover:text-[#1a237e] transition-colors">HOMBRE</a>
+      <a href="#" (click)="scrollTo('ninos', $event)"     class="nav-link text-sm font-bold tracking-wide hover:text-[#1a237e] transition-colors">NIÑOS</a>
+      <a href="#" (click)="scrollTo('deporte', $event)"   class="nav-link text-sm font-bold tracking-wide hover:text-[#1a237e] transition-colors">DEPORTE</a>
+      <a [routerLink]="['/catalogo']"                     class="text-sm font-bold tracking-wide text-[#1a237e] hover:opacity-80 transition-opacity">CATÁLOGO</a>
+    </nav>
+
+    <div class="flex items-center gap-4">
+      <div class="hidden lg:flex items-center border border-gray-300 px-4 py-2 focus-within:border-[#1a237e] transition-colors">
+        <input type="text" placeholder="Buscar" class="bg-transparent text-sm outline-none w-48"/>
+        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+      </div>
+
+      <button (click)="cart.toggle()" class="relative cursor-pointer" title="Carrito">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+        </svg>
+        @if (cart.count() > 0) {
+          <span class="absolute -top-1 -right-1 w-5 h-5 bg-[#1a237e] text-white text-xs flex items-center justify-center rounded-full font-bold">{{ cart.count() }}</span>
+        }
+      </button>
+
+      <button class="lg:hidden cursor-pointer" (click)="toggleMobileMenu()" title="Menú">
+        @if (mobileMenuOpen()) {
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        } @else {
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        }
+      </button>
+    </div>
+  </div>
+
+  @if (mobileMenuOpen()) {
+    <nav class="lg:hidden bg-white border-t py-6 animate-fade-in">
+      <div class="flex flex-col px-4 gap-4">
+        <a href="#" (click)="scrollTo('novedades', $event)" class="text-lg font-bold hover:text-[#1a237e] transition-colors">NOVEDADES</a>
+        <a href="#" (click)="scrollTo('mujer', $event)"     class="text-lg font-bold hover:text-[#1a237e] transition-colors">MUJER</a>
+        <a href="#" (click)="scrollTo('hombre', $event)"    class="text-lg font-bold hover:text-[#1a237e] transition-colors">HOMBRE</a>
+        <a href="#" (click)="scrollTo('ninos', $event)"     class="text-lg font-bold hover:text-[#1a237e] transition-colors">NIÑOS</a>
+        <a href="#" (click)="scrollTo('deporte', $event)"   class="text-lg font-bold hover:text-[#1a237e] transition-colors">DEPORTE</a>
+        <a [routerLink]="['/catalogo']" (click)="toggleMobileMenu()" class="text-lg font-bold text-[#1a237e]">CATÁLOGO</a>
+      </div>
+    </nav>
+  }
+</header>

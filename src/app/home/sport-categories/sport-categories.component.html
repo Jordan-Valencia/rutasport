@@ -1,0 +1,123 @@
+<section #sportCategoriesSection class="py-0 overflow-hidden" (click)="closePicker()">
+
+  <!-- Section header with dynamic accent -->
+  <div class="px-4 lg:px-8 pt-16 pb-8"
+    [style.background]="'linear-gradient(135deg, ' + activeMeta().color + '12 0%, transparent 60%)'">
+    <p class="text-xs font-black tracking-widest mb-2 uppercase"
+      [style.color]="activeMeta().color">POR DEPORTE</p>
+    <h2 class="text-3xl lg:text-5xl font-black mb-8 text-[#1a1a2e]">COMPRAR POR DEPORTE</h2>
+
+    <!-- Sport tabs -->
+    <div class="flex gap-3 overflow-x-auto pb-4 scrollbar-hide">
+      @for (sport of sports(); track sport.name) {
+        @let meta = getMeta(sport.name);
+        @let isActive = activeSport() === sport.name;
+        <button
+          (click)="setActiveSport(sport.name); $event.stopPropagation()"
+          class="sport-btn shrink-0 flex items-center gap-2.5 px-5 py-3 font-black text-sm whitespace-nowrap transition-all duration-300 rounded-full border-2"
+          [style.borderColor]="isActive ? meta.color : '#e5e7eb'"
+          [style.backgroundColor]="isActive ? meta.color : 'white'"
+          [style.color]="isActive ? 'white' : '#374151'"
+          [style.boxShadow]="isActive ? '0 4px 20px ' + meta.color + '55' : 'none'"
+          [style.transform]="isActive ? 'scale(1.05)' : 'scale(1)'">
+          <span class="text-base leading-none">{{ meta.icon }}</span>
+          <span class="tracking-wide">{{ sport.name | uppercase }}</span>
+        </button>
+      }
+    </div>
+  </div>
+
+  <!-- Active sport hero banner -->
+  <div class="relative px-4 lg:px-8 py-8 mb-2 transition-all duration-500"
+    [style.background]="'linear-gradient(to right, ' + activeMeta().color + 'ee, ' + activeMeta().color + '88)'">
+    <div class="absolute inset-0 opacity-10"
+      style="background-image: url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')">
+    </div>
+    <div class="relative z-10 flex items-center justify-between">
+      <div>
+        <div class="text-5xl lg:text-6xl mb-2">{{ activeMeta().icon }}</div>
+        <h3 class="text-white font-black text-2xl lg:text-4xl tracking-tight">{{ activeSport() | uppercase }}</h3>
+        <p class="text-white/70 text-sm mt-1">{{ filteredProducts().length }} producto(s) disponible(s)</p>
+      </div>
+      <div class="hidden lg:block text-right">
+        <p class="text-white/50 text-xs font-bold tracking-widest uppercase">Colección</p>
+        <p class="text-white/90 text-6xl font-black leading-none mt-1">{{ activeSport().charAt(0) }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Products grid -->
+  <div class="px-4 lg:px-8 py-10 bg-[#fafaf9]">
+    @if (loading()) {
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        @for (i of [1,2,3,4]; track i) {
+          <div class="animate-pulse">
+            <div class="bg-gray-200 aspect-square mb-3 rounded"></div>
+            <div class="h-3 bg-gray-200 rounded w-1/2 mb-2"></div>
+            <div class="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+            <div class="h-4 bg-gray-200 rounded w-1/3"></div>
+          </div>
+        }
+      </div>
+    } @else if (filteredProducts().length === 0) {
+      <div class="flex flex-col items-center justify-center py-20 text-center">
+        <div class="text-7xl mb-4">{{ activeMeta().icon }}</div>
+        <p class="font-black text-xl text-gray-700 mb-1">Próximamente en {{ activeSport() }}</p>
+        <p class="text-gray-400 text-sm">Estamos preparando la mejor selección para ti.</p>
+      </div>
+    } @else {
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+        @for (product of filteredProducts(); track product.id ?? product.name) {
+          <div class="product-card group cursor-pointer relative" (click)="closePicker()">
+
+            <div class="relative bg-[#ebedee] aspect-square mb-3 overflow-hidden">
+              @if (product.image) {
+                <img [src]="product.image" [alt]="product.name"
+                  class="object-contain p-4 group-hover:scale-105 transition-transform duration-500 w-full h-full"
+                  onerror="this.parentElement.style.backgroundColor='#d1d5db'"/>
+              } @else {
+                <div class="w-full h-full flex items-center justify-center">
+                  <span class="text-5xl opacity-30">{{ activeMeta().icon }}</span>
+                </div>
+              }
+
+              @if (product.isNew)        { <span class="absolute top-2 left-2 text-white px-2 py-0.5 text-xs font-black" [style.backgroundColor]="activeMeta().color">NUEVO</span> }
+              @if (product.isBestSeller) { <span class="absolute top-2 left-2 bg-[#1a237e] text-white px-2 py-0.5 text-xs font-black">TOP</span> }
+
+              <button (click)="onAddClick(product, $event)"
+                class="cursor-pointer absolute bottom-0 left-0 right-0 py-2.5 text-white text-xs font-black tracking-wide translate-y-full group-hover:translate-y-0 transition-transform duration-300"
+                [style.backgroundColor]="activeMeta().color">
+                AGREGAR AL CARRITO
+              </button>
+
+              @if (sizePickerProduct()?.id === product.id) {
+                <div class="absolute inset-0 bg-white/96 flex flex-col items-center justify-center p-3 gap-2" (click)="$event.stopPropagation()">
+                  <p class="text-xs font-black tracking-wide">TALLA</p>
+                  <div class="flex flex-wrap gap-1.5 justify-center">
+                    @for (size of getSizes(product); track size) {
+                      <button (click)="addToCart(product, size)"
+                        class="cursor-pointer px-2 py-1.5 border-2 text-xs font-bold transition-colors"
+                        [style.borderColor]="activeMeta().color"
+                        [style.color]="activeMeta().color"
+                        (mouseenter)="$any($event.target).style.backgroundColor=activeMeta().color; $any($event.target).style.color='white'"
+                        (mouseleave)="$any($event.target).style.backgroundColor='white'; $any($event.target).style.color=activeMeta().color">
+                        {{ size }}
+                      </button>
+                    }
+                  </div>
+                  <button (click)="closePicker()" class="cursor-pointer text-xs text-gray-400 hover:text-gray-600 mt-1">Cancelar</button>
+                </div>
+              }
+            </div>
+
+            @if (product.brand) { <p class="text-xs font-black uppercase tracking-wide mb-0.5" [style.color]="activeMeta().color">{{ product.brand }}</p> }
+            <p class="text-xs text-gray-400 mb-0.5">{{ product.category }}</p>
+            <h3 class="font-bold text-sm mb-1 truncate text-gray-800">{{ product.name }}</h3>
+            <p class="font-black text-sm">{{ product.price }}</p>
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+</section>

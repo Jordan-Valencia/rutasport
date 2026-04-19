@@ -1,0 +1,72 @@
+<section #newReleasesSection id="novedades" class="py-16 px-4 lg:px-8 bg-white overflow-hidden" (click)="sizePickerProduct.set(null)">
+  <div class="section-heading flex items-center justify-between mb-10">
+    <div>
+      <p class="text-xs font-black tracking-widest text-[#1a237e] mb-1 uppercase">Recién llegados</p>
+      <h2 class="text-3xl lg:text-4xl font-black">NUEVOS LANZAMIENTOS</h2>
+    </div>
+    <a routerLink="/catalogo" [queryParams]="{isNew: true}" class="text-sm font-bold underline underline-offset-4 hover:text-[#1a237e] transition-colors whitespace-nowrap">Ver todo →</a>
+  </div>
+
+  @if (loading()) {
+    <div class="flex gap-4 overflow-x-hidden">
+      @for (i of [1,2,3,4,5]; track i) {
+        <div class="shrink-0 w-[240px] animate-pulse">
+          <div class="bg-gray-200 aspect-square mb-3"></div>
+          <div class="h-3 bg-gray-200 rounded w-1/2 mb-2"></div>
+          <div class="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+          <div class="h-4 bg-gray-200 rounded w-1/3"></div>
+        </div>
+      }
+    </div>
+  } @else if (products().length === 0) {
+    <p class="text-gray-400 text-center py-12">Próximamente nuevos lanzamientos.</p>
+  } @else {
+    <div class="flex gap-4 overflow-x-auto pb-4 -mx-4 px-4">
+      @for (product of products(); track product.id ?? product.name) {
+        <div class="product-card shrink-0 w-[240px] group cursor-pointer relative">
+
+          <div class="relative bg-[#ebedee] aspect-square mb-3 overflow-hidden">
+            @if (product.image) {
+              <img [src]="product.image" [alt]="product.name"
+                class="object-contain p-4 group-hover:scale-105 transition-transform duration-500 w-full h-full"
+                onerror="this.parentElement.style.backgroundColor='#d1d5db'"/>
+            } @else {
+              <div class="w-full h-full flex items-center justify-center">
+                <svg class="w-16 h-16 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                </svg>
+              </div>
+            }
+
+            <span class="absolute top-2 left-2 bg-black text-white px-2 py-0.5 text-xs font-black">NUEVO</span>
+
+            <button (click)="onAddClick(product, $event)"
+              class="cursor-pointer absolute bottom-0 left-0 right-0 py-2.5 bg-[#1a237e] text-white text-xs font-black tracking-wide translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+              AGREGAR AL CARRITO
+            </button>
+
+            @if (sizePickerProduct()?.id === product.id) {
+              <div class="absolute inset-0 bg-white/96 flex flex-col items-center justify-center p-3 gap-2" (click)="$event.stopPropagation()">
+                <p class="text-xs font-black tracking-wide">TALLA</p>
+                <div class="flex flex-wrap gap-1.5 justify-center">
+                  @for (size of getSizes(product); track size) {
+                    <button (click)="addToCart(product, size)"
+                      class="cursor-pointer px-2 py-1.5 border-2 border-[#1a237e] text-[#1a237e] text-xs font-bold hover:bg-[#1a237e] hover:text-white transition-colors">
+                      {{ size }}
+                    </button>
+                  }
+                </div>
+                <button (click)="sizePickerProduct.set(null)" class="cursor-pointer text-xs text-gray-400 hover:text-gray-600 mt-1">Cancelar</button>
+              </div>
+            }
+          </div>
+
+          @if (product.brand) { <p class="text-xs font-black text-[#1a237e] uppercase tracking-wide mb-0.5">{{ product.brand }}</p> }
+          <p class="text-xs text-gray-400 mb-0.5">{{ product.category }}</p>
+          <h3 class="font-bold text-sm mb-1 truncate">{{ product.name }}</h3>
+          <p class="font-black text-sm">{{ product.price }}</p>
+        </div>
+      }
+    </div>
+  }
+</section>

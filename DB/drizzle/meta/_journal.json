@@ -8,6 +8,27 @@
       "when": 1776316808275,
       "tag": "0000_secret_black_cat",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1776561422012,
+      "tag": "0001_confused_rafael_vega",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1776562394063,
+      "tag": "0002_blushing_rocket_raccoon",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1776563953249,
+      "tag": "0003_dear_blockbuster",
+      "breakpoints": true
     }
   ]
 }

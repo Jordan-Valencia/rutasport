@@ -1,0 +1,67 @@
+<app-header />
+
+<app-hero />
+
+<!-- MUJER -->
+<section id="mujer" class="relative overflow-hidden bg-[#1a1a2e] py-24 px-4 lg:px-16 flex items-center min-h-[50vh]">
+  <div class="absolute inset-0 bg-linear-to-br from-pink-900/60 via-[#1a1a2e]/80 to-[#1a1a2e]"></div>
+  <div class="absolute top-0 right-0 w-1/2 h-full opacity-10">
+    <div class="w-full h-full" style="background: radial-gradient(circle at 80% 50%, #f9a8d4 0%, transparent 60%)"></div>
+  </div>
+  <div class="relative z-10 max-w-2xl">
+    <span class="inline-block text-pink-300 text-xs font-black tracking-widest mb-4 border border-pink-300/40 px-3 py-1">COLECCIÓN MUJER</span>
+    <h2 class="text-white text-5xl lg:text-7xl font-black leading-none mb-5">ELLA<br>DOMINA.</h2>
+    <p class="text-white/60 text-lg mb-8 max-w-md">Diseño y rendimiento para cada momento. Encuentra el estilo que te define.</p>
+    <a [routerLink]="['/catalogo']" class="inline-flex items-center gap-3 bg-white text-[#1a1a2e] px-8 py-4 font-black text-sm tracking-wide hover:bg-pink-50 transition-colors">
+      VER COLECCIÓN
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+    </a>
+  </div>
+</section>
+
+<!-- HOMBRE -->
+<section id="hombre" class="relative overflow-hidden bg-[#0f172a] py-24 px-4 lg:px-16 flex items-center min-h-[50vh]">
+  <div class="absolute inset-0 bg-linear-to-tl from-blue-900/50 via-[#0f172a]/80 to-[#0f172a]"></div>
+  <div class="absolute bottom-0 left-0 w-2/3 h-full opacity-10">
+    <div class="w-full h-full" style="background: radial-gradient(circle at 20% 70%, #93c5fd 0%, transparent 60%)"></div>
+  </div>
+  <div class="relative z-10 max-w-2xl ml-auto text-right">
+    <span class="inline-block text-blue-300 text-xs font-black tracking-widest mb-4 border border-blue-300/40 px-3 py-1">COLECCIÓN HOMBRE</span>
+    <h2 class="text-white text-5xl lg:text-7xl font-black leading-none mb-5">SIN<br>LÍMITES.</h2>
+    <p class="text-white/60 text-lg mb-8 max-w-md ml-auto">Alto rendimiento para los que van más lejos. Tecnología en cada paso.</p>
+    <a [routerLink]="['/catalogo']" class="inline-flex items-center gap-3 bg-white text-[#0f172a] px-8 py-4 font-black text-sm tracking-wide hover:bg-blue-50 transition-colors">
+      VER COLECCIÓN
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+    </a>
+  </div>
+</section>
+
+<!-- NIÑOS -->
+<section id="ninos" class="relative overflow-hidden bg-[#fafaf9] py-20 px-4 lg:px-16 flex items-center min-h-[44vh] border-t border-gray-100">
+  <div class="absolute inset-0" style="background: radial-gradient(circle at 90% 50%, #fde68a44 0%, transparent 55%), radial-gradient(circle at 10% 50%, #bbf7d044 0%, transparent 55%)"></div>
+  <div class="relative z-10 text-center w-full">
+    <span class="inline-block text-gray-400 text-xs font-black tracking-widest mb-4 border border-gray-200 px-3 py-1">COLECCIÓN NIÑOS</span>
+    <h2 class="text-[#1a1a2e] text-5xl lg:text-7xl font-black leading-none mb-5">JUEGA<br>GRANDE.</h2>
+    <p class="text-gray-500 text-lg mb-8 max-w-lg mx-auto">Los mejores modelos para los campeones del mañana. Comodidad y estilo sin límites.</p>
+    <a [routerLink]="['/catalogo']" [queryParams]="{categoria: 'Niños'}" class="inline-flex items-center gap-3 bg-[#1a1a2e] text-white px-8 py-4 font-black text-sm tracking-wide hover:opacity-80 transition-opacity">
+      VER COLECCIÓN NIÑOS
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+    </a>
+  </div>
+</section>
+
+<!-- Banners destacados -->
+<app-feature-banners />
+
+<!-- DEPORTE (sport categories) -->
+<div id="deporte">
+  <app-sport-categories />
+</div>
+
+<!-- NOVEDADES -->
+<div id="novedades">
+  <app-new-releases />
+</div>
+
+<app-footer />
+<app-cart-drawer />
