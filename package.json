@@ -11,7 +11,8 @@
     "db:init:FRESH_ONLY": "wrangler d1 execute rutasport --local --file=DB/init-db.sql",
     "db:migrate:008": "wrangler d1 execute rutasport --local --file=DB/migrations/008_junction_tables.sql",
     "pages:dev": "wrangler pages dev --proxy 4200 --port 8788",
-    "cf": "wrangler pages dev --proxy 4200 --port 8788"
+    "cf": "wrangler pages dev --proxy 4200 --port 8788",
+    "deploy:cf": "wrangler pages deploy dist/CalzadoAndres/browser --project-name rutasport --branch main"
   },
   "private": true,
   "packageManager": "npm@11.9.0",
