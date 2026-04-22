@@ -77,17 +77,8 @@
 @if (svc.isAuthenticated()) {
   <div class="flex h-screen bg-slate-50 overflow-hidden">
 
-    <!-- ── Mobile backdrop ───────────────────────────────────────────────── -->
-    @if (sidebarOpen()) {
-      <div class="fixed inset-0 z-30 bg-black/50 backdrop-blur-sm md:hidden" (click)="closeSidebar()"></div>
-    }
-
     <!-- ── Sidebar ───────────────────────────────────────────────────────── -->
-    <!-- Mobile: fixed overlay con slide; Desktop: en flujo normal -->
-    <aside class="rs-sidebar flex flex-col w-[216px] shrink-0 bg-[#0d1117] border-r border-white/[0.06]
-                  fixed inset-y-0 left-0 z-40 transition-transform duration-300
-                  md:relative md:translate-x-0 md:z-auto"
-           [ngClass]="sidebarOpen() ? 'translate-x-0' : '-translate-x-full'">
+    <aside class="rs-sidebar flex flex-col w-[216px] shrink-0 bg-[#0d1117] border-r border-white/[0.06]">
 
       <!-- Logo -->
       <div class="flex items-center gap-3 px-4 py-[18px] border-b border-white/[0.06]">
@@ -141,34 +132,23 @@
     </aside>
 
     <!-- ── Main ──────────────────────────────────────────────────────────── -->
-    <div class="flex-1 flex flex-col min-w-0 overflow-hidden w-full">
+    <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
 
       <!-- Topbar -->
-      <header class="rs-topbar h-[60px] flex items-center gap-3 px-4 md:px-7 bg-white border-b border-slate-100/80 shrink-0">
-
-        <!-- Hamburger (solo móvil) -->
-        <button
-          class="md:hidden flex items-center justify-center w-9 h-9 rounded-xl hover:bg-slate-100 text-slate-500 transition-colors shrink-0"
-          (click)="toggleSidebar()"
-          aria-label="Abrir menú">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-          </svg>
-        </button>
-
+      <header class="rs-topbar h-[60px] flex items-center gap-4 px-7 bg-white border-b border-slate-100/80 shrink-0">
         @for (tab of tabs; track tab.id) {
           @if (tab.id === activeTab()) {
-            <div class="flex items-center gap-2.5 min-w-0">
-              <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center text-[15px] shadow-sm shrink-0">{{ tab.icon }}</div>
-              <div class="min-w-0">
-                <h1 class="font-semibold text-slate-800 text-[14px] leading-snug truncate">{{ tab.label }}</h1>
-                <p class="hidden sm:block text-[11px] text-slate-400 leading-snug">Gestiona los registros de esta sección</p>
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center text-[15px] shadow-sm">{{ tab.icon }}</div>
+              <div>
+                <h1 class="font-semibold text-slate-800 text-[14px] leading-snug">{{ tab.label }}</h1>
+                <p class="text-[11px] text-slate-400 leading-snug">Gestiona los registros de esta sección</p>
               </div>
             </div>
           }
         }
 
-        <div class="ml-auto flex items-center gap-2 shrink-0">
+        <div class="ml-auto flex items-center gap-3">
           <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-100">
             <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
             <span class="text-[11px] font-medium text-slate-500">Online</span>
@@ -178,7 +158,7 @@
       </header>
 
       <!-- Content -->
-      <main class="rs-main-content flex-1 overflow-y-auto p-3 sm:p-6">
+      <main class="rs-main-content flex-1 overflow-y-auto p-6">
         @switch (activeTab()) {
           @case ('products')   { <app-products-tab />   }
           @case ('banners')    { <app-banners-tab />    }

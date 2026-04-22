@@ -104,7 +104,7 @@
 
         <!-- Precio + tallas (desktop) -->
         <div class="hidden sm:flex flex-col items-end gap-0.5 shrink-0 min-w-[80px]">
-          <p class="font-bold text-slate-800 text-sm tabular-nums">{{ p.price }}</p>
+          <p class="font-bold text-slate-800 text-sm tabular-nums">${{ p.price }}</p>
           @if (p.sizes) {
             <p class="text-xs text-slate-400">{{ p.sizes.split(',').length }} tallas</p>
           } @else {
