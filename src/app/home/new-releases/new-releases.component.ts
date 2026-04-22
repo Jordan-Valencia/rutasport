@@ -1,6 +1,6 @@
 import { Component, inject, signal, ElementRef, viewChild, afterNextRender, PLATFORM_ID } from '@angular/core'
 import { CommonModule, isPlatformBrowser } from '@angular/common'
-import { RouterModule } from '@angular/router'
+import { RouterModule, Router } from '@angular/router'
 import { DataService } from '../../services/data.service'
 import { CartService } from '../../services/cart.service'
 import { Product } from '../../models/product'
@@ -14,6 +14,7 @@ import { Product } from '../../models/product'
 export class NewReleasesComponent {
   private dataService = inject(DataService)
   private platformId  = inject(PLATFORM_ID)
+  private router      = inject(Router)
   protected cart      = inject(CartService)
   protected products  = signal<Product[]>([])
   protected loading   = signal(true)
@@ -26,6 +27,15 @@ export class NewReleasesComponent {
       this.loading.set(false)
     })
     afterNextRender(() => this.animateCards())
+  }
+
+  openProduct(product: Product, event: Event) {
+    event.stopPropagation()
+    if (this.sizePickerProduct()?.id === product.id) {
+      this.sizePickerProduct.set(null)
+      return
+    }
+    this.router.navigate(['/producto', product.id])
   }
 
   getSizes(product: Product): string[] {

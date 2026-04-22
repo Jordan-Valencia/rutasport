@@ -17,7 +17,7 @@ const QUERY = `
           FROM product_categories pc2 WHERE pc2.product_id = p.id) AS category_ids,
          (SELECT GROUP_CONCAT(ps2.sport_id, ',')
           FROM product_sports ps2 WHERE ps2.product_id = p.id) AS sport_ids,
-         (SELECT GROUP_CONCAT(pi.url, ',')
+         (SELECT GROUP_CONCAT(url, ',')
           FROM (SELECT url FROM product_images WHERE product_id = p.id ORDER BY sort_order ASC)
          ) AS gallery
   FROM products p

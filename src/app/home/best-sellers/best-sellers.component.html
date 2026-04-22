@@ -1,4 +1,4 @@
-<section #bestSellersSection class="py-16 px-4 lg:px-8">
+<section #bestSellersSection class="py-16 px-4 lg:px-8" (click)="sizePickerProduct.set(null)">
   <div class="section-heading mb-10">
     <p class="text-[10px] font-black tracking-[0.35em] text-[#1a237e] mb-2 uppercase">Selección de temporada</p>
     <div class="flex items-end justify-between gap-4">
@@ -21,7 +21,7 @@
   } @else {
     <div class="grid grid-cols-2 lg:grid-cols-5 gap-4">
       @for (product of products(); track product.name) {
-        <div class="product-card group cursor-pointer">
+        <div class="product-card group cursor-pointer relative" (click)="openProduct(product, $event)">
           <div class="relative bg-[#ebedee] aspect-square mb-3 overflow-hidden">
             <img
               [src]="product.image"
@@ -29,16 +29,31 @@
               class="object-contain p-4 group-hover:scale-105 transition-transform duration-500 w-full h-full"
               onerror="this.parentElement.style.backgroundColor='#ccc'"
             />
-            <button class="absolute top-3 right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm opacity-0 group-hover:opacity-100 transition-opacity">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-              </svg>
-            </button>
             @if (product.isBestSeller) {
               <span class="absolute top-3 left-3 bg-[#1a237e] text-white px-2 py-1 text-xs font-bold">BEST SELLER</span>
             }
             @if (product.isNew) {
               <span class="absolute top-3 left-3 bg-black text-white px-2 py-1 text-xs font-bold">NUEVO</span>
+            }
+
+            <button (click)="onAddClick(product, $event)"
+              class="cursor-pointer absolute bottom-0 left-0 right-0 py-2.5 bg-[#1a237e] text-white text-xs font-black tracking-wide translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+              AGREGAR AL CARRITO
+            </button>
+
+            @if (sizePickerProduct()?.id === product.id) {
+              <div class="absolute inset-0 bg-white/96 flex flex-col items-center justify-center p-3 gap-2" (click)="$event.stopPropagation()">
+                <p class="text-xs font-black tracking-wide">TALLA</p>
+                <div class="flex flex-wrap gap-1.5 justify-center">
+                  @for (size of getSizes(product); track size) {
+                    <button (click)="addToCart(product, size)"
+                      class="cursor-pointer px-2 py-1.5 border-2 border-[#1a237e] text-[#1a237e] text-xs font-bold hover:bg-[#1a237e] hover:text-white transition-colors">
+                      {{ size }}
+                    </button>
+                  }
+                </div>
+                <button (click)="sizePickerProduct.set(null)" class="cursor-pointer text-xs text-gray-400 hover:text-gray-600 mt-1">Cancelar</button>
+              </div>
             }
           </div>
           @if (product.categories) { <p class="text-xs text-gray-500 mb-1">{{ product.categories }}</p> }

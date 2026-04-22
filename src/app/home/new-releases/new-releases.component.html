@@ -23,7 +23,7 @@
   } @else {
     <div class="flex gap-4 overflow-x-auto pb-4 -mx-4 px-4">
       @for (product of products(); track product.id ?? product.name) {
-        <div class="product-card shrink-0 w-[240px] group cursor-pointer relative">
+        <div class="product-card shrink-0 w-[240px] group cursor-pointer relative" (click)="openProduct(product, $event)">
 
           <div class="relative bg-[#ebedee] aspect-square mb-3 overflow-hidden">
             @if (product.image) {

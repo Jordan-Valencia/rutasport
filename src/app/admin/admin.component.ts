@@ -30,6 +30,7 @@ export class AdminComponent implements OnInit {
   passwordInput = ''
   passwordError = signal(false)
   activeTab = signal<AdminTab>('products')
+  sidebarOpen = signal(false)
 
   readonly tabs: { id: AdminTab; label: string; icon: string }[] = [
     { id: 'products',   label: 'Productos',   icon: '📦' },
@@ -55,8 +56,12 @@ export class AdminComponent implements OnInit {
 
   setTab(tab: AdminTab) {
     this.activeTab.set(tab)
+    this.sidebarOpen.set(false)
     this.runContentAnimation()
   }
+
+  toggleSidebar() { this.sidebarOpen.update(v => !v) }
+  closeSidebar()  { this.sidebarOpen.set(false) }
 
   private async runEntryAnimation() {
     if (!isPlatformBrowser(this.platformId)) return

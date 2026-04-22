@@ -1,4 +1,4 @@
-import { Component, inject, signal, computed, PLATFORM_ID, afterNextRender } from '@angular/core'
+import { Component, inject, signal, computed, PLATFORM_ID } from '@angular/core'
 import { CommonModule, isPlatformBrowser } from '@angular/common'
 import { FormsModule } from '@angular/forms'
 import { RouterModule, ActivatedRoute, Router } from '@angular/router'
@@ -101,6 +101,7 @@ export class CatalogComponent {
     this.dataService.getProducts().subscribe(data => {
       this.allProducts.set(data)
       this.loading.set(false)
+      setTimeout(() => this.animateCardsIn(), 16)
     })
     this.dataService.getBrands().subscribe(data =>
       this.brands.set(data.map(b => b.name).filter(Boolean).sort())
@@ -122,7 +123,6 @@ export class CatalogComponent {
       if (params['novedades'])  this.filterIsNew.set(true)
       if (params['bestSeller']) this.filterBestSeller.set(true)
     })
-    afterNextRender(() => this.animateCardsIn())
   }
 
   firstSport(product: Product): string {
