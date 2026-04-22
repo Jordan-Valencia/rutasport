@@ -4,7 +4,7 @@
       <p class="text-xs font-black tracking-widest text-[#1a237e] mb-1 uppercase">Recién llegados</p>
       <h2 class="text-3xl lg:text-4xl font-black">NUEVOS LANZAMIENTOS</h2>
     </div>
-    <a routerLink="/catalogo" [queryParams]="{isNew: true}" class="text-sm font-bold underline underline-offset-4 hover:text-[#1a237e] transition-colors whitespace-nowrap">Ver todo →</a>
+    <a routerLink="/catalogo" [queryParams]="{novedades: true}" class="text-sm font-bold underline underline-offset-4 hover:text-[#1a237e] transition-colors whitespace-nowrap">Ver todo →</a>
   </div>
 
   @if (loading()) {
@@ -62,7 +62,7 @@
           </div>
 
           @if (product.brand) { <p class="text-xs font-black text-[#1a237e] uppercase tracking-wide mb-0.5">{{ product.brand }}</p> }
-          <p class="text-xs text-gray-400 mb-0.5">{{ product.category }}</p>
+          @if (product.categories) { <p class="text-xs text-gray-400 mb-0.5">{{ product.categories }}</p> }
           <h3 class="font-bold text-sm mb-1 truncate">{{ product.name }}</h3>
           <p class="font-black text-sm">{{ product.price }}</p>
         </div>

@@ -15,28 +15,43 @@ export class ProductsTabComponent implements OnInit {
 
   readonly SIZES = ['4','4.5','5','5.5','6','6.5','7','7.5','8','8.5','9','9.5','10','10.5','11','11.5','12','12.5','13']
 
-  items          = signal<any[]>([])
-  loading        = signal(false)
-  saving         = signal(false)
+  items = signal<any[]>([])
+  loading = signal(false)
+  saving = signal(false)
   imageUploading = signal(false)
-  apiError       = signal('')
+  apiError = signal('')
 
-  showModal  = signal(false)
-  modalMode  = signal<'add' | 'edit'>('add')
+  urlMainInput = ''
+  urlExtraInput = ''
+
+  showModal = signal(false)
+  modalMode = signal<'add' | 'edit'>('add')
+
   formData: any = {}
   formErrors: Record<string, string> = {}
-  sizesArray:   string[] = []
-  galleryArray: string[] = []  // gallery image URLs (product_images table)
 
-  async ngOnInit() { await this.load() }
+  sizesArray: string[] = []
+  categoryIdsArray: number[] = []
+  sportIdsArray: number[] = []
+  imagesArray: string[] = []
+
+  async ngOnInit() {
+    await this.load()
+  }
 
   async load() {
     this.loading.set(true)
     this.apiError.set('')
+
     try {
-      const res  = await this.svc.apiFetch('/api/admin/products')
+      const res = await this.svc.apiFetch('/api/admin/products')
       const data = await res.json()
-      if (!res.ok) { this.apiError.set(data.error ?? `Error ${res.status}`); return }
+
+      if (!res.ok) {
+        this.apiError.set(data.error ?? `Error ${res.status}`)
+        return
+      }
+
       this.items.set(data)
     } catch {
       this.apiError.set('Error de red al cargar productos')
@@ -45,16 +60,95 @@ export class ProductsTabComponent implements OnInit {
     }
   }
 
+  async importMainImageFromUrl() {
+    const url = this.urlMainInput.trim()
+    if (!url) return
+
+    this.imageUploading.set(true)
+    this.apiError.set('')
+
+    try {
+      const res = await fetch('/api/admin/upload-url', {
+        method: 'POST',
+        headers: {
+          'x-admin-key': this.svc.adminKey(),
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ url }),
+      })
+
+      if (res.ok) {
+        const { path } = await res.json()
+        this.formData = { ...this.formData, image: path }
+        this.urlMainInput = ''
+      } else {
+        const err = await res.json().catch(() => ({})) as any
+        this.apiError.set(err.error ?? `Error ${res.status}`)
+      }
+    } catch {
+      this.apiError.set('Error de red al importar imagen')
+    } finally {
+      this.imageUploading.set(false)
+    }
+  }
+
+  async importExtraImageFromUrl() {
+    const url = this.urlExtraInput.trim()
+    if (!url) return
+
+    this.imageUploading.set(true)
+    this.apiError.set('')
+
+    try {
+      const res = await fetch('/api/admin/upload-url', {
+        method: 'POST',
+        headers: {
+          'x-admin-key': this.svc.adminKey(),
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ url }),
+      })
+
+      if (res.ok) {
+        const { path } = await res.json()
+        this.imagesArray = [...this.imagesArray, path]
+        this.urlExtraInput = ''
+      } else {
+        const err = await res.json().catch(() => ({})) as any
+        this.apiError.set(err.error ?? `Error ${res.status}`)
+      }
+    } catch {
+      this.apiError.set('Error de red al importar imagen')
+    } finally {
+      this.imageUploading.set(false)
+    }
+  }
+
   openAdd() {
     this.modalMode.set('add')
+
     this.formData = {
-      name: '', price: '', image: '',
-      brand_id: null, category_id: null, sport_id: null, gender_id: null,
-      isBestSeller: false, isNew: false, description: ''
+      name: '',
+      model: '',
+      price: '',
+      image: '',
+      brand_id: null,
+      gender_id: null,
+      isBestSeller: false,
+      isNew: false,
+      description: '',
     }
-    this.sizesArray   = []
-    this.galleryArray = []
-    this.formErrors   = {}
+
+    this.sizesArray = []
+    this.categoryIdsArray = []
+    this.sportIdsArray = []
+    this.imagesArray = []
+
+    this.formErrors = {}
+    this.apiError.set('')
+    this.urlMainInput = ''
+    this.urlExtraInput = ''
+
     this.showModal.set(true)
     this.animateModal()
   }
@@ -62,21 +156,56 @@ export class ProductsTabComponent implements OnInit {
   openEdit(item: any) {
     this.modalMode.set('edit')
     this.formData = { ...item }
-    this.sizesArray   = item.sizes ? item.sizes.split(',').map((s: string) => s.trim()).filter(Boolean) : []
-    this.galleryArray = item.gallery ? item.gallery.split(',').filter(Boolean) : []
-    this.formErrors   = {}
+
+    this.sizesArray = item.sizes
+      ? item.sizes.split(',').map((s: string) => s.trim()).filter(Boolean)
+      : []
+
+    this.categoryIdsArray = item.category_ids
+      ? item.category_ids
+          .split(',')
+          .map((id: string) => Number(id))
+          .filter((id: number) => !Number.isNaN(id))
+      : []
+
+    this.sportIdsArray = item.sport_ids
+      ? item.sport_ids
+          .split(',')
+          .map((id: string) => Number(id))
+          .filter((id: number) => !Number.isNaN(id))
+      : []
+
+    this.imagesArray = item.gallery
+      ? item.gallery.split(',').map((url: string) => url.trim()).filter(Boolean)
+      : []
+
+    this.formErrors = {}
+    this.apiError.set('')
+    this.urlMainInput = ''
+    this.urlExtraInput = ''
+
     this.showModal.set(true)
     this.animateModal()
   }
 
   private async animateModal() {
     if (!isPlatformBrowser(this.platformId)) return
+
     await new Promise(r => setTimeout(r, 20))
     const { gsap } = await import('gsap')
-    gsap.from('.rs-modal-card', { scale: 0.93, opacity: 0, y: 20, duration: 0.28, ease: 'back.out(1.8)' })
+
+    gsap.from('.rs-modal-card', {
+      scale: 0.93,
+      opacity: 0,
+      y: 20,
+      duration: 0.28,
+      ease: 'back.out(1.8)'
+    })
   }
 
-  closeModal() { this.showModal.set(false) }
+  closeModal() {
+    this.showModal.set(false)
+  }
 
   toggleSize(s: string) {
     if (this.sizesArray.includes(s)) {
@@ -86,77 +215,147 @@ export class ProductsTabComponent implements OnInit {
     }
   }
 
+  toggleCategory(id: number) {
+    if (this.categoryIdsArray.includes(id)) {
+      this.categoryIdsArray = this.categoryIdsArray.filter(x => x !== id)
+    } else {
+      this.categoryIdsArray = [...this.categoryIdsArray, id]
+    }
+  }
+
+  toggleSport(id: number) {
+    if (this.sportIdsArray.includes(id)) {
+      this.sportIdsArray = this.sportIdsArray.filter(x => x !== id)
+    } else {
+      this.sportIdsArray = [...this.sportIdsArray, id]
+    }
+  }
+
   async uploadMainImage(event: Event) {
     const input = event.target as HTMLInputElement
     if (!input.files?.length) return
+
     this.imageUploading.set(true)
+    this.apiError.set('')
+
     const fd = new FormData()
     fd.append('file', input.files[0])
+
     try {
-      const res = await fetch('/api/admin/upload', { method: 'POST', headers: { 'x-admin-key': this.svc.adminKey() }, body: fd })
+      const res = await fetch('/api/admin/upload', {
+        method: 'POST',
+        headers: { 'x-admin-key': this.svc.adminKey() },
+        body: fd
+      })
+
       if (res.ok) {
         const { path } = await res.json()
         this.formData = { ...this.formData, image: path }
+      } else {
+        const err = await res.json().catch(() => ({})) as any
+        this.apiError.set(err.error ?? `Error ${res.status}`)
       }
+    } catch {
+      this.apiError.set('Error de red al subir imagen')
     } finally {
       this.imageUploading.set(false)
       input.value = ''
     }
   }
 
-  async uploadGalleryImage(event: Event) {
+  async uploadExtraImage(event: Event) {
     const input = event.target as HTMLInputElement
     if (!input.files?.length) return
+
     this.imageUploading.set(true)
+    this.apiError.set('')
+
     const fd = new FormData()
     fd.append('file', input.files[0])
+
     try {
-      const res = await fetch('/api/admin/upload', { method: 'POST', headers: { 'x-admin-key': this.svc.adminKey() }, body: fd })
+      const res = await fetch('/api/admin/upload', {
+        method: 'POST',
+        headers: { 'x-admin-key': this.svc.adminKey() },
+        body: fd
+      })
+
       if (res.ok) {
         const { path } = await res.json()
-        this.galleryArray = [...this.galleryArray, path]
+        this.imagesArray = [...this.imagesArray, path]
+      } else {
+        const err = await res.json().catch(() => ({})) as any
+        this.apiError.set(err.error ?? `Error ${res.status}`)
       }
+    } catch {
+      this.apiError.set('Error de red al subir imagen')
     } finally {
       this.imageUploading.set(false)
       input.value = ''
     }
   }
 
-  removeGalleryImage(index: number) {
-    this.galleryArray = this.galleryArray.filter((_, i) => i !== index)
+  removeExtraImage(index: number) {
+    this.imagesArray = this.imagesArray.filter((_, i) => i !== index)
   }
 
   private validate(): boolean {
     const e: Record<string, string> = {}
     const d = this.formData
-    if (!d.name?.trim())  e['name']  = 'El nombre es requerido'
+
+    if (!d.name?.trim()) e['name'] = 'El nombre es requerido'
     if (!d.price?.trim()) e['price'] = 'El precio es requerido'
+
     this.formErrors = e
     return Object.keys(e).length === 0
   }
 
   async save() {
     if (!this.validate()) return
+
     this.saving.set(true)
     this.apiError.set('')
+
     const mode = this.modalMode()
-    const { id, createdAt, brand, category, sport, gender, ...data } = this.formData
-    data.sizes   = this.sizesArray.join(',')
-    data.gallery = this.galleryArray
-    // ensure numeric IDs
-    if (data.brand_id)    data.brand_id    = Number(data.brand_id)
-    if (data.category_id) data.category_id = Number(data.category_id)
-    if (data.sport_id)    data.sport_id    = Number(data.sport_id)
-    if (data.gender_id)   data.gender_id   = Number(data.gender_id)
+
+    const {
+      id,
+      createdAt,
+      brand,
+      gender,
+      categories,
+      sports,
+      category_ids,
+      sport_ids,
+      gallery,
+      ...data
+    } = this.formData
+
+    data.sizes = this.sizesArray.join(',')
+    data.category_ids = this.categoryIdsArray
+    data.sport_ids = this.sportIdsArray
+    data.gallery = this.imagesArray
+
+    data.brand_id = data.brand_id ? Number(data.brand_id) : null
+    data.gender_id = data.gender_id ? Number(data.gender_id) : null
+
     try {
       const res = mode === 'add'
-        ? await this.svc.apiFetch('/api/admin/products',       { method: 'POST', body: JSON.stringify(data) })
-        : await this.svc.apiFetch(`/api/admin/products/${id}`, { method: 'PUT',  body: JSON.stringify(data) })
+        ? await this.svc.apiFetch('/api/admin/products', {
+            method: 'POST',
+            body: JSON.stringify(data),
+          })
+        : await this.svc.apiFetch(`/api/admin/products/${id}`, {
+            method: 'PUT',
+            body: JSON.stringify(data),
+          })
+
       if (!res.ok) {
         const err = await res.json().catch(() => ({})) as any
         this.apiError.set(err.error ?? `Error ${res.status}`)
         return
       }
+
       this.showModal.set(false)
       await this.load()
     } catch {
@@ -168,9 +367,14 @@ export class ProductsTabComponent implements OnInit {
 
   async deleteItem(id: number) {
     if (!confirm('¿Eliminar este producto? Esta acción no se puede deshacer.')) return
+
     this.apiError.set('')
+
     try {
-      const res = await this.svc.apiFetch(`/api/admin/products/${id}`, { method: 'DELETE' })
+      const res = await this.svc.apiFetch(`/api/admin/products/${id}`, {
+        method: 'DELETE'
+      })
+
       if (!res.ok) {
         const err = await res.json().catch(() => ({})) as any
         this.apiError.set(err.error ?? `Error ${res.status}`)
@@ -180,8 +384,11 @@ export class ProductsTabComponent implements OnInit {
       this.apiError.set('Error de red al eliminar')
       return
     }
+
     await this.load()
   }
 
-  trackById(_: number, item: any) { return item.id }
+  trackById(_: number, item: any) {
+    return item.id
+  }
 }

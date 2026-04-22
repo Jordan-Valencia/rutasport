@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core'
+import { Component, inject, signal } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { CartService } from '../../services/cart.service'
 
@@ -10,4 +10,13 @@ import { CartService } from '../../services/cart.service'
 })
 export class CartDrawerComponent {
   protected cart = inject(CartService)
+  protected isClosing = signal(false)
+
+  closeWithAnimation() {
+    this.isClosing.set(true)
+    setTimeout(() => {
+      this.cart.close()
+      this.isClosing.set(false)
+    }, 320)
+  }
 }

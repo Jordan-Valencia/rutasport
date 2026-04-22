@@ -1,246 +1,317 @@
-<div class="rs-content-card bg-white rounded-2xl shadow-sm overflow-hidden">
-
-  @if (apiError()) {
-    <div class="flex items-center gap-3 px-6 py-3 bg-red-50 border-b border-red-100 text-red-700 text-sm">
-      <span class="flex-1">{{ apiError() }}</span>
-      <button (click)="apiError.set('')" class="cursor-pointer text-red-400 hover:text-red-600">✕</button>
-    </div>
-  }
-
-  <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100">
-    <div class="flex items-center gap-3">
-      <span class="text-xl">📦</span>
-      <div>
-        <h2 class="font-semibold text-slate-800">Productos</h2>
-        <p class="text-xs text-slate-400">{{ items().length }} registros</p>
-      </div>
-    </div>
-    <button (click)="openAdd()" class="cursor-pointer flex items-center gap-2 px-4 py-2 rounded-xl bg-linear-to-r from-blue-600 to-indigo-600 text-white text-sm font-medium shadow hover:opacity-90 transition-all">
-      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-      Nuevo producto
-    </button>
-  </div>
-
-  @if (loading()) {
-    <div class="flex items-center justify-center py-20">
-      <div class="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-    </div>
-  } @else {
-    <div class="overflow-x-auto">
-      <table class="w-full text-sm">
-        <thead>
-          <tr class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider">
-            <th class="text-left px-4 py-3 font-medium">ID</th>
-            <th class="text-left px-4 py-3 font-medium">Nombre</th>
-            <th class="text-left px-4 py-3 font-medium">Marca</th>
-            <th class="text-left px-4 py-3 font-medium">Precio</th>
-            <th class="text-left px-4 py-3 font-medium">Categoría</th>
-            <th class="text-left px-4 py-3 font-medium">Tallas</th>
-            <th class="text-left px-4 py-3 font-medium">Imágenes</th>
-            <th class="text-left px-4 py-3 font-medium">Tags</th>
-            <th class="text-right px-4 py-3 font-medium">Acciones</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-slate-50">
-          @for (p of items(); track trackById($index, p)) {
-            <tr class="group hover:bg-slate-50 transition-colors">
-              <td class="px-4 py-3 text-slate-400 font-mono text-xs">{{ p.id }}</td>
-              <td class="px-4 py-3 font-medium text-slate-800">{{ p.name }}</td>
-              <td class="px-4 py-3">
-                @if (p.brand) {
-                  <span class="px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 text-xs font-medium">{{ p.brand }}</span>
-                } @else {
-                  <span class="text-slate-300">—</span>
-                }
-              </td>
-              <td class="px-4 py-3 font-medium text-slate-700">{{ p.price }}</td>
-              <td class="px-4 py-3">
-                <span class="px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 text-xs font-medium">{{ p.category }}</span>
-              </td>
-              <td class="px-4 py-3">
-                @if (p.sizes) {
-                  <div class="flex flex-wrap gap-1">
-                    @for (s of p.sizes.split(','); track s) {
-                      <span class="px-1.5 py-0.5 rounded bg-indigo-50 text-indigo-700 text-xs">{{ s.trim() }}</span>
-                    }
-                  </div>
-                } @else {
-                  <span class="text-slate-300 text-xs">—</span>
-                }
-              </td>
-              <td class="px-4 py-3">
-                @if (getFirstImage(p)) {
-                  <div class="flex items-center gap-1">
-                    <img [src]="getFirstImage(p)" [alt]="p.name" class="w-9 h-9 rounded-lg object-cover border border-slate-200">
-                    @if (p.images) {
-                      <span class="text-xs text-slate-400">×{{ (p.images | json)?.length ?? 1 }}</span>
-                    }
-                  </div>
-                } @else {
-                  <div class="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-slate-300 text-xs">—</div>
-                }
-              </td>
-              <td class="px-4 py-3">
-                <div class="flex gap-1">
-                  @if (p.isBestSeller) { <span class="px-1.5 py-0.5 rounded bg-amber-50 text-amber-700 text-xs font-bold">TOP</span> }
-                  @if (p.isNew)        { <span class="px-1.5 py-0.5 rounded bg-green-50 text-green-700 text-xs font-bold">NEW</span> }
-                </div>
-              </td>
-              <td class="px-4 py-3">
-                <div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <button (click)="openEdit(p)" class="cursor-pointer w-7 h-7 flex items-center justify-center rounded-lg hover:bg-blue-50 text-slate-400 hover:text-blue-600 transition-colors">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
-                  </button>
-                  <button (click)="deleteItem(p.id)" class="cursor-pointer w-7 h-7 flex items-center justify-center rounded-lg hover:bg-red-50 text-slate-400 hover:text-red-600 transition-colors">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                  </button>
-                </div>
-              </td>
-            </tr>
-          } @empty {
-            <tr>
-              <td colspan="9" class="px-4 py-16 text-center text-slate-400">
-                <div class="text-4xl mb-2">📦</div>
-                <p>No hay productos. Crea el primero.</p>
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
-    </div>
-  }
+@if (loading()) {
+<div class="rs-loading">Cargando productos…</div>
+} @else {
+<div class="rs-tab-toolbar">
+  <span class="rs-count">{{ items().length }} registros</span>
+  <button class="rs-btn rs-btn-primary" (click)="openAdd()">+ Nuevo producto</button>
 </div>
 
-@if (showModal()) {
-  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" (click)="closeModal()">
-    <div class="rs-modal-card bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto" (click)="$event.stopPropagation()">
+@if (apiError()) {
+<div class="rs-alert rs-alert-error">{{ apiError() }}</div>
+}
 
-      <div class="flex items-center justify-between px-6 py-5 border-b border-slate-100">
-        <h3 class="font-semibold text-slate-800">{{ modalMode() === 'add' ? 'Nuevo producto' : 'Editar producto' }}</h3>
-        <button (click)="closeModal()" class="cursor-pointer w-8 h-8 flex items-center justify-center rounded-lg hover:bg-slate-100 text-slate-400">✕</button>
-      </div>
-
-      <div class="p-6 grid grid-cols-2 gap-4">
-
-        <div class="col-span-2">
-          <label class="block text-xs font-medium text-slate-500 mb-1.5">Nombre / Modelo *</label>
-          <input [(ngModel)]="formData.name" type="text" placeholder="Ej. FOF100334-001"
-            class="w-full px-3 py-2 rounded-xl border text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            [class.border-red-400]="formErrors['name']" [class.border-slate-200]="!formErrors['name']">
-          @if (formErrors['name']) { <p class="text-xs text-red-500 mt-1">{{ formErrors['name'] }}</p> }
-        </div>
-
-        <div>
-          <label class="block text-xs font-medium text-slate-500 mb-1.5">Precio *</label>
-          <input [(ngModel)]="formData.price" type="text" placeholder="$299.900"
-            class="w-full px-3 py-2 rounded-xl border text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            [class.border-red-400]="formErrors['price']" [class.border-slate-200]="!formErrors['price']">
-          @if (formErrors['price']) { <p class="text-xs text-red-500 mt-1">{{ formErrors['price'] }}</p> }
-        </div>
-
-        <div>
-          <label class="block text-xs font-medium text-slate-500 mb-1.5">Marca</label>
-          <select [(ngModel)]="formData.brand" class="cursor-pointer w-full px-3 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
-            <option value="">Sin marca</option>
-            @for (b of svc.brands(); track b.id) {
-              <option [value]="b.name">{{ b.name }}</option>
-            }
-          </select>
-        </div>
-
-        <div>
-          <label class="block text-xs font-medium text-slate-500 mb-1.5">Categoría *</label>
-          <select [(ngModel)]="formData.category" class="cursor-pointer w-full px-3 py-2 rounded-xl border text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
-            [class.border-red-400]="formErrors['category']" [class.border-slate-200]="!formErrors['category']">
-            <option value="">Seleccionar</option>
-            @for (c of svc.categories(); track c.id) {
-              <option [value]="c.name">{{ c.name }}</option>
-            }
-          </select>
-          @if (formErrors['category']) { <p class="text-xs text-red-500 mt-1">{{ formErrors['category'] }}</p> }
-        </div>
-
-        <div>
-          <label class="block text-xs font-medium text-slate-500 mb-1.5">Deporte *</label>
-          <select [(ngModel)]="formData.sport" class="cursor-pointer w-full px-3 py-2 rounded-xl border text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
-            [class.border-red-400]="formErrors['sport']" [class.border-slate-200]="!formErrors['sport']">
-            <option value="">Seleccionar</option>
-            @for (s of svc.sports(); track s.id) {
-              <option [value]="s.name">{{ s.name }}</option>
-            }
-          </select>
-          @if (formErrors['sport']) { <p class="text-xs text-red-500 mt-1">{{ formErrors['sport'] }}</p> }
-        </div>
-
-        <!-- Tallas -->
-        <div class="col-span-2">
-          <label class="block text-xs font-medium text-slate-500 mb-2">Tallas disponibles</label>
-          <div class="flex flex-wrap gap-1.5">
-            @for (s of SIZES; track s) {
-              <button type="button" (click)="toggleSize(s)"
-                class="px-2.5 py-1 rounded-full text-xs font-medium border transition-all cursor-pointer"
-                [class]="sizesArray.includes(s) ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-slate-500 border-slate-200 hover:border-indigo-400 hover:text-indigo-600'">
-                {{ s }}
-              </button>
+<div class="rs-table-wrap">
+  <table class="rs-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Imagen</th>
+        <th>Nombre</th>
+        <th>Modelo</th>
+        <th>Marca</th>
+        <th>Precio</th>
+        <th>Categoría</th>
+        <th>Deporte(s)</th>
+        <th>Género</th>
+        <th>Tallas</th>
+        <th>Imgs+</th>
+        <th>Tags</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (p of items(); track p.id) {
+      <tr>
+        <td class="rs-td-id">{{ p.id }}</td>
+        <td>
+          @if (p.image) {
+          <img class="rs-thumb" [src]="p.image" [alt]="p.name" />
+          } @else {
+          <span class="rs-no-img">—</span>
+          }
+        </td>
+        <td>{{ p.name }}</td>
+        <td>{{ p.model ?? '—' }}</td>
+        <td>{{ p.brand ?? '—' }}</td>
+        <td>{{ p.price }}</td>
+        <td>{{ p.categories ?? '—' }}</td>
+        <td>{{ p.sports ?? '—' }}</td>
+        <td>{{ p.gender ?? '—' }}</td>
+        <td>
+          @if (p.sizes) {
+          <div class="rs-sizes-list">
+            @for (s of p.sizes.split(','); track s) {
+            <span class="rs-size-badge">{{ s.trim() }}</span>
             }
           </div>
-          @if (sizesArray.length > 0) {
-            <p class="text-xs text-indigo-600 mt-2">{{ sizesArray.length }} talla(s) seleccionada(s): {{ sizesArray.join(', ') }}</p>
+          } @else {
+          —
+          }
+        </td>
+        <td>
+          @if (p.gallery) {
+          <span class="rs-badge-count">×{{ p.gallery.split(',').length }}</span>
+          } @else {
+          —
+          }
+        </td>
+        <td>
+          @if (p.isBestSeller) {
+          <span class="rs-tag rs-tag-gold">TOP</span>
+          }
+          @if (p.isNew) {
+          <span class="rs-tag rs-tag-blue">NEW</span>
+          }
+        </td>
+        <td class="rs-td-actions">
+          <button class="rs-btn rs-btn-sm rs-btn-ghost" (click)="openEdit(p)">Editar</button>
+          <button class="rs-btn rs-btn-sm rs-btn-danger" (click)="deleteItem(p.id)">Eliminar</button>
+        </td>
+      </tr>
+      } @empty {
+      <tr>
+        <td colspan="13" class="rs-empty-row">
+          <span class="rs-empty-icon">📦</span>
+          No hay productos. Crea el primero.
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</div>
+}
+
+@if (showModal()) {
+<div class="rs-modal-overlay" (click)="closeModal()">
+  <div class="rs-modal-card" (click)="$event.stopPropagation()">
+    <div class="rs-modal-header">
+      <h2 class="rs-modal-title">
+        {{ modalMode() === 'add' ? 'Nuevo producto' : 'Editar producto' }}
+      </h2>
+      <button class="rs-modal-close" (click)="closeModal()" aria-label="Cerrar">✕</button>
+    </div>
+
+    <div class="rs-modal-body">
+      @if (apiError()) {
+      <div class="rs-alert rs-alert-error">{{ apiError() }}</div>
+      }
+
+      <div class="rs-field">
+        <label class="rs-label">Nombre *</label>
+        <input class="rs-input" [(ngModel)]="formData.name" placeholder="Ej: Halftrack Mid II" />
+        @if (formErrors['name']) {
+        <span class="rs-error">{{ formErrors['name'] }}</span>
+        }
+      </div>
+
+      <div class="rs-field">
+        <label class="rs-label">Modelo / Referencia</label>
+        <input class="rs-input" [(ngModel)]="formData.model" placeholder="Ej: FOF100334-001" />
+      </div>
+
+      <div class="rs-field">
+        <label class="rs-label">Precio *</label>
+        <input class="rs-input" [(ngModel)]="formData.price" placeholder="Ej: 129900" />
+        @if (formErrors['price']) {
+        <span class="rs-error">{{ formErrors['price'] }}</span>
+        }
+      </div>
+
+      <div class="rs-field">
+        <label class="rs-label">Descripción</label>
+        <textarea class="rs-input rs-textarea" [(ngModel)]="formData.description" rows="3"
+          placeholder="Descripción del producto"></textarea>
+      </div>
+
+      <div class="rs-grid-2">
+        <div class="rs-field">
+          <label class="rs-label">Marca</label>
+          <select class="rs-input" [(ngModel)]="formData.brand_id">
+            <option [ngValue]="null">— Sin marca —</option>
+            @for (b of svc.brands(); track b.id) {
+            <option [ngValue]="b.id">{{ b.name }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="rs-field">
+          <label class="rs-label">Género</label>
+          <select class="rs-input" [(ngModel)]="formData.gender_id">
+            <option [ngValue]="null">— Sin género —</option>
+            @for (g of svc.genders(); track g.id) {
+            <option [ngValue]="g.id">{{ g.name }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div class="rs-field">
+        <label class="rs-label">
+          Categorías
+          @if (categoryIdsArray.length > 0) {
+          <span class="rs-count-badge">{{ categoryIdsArray.length }}</span>
+          }
+        </label>
+
+        @if (svc.categories().length === 0) {
+        <span class="rs-hint">Cargando categorías…</span>
+        } @else {
+        <div class="rs-sizes-grid">
+          @for (c of svc.categories(); track c.id) {
+          <button type="button" class="rs-size-btn" [class.rs-size-btn-active]="categoryIdsArray.includes(c.id)"
+            (click)="toggleCategory(c.id)">
+            {{ c.name }}
+          </button>
           }
         </div>
 
-        <!-- Imágenes -->
-        <div class="col-span-2">
-          <label class="block text-xs font-medium text-slate-500 mb-2">Imágenes del producto</label>
-          <div class="flex flex-wrap gap-2">
-            @for (img of imagesArray; track img; let i = $index) {
-              <div class="relative group w-20 h-20 rounded-xl overflow-hidden border border-slate-200 bg-slate-50">
-                <img [src]="img" class="w-full h-full object-cover">
-                <button type="button" (click)="removeImage(i)"
-                  class="cursor-pointer absolute top-1 right-1 w-5 h-5 rounded-full bg-red-500 text-white flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity leading-none">✕</button>
-                @if (i === 0) {
-                  <span class="absolute bottom-0 left-0 right-0 text-center text-white text-[10px] bg-black/50 py-0.5">Principal</span>
-                }
-              </div>
-            }
-            <label class="cursor-pointer w-20 h-20 rounded-xl border-2 border-dashed border-slate-200 hover:border-blue-400 hover:bg-blue-50 flex flex-col items-center justify-center transition-colors gap-1">
-              @if (imageUploading()) {
-                <div class="w-5 h-5 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-              } @else {
-                <svg class="w-6 h-6 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                <span class="text-xs text-slate-400">Añadir</span>
-              }
-              <input type="file" accept="image/*" (change)="uploadImage($event)" class="hidden">
-            </label>
-          </div>
-        </div>
-
-        <div class="col-span-2">
-          <label class="block text-xs font-medium text-slate-500 mb-1.5">Descripción</label>
-          <textarea [(ngModel)]="formData.description" rows="2" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none" placeholder="Descripción opcional..."></textarea>
-        </div>
-
-        <div class="flex items-center gap-2">
-          <input [(ngModel)]="formData.isBestSeller" type="checkbox" id="isBestSeller" class="cursor-pointer w-4 h-4 rounded text-blue-600">
-          <label for="isBestSeller" class="cursor-pointer text-sm text-slate-600">Más vendido</label>
-        </div>
-        <div class="flex items-center gap-2">
-          <input [(ngModel)]="formData.isNew" type="checkbox" id="isNew" class="cursor-pointer w-4 h-4 rounded text-blue-600">
-          <label for="isNew" class="cursor-pointer text-sm text-slate-600">Nuevo</label>
-        </div>
-
+        <span class="rs-hint">
+          @if (categoryIdsArray.length === 0) {
+          Sin categorías seleccionadas
+          } @else {
+          {{ categoryIdsArray.length }} seleccionada(s)
+          }
+        </span>
+        }
       </div>
 
-      @if (apiError()) {
-        <div class="px-6 py-2 bg-red-50 text-red-700 text-sm">{{ apiError() }}</div>
-      }
-      <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-slate-100 bg-slate-50 rounded-b-2xl">
-        <button (click)="closeModal()" class="cursor-pointer px-4 py-2 rounded-xl text-slate-600 text-sm hover:bg-slate-100 transition-colors">Cancelar</button>
-        <button (click)="save()" [disabled]="saving()" class="cursor-pointer flex items-center gap-2 px-5 py-2 rounded-xl bg-linear-to-r from-blue-600 to-indigo-600 text-white text-sm font-medium shadow hover:opacity-90 transition-all disabled:opacity-50">
-          @if (saving()) { <div class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div> }
-          {{ saving() ? 'Guardando...' : 'Guardar' }}
-        </button>
+  
+
+      <div class="rs-field">
+        <label class="rs-label">
+          Deportes
+          @if (sportIdsArray.length > 0) {
+          <span class="rs-count-badge">{{ sportIdsArray.length }}</span>
+          }
+        </label>
+
+        @if (svc.sports().length === 0) {
+        <span class="rs-hint">Cargando deportes…</span>
+        } @else {
+        <div class="rs-sizes-grid">
+          @for (s of svc.sports(); track s.id) {
+          <button type="button" class="rs-size-btn" [class.rs-size-btn-active]="sportIdsArray.includes(s.id)"
+            (click)="toggleSport(s.id)">
+            @if (s.icon) { {{ s.icon }}&nbsp; }{{ s.name }}
+          </button>
+          }
+        </div>
+
+        <span class="rs-hint">
+          @if (sportIdsArray.length === 0) {
+          Sin deportes seleccionados
+          } @else {
+          {{ sportIdsArray.length }} seleccionado(s)
+          }
+        </span>
+        }
+      </div>
+
+      <div class="rs-field">
+        <label class="rs-label">Tallas disponibles</label>
+        <div class="rs-sizes-grid">
+          @for (s of SIZES; track s) {
+          <button type="button" class="rs-size-btn" [class.rs-size-btn-active]="sizesArray.includes(s)"
+            (click)="toggleSize(s)">
+            {{ s }}
+          </button>
+          }
+        </div>
+        <span class="rs-hint">
+          {{ sizesArray.length }} talla(s) seleccionada(s): {{ sizesArray.join(', ') }}
+        </span>
+      </div>
+
+      <div class="rs-field rs-field-row">
+        <label class="rs-checkbox-label">
+          <input type="checkbox" [(ngModel)]="formData.isBestSeller" />
+          <span>Best Seller</span>
+        </label>
+
+        <label class="rs-checkbox-label">
+          <input type="checkbox" [(ngModel)]="formData.isNew" />
+          <span>Nuevo</span>
+        </label>
+      </div>
+
+      <div class="rs-field">
+        <label class="rs-label">Imagen principal (thumbnail)</label>
+
+        @if (formData.image) {
+        <img class="rs-preview-img" [src]="formData.image" alt="Preview imagen principal" />
+        }
+
+        <label class="rs-upload-btn">
+          @if (imageUploading()) { Subiendo… } @else { Subir imagen principal }
+          <input type="file" accept="image/*" (change)="uploadMainImage($event)" [disabled]="imageUploading()" hidden />
+        </label>
+
+        <div class="rs-url-row">
+          <input class="rs-input rs-input-sm" [(ngModel)]="urlMainInput" placeholder="O pega una URL de imagen…"
+            [disabled]="imageUploading()" />
+
+          <button type="button" class="rs-btn rs-btn-ghost rs-btn-sm" (click)="importMainImageFromUrl()"
+            [disabled]="imageUploading() || !urlMainInput.trim()">
+            {{ imageUploading() ? '…' : 'Importar' }}
+          </button>
+        </div>
+
+        @if (formData.image) {
+        <input class="rs-input rs-input-sm" [(ngModel)]="formData.image" placeholder="URL imagen principal" />
+        }
+      </div>
+
+      <div class="rs-field">
+        <label class="rs-label">Imágenes adicionales</label>
+
+        @if (imagesArray.length > 0) {
+        <div class="rs-gallery-grid">
+          @for (url of imagesArray; track url; let i = $index) {
+          <div class="rs-gallery-item">
+            <img [src]="url" alt="Imagen adicional {{ i + 1 }}" class="rs-gallery-thumb" />
+            <button type="button" class="rs-gallery-remove" (click)="removeExtraImage(i)"
+              aria-label="Eliminar imagen">✕</button>
+          </div>
+          }
+        </div>
+        }
+
+        <label class="rs-upload-btn">
+          @if (imageUploading()) { Subiendo… } @else { + Agregar imagen }
+          <input type="file" accept="image/*" (change)="uploadExtraImage($event)" [disabled]="imageUploading()"
+            hidden />
+        </label>
+
+        <div class="rs-url-row">
+          <input class="rs-input rs-input-sm" [(ngModel)]="urlExtraInput"
+            placeholder="O pega una URL de imagen adicional…" [disabled]="imageUploading()" />
+
+          <button type="button" class="rs-btn rs-btn-ghost rs-btn-sm" (click)="importExtraImageFromUrl()"
+            [disabled]="imageUploading() || !urlExtraInput.trim()">
+            {{ imageUploading() ? '…' : 'Importar' }}
+          </button>
+        </div>
+
+        <span class="rs-hint">{{ imagesArray.length }} imagen(es) adicional(es)</span>
       </div>
     </div>
+
+    <div class="rs-modal-footer">
+      <button class="rs-btn rs-btn-ghost" (click)="closeModal()">Cancelar</button>
+      <button class="rs-btn rs-btn-primary" (click)="save()" [disabled]="saving()">
+        {{ saving() ? 'Guardando…' : (modalMode() === 'add' ? 'Crear producto' : 'Guardar cambios') }}
+      </button>
+    </div>
   </div>
+</div>
 }

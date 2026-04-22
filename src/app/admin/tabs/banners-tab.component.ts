@@ -75,10 +75,7 @@ export class BannersTabComponent implements OnInit {
   }
 
   async save() {
-    const e: Record<string, string> = {}
-    if (!this.formData.title?.trim()) e['title'] = 'El título es requerido'
-    this.formErrors = e
-    if (Object.keys(e).length > 0) return
+    this.formErrors = {}
     this.saving.set(true)
     this.apiError.set('')
     const { id, createdAt, ...data } = this.formData

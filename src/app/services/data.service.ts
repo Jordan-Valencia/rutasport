@@ -27,30 +27,51 @@ export interface Sport {
   isActive?: boolean | number
 }
 
+export interface Brand {
+  id?: number
+  name: string
+  logo?: string
+  order?: number
+  isActive?: boolean | number
+}
+
+export interface Category {
+  id?: number
+  name: string
+  order?: number
+  isActive?: boolean | number
+}
+
+export interface Gender {
+  id?: number
+  name: string
+  order?: number
+}
+
 const MOCK_PRODUCTS: Product[] = [
   // Hombre
-  { id: 1,  name: 'FOF100575-213', price: '$699.900', category: 'Lifestyle', sport: 'Lifestyle', brand: 'Oakley', gender: 'Hombre', image: '', sizes: '8.5,11' },
-  { id: 2,  name: 'FOF100631-001', price: '$599.900', category: 'Lifestyle', sport: 'Lifestyle', brand: 'Oakley', gender: 'Hombre', image: '', sizes: '11' },
-  { id: 3,  name: 'KJ1735',        price: '$299.900', category: 'Lifestyle', sport: 'Lifestyle', brand: 'Adidas', gender: 'Hombre', image: '', sizes: '9,9.5,10,11', isBestSeller: true },
-  { id: 4,  name: 'JQ6958',        price: '$399.900', category: 'Lifestyle', sport: 'Lifestyle', brand: 'Adidas', gender: 'Hombre', image: '', sizes: '8,9,9.5,10', isNew: true },
-  { id: 5,  name: 'FOF100546-01K', price: '$759.900', category: 'Lifestyle', sport: 'Lifestyle', brand: 'Oakley', gender: 'Hombre', image: '', sizes: '10', isNew: true },
-  { id: 6,  name: 'FOF100634-323', price: '$699.900', category: 'Lifestyle', sport: 'Lifestyle', brand: 'Oakley', gender: 'Hombre', image: '', sizes: '9.5,11', isNew: true },
+  { id: 1,  name: 'FOF100575-213', price: '$699.900', categories: 'Lifestyle', sports: 'Lifestyle', brand: 'Oakley', gender: 'Hombre', image: '', sizes: '8.5,11' },
+  { id: 2,  name: 'FOF100631-001', price: '$599.900', categories: 'Lifestyle', sports: 'Lifestyle', brand: 'Oakley', gender: 'Hombre', image: '', sizes: '11' },
+  { id: 3,  name: 'KJ1735',        price: '$299.900', categories: 'Lifestyle', sports: 'Lifestyle', brand: 'Adidas', gender: 'Hombre', image: '', sizes: '9,9.5,10,11', isBestSeller: true },
+  { id: 4,  name: 'JQ6958',        price: '$399.900', categories: 'Lifestyle', sports: 'Lifestyle', brand: 'Adidas', gender: 'Hombre', image: '', sizes: '8,9,9.5,10', isNew: true },
+  { id: 5,  name: 'FOF100546-01K', price: '$759.900', categories: 'Lifestyle', sports: 'Lifestyle', brand: 'Oakley', gender: 'Hombre', image: '', sizes: '10', isNew: true },
+  { id: 6,  name: 'FOF100634-323', price: '$699.900', categories: 'Lifestyle', sports: 'Lifestyle', brand: 'Oakley', gender: 'Hombre', image: '', sizes: '9.5,11', isNew: true },
   // Mujer
-  { id: 10, name: 'FOF100614-001', price: '$649.900', category: 'Lifestyle', sport: 'Lifestyle', brand: 'Oakley', gender: 'Mujer',  image: '', sizes: '7' },
-  { id: 11, name: 'FOF100334-053', price: '$535.900', category: 'Lifestyle', sport: 'Lifestyle', brand: 'Oakley', gender: 'Mujer',  image: '', sizes: '7.5' },
-  { id: 12, name: 'JQ2540',        price: '$299.900', category: 'Lifestyle', sport: 'Lifestyle', brand: 'Adidas', gender: 'Mujer',  image: '', sizes: '5,5.5,6.5,7', isBestSeller: true },
-  { id: 13, name: 'IH8225',        price: '$399.900', category: 'Lifestyle', sport: 'Lifestyle', brand: 'Adidas', gender: 'Mujer',  image: '', sizes: '6,7,7.5', isNew: true },
-  { id: 14, name: 'ID8742',        price: '$499.900', category: 'Lifestyle', sport: 'Lifestyle', brand: 'Adidas', gender: 'Mujer',  image: '', sizes: '5.5,7,7.5' },
-  { id: 15, name: 'JQ2610',        price: '$299.900', category: 'Lifestyle', sport: 'Lifestyle', brand: 'Adidas', gender: 'Mujer',  image: '', sizes: '6.5,7,7.5' },
+  { id: 10, name: 'FOF100614-001', price: '$649.900', categories: 'Lifestyle', sports: 'Lifestyle', brand: 'Oakley', gender: 'Mujer',  image: '', sizes: '7' },
+  { id: 11, name: 'FOF100334-053', price: '$535.900', categories: 'Lifestyle', sports: 'Lifestyle', brand: 'Oakley', gender: 'Mujer',  image: '', sizes: '7.5' },
+  { id: 12, name: 'JQ2540',        price: '$299.900', categories: 'Lifestyle', sports: 'Lifestyle', brand: 'Adidas', gender: 'Mujer',  image: '', sizes: '5,5.5,6.5,7', isBestSeller: true },
+  { id: 13, name: 'IH8225',        price: '$399.900', categories: 'Lifestyle', sports: 'Lifestyle', brand: 'Adidas', gender: 'Mujer',  image: '', sizes: '6,7,7.5', isNew: true },
+  { id: 14, name: 'ID8742',        price: '$499.900', categories: 'Lifestyle', sports: 'Lifestyle', brand: 'Adidas', gender: 'Mujer',  image: '', sizes: '5.5,7,7.5' },
+  { id: 15, name: 'JQ2610',        price: '$299.900', categories: 'Lifestyle', sports: 'Lifestyle', brand: 'Adidas', gender: 'Mujer',  image: '', sizes: '6.5,7,7.5' },
   // Unisex / Running / Fútbol
-  { id: 20, name: 'FOF100334-001', price: '$599.900', category: 'Lifestyle', sport: 'Lifestyle', brand: 'Oakley', gender: 'Unisex', image: '', sizes: '7.5,10' },
-  { id: 21, name: 'FOF100670-323', price: '$629.900', category: 'Lifestyle', sport: 'Lifestyle', brand: 'Oakley', gender: 'Unisex', image: '', sizes: '7,10' },
-  { id: 22, name: 'JR7151',        price: '$319.900', category: 'Running',   sport: 'Running',   brand: 'Adidas', gender: 'Hombre', image: '', sizes: '8,10,11' },
-  { id: 23, name: 'JR9142',        price: '$399.900', category: 'Running',   sport: 'Running',   brand: 'Adidas', gender: 'Unisex', image: '', sizes: '6,7,7.5,8' },
-  { id: 24, name: 'JP5911',        price: '$399.900', category: 'Fútbol',    sport: 'Fútbol',    brand: 'Adidas', gender: 'Unisex', image: '', sizes: '6,6.5,7' },
-  { id: 25, name: 'JS4435',        price: '$299.900', category: 'Lifestyle', sport: 'Lifestyle', brand: 'Adidas', gender: 'Unisex', image: '', sizes: '6,6.5,7,8' },
-  { id: 26, name: 'HQ2329',        price: '$299.900', category: 'Lifestyle', sport: 'Lifestyle', brand: 'Adidas', gender: 'Unisex', image: '', sizes: '6.5,7,7.5,8' },
-  { id: 27, name: 'FOF100334-323', price: '$535.900', category: 'Lifestyle', sport: 'Lifestyle', brand: 'Oakley', gender: 'Unisex', image: '', sizes: '7,7.5,10' },
+  { id: 20, name: 'FOF100334-001', price: '$599.900', categories: 'Lifestyle', sports: 'Lifestyle', brand: 'Oakley', gender: 'Unisex', image: '', sizes: '7.5,10' },
+  { id: 21, name: 'FOF100670-323', price: '$629.900', categories: 'Lifestyle', sports: 'Lifestyle', brand: 'Oakley', gender: 'Unisex', image: '', sizes: '7,10' },
+  { id: 22, name: 'JR7151',        price: '$319.900', categories: 'Running',   sports: 'Running',   brand: 'Adidas', gender: 'Hombre', image: '', sizes: '8,10,11' },
+  { id: 23, name: 'JR9142',        price: '$399.900', categories: 'Running',   sports: 'Running',   brand: 'Adidas', gender: 'Unisex', image: '', sizes: '6,7,7.5,8' },
+  { id: 24, name: 'JP5911',        price: '$399.900', categories: 'Fútbol',    sports: 'Fútbol',    brand: 'Adidas', gender: 'Unisex', image: '', sizes: '6,6.5,7' },
+  { id: 25, name: 'JS4435',        price: '$299.900', categories: 'Lifestyle', sports: 'Lifestyle', brand: 'Adidas', gender: 'Unisex', image: '', sizes: '6,6.5,7,8' },
+  { id: 26, name: 'HQ2329',        price: '$299.900', categories: 'Lifestyle', sports: 'Lifestyle', brand: 'Adidas', gender: 'Unisex', image: '', sizes: '6.5,7,7.5,8' },
+  { id: 27, name: 'FOF100334-323', price: '$535.900', categories: 'Lifestyle', sports: 'Lifestyle', brand: 'Oakley', gender: 'Unisex', image: '', sizes: '7,7.5,10' },
 ]
 
 const MOCK_BANNERS: FeatureBanner[] = [
@@ -65,6 +86,23 @@ const MOCK_SPORTS: Sport[] = [
   { id: 4, name: 'Training',   icon: '💪', order: 4 },
   { id: 5, name: 'Tenis',      icon: '🎾', order: 5 },
   { id: 6, name: 'Lifestyle',  icon: '👟', order: 6 },
+]
+
+const MOCK_BRANDS: Brand[] = [
+  { id: 1, name: 'Adidas',  order: 1 },
+  { id: 2, name: 'Oakley',  order: 2 },
+]
+
+const MOCK_CATEGORIES: Category[] = [
+  { id: 1, name: 'Lifestyle', order: 1 },
+  { id: 2, name: 'Running',   order: 2 },
+  { id: 3, name: 'Fútbol',    order: 3 },
+]
+
+const MOCK_GENDERS: Gender[] = [
+  { id: 1, name: 'Hombre', order: 1 },
+  { id: 2, name: 'Mujer',  order: 2 },
+  { id: 3, name: 'Unisex', order: 3 },
 ]
 
 const MOCK_HEROES: Hero[] = [
@@ -89,6 +127,13 @@ export class DataService {
 
   private get isBrowser(): boolean {
     return isPlatformBrowser(this.platformId)
+  }
+
+  getProductById(id: number): Observable<Product | null> {
+    if (!this.isBrowser) return of(MOCK_PRODUCTS.find(p => p.id === id) ?? null)
+    return this.http.get<Product>(`/api/products/${id}`).pipe(
+      catchError(() => of(MOCK_PRODUCTS.find(p => p.id === id) ?? null))
+    )
   }
 
   getProducts(params?: ProductFilters): Observable<Product[]> {
@@ -123,5 +168,20 @@ export class DataService {
   getHeroes(): Observable<Hero[]> {
     if (!this.isBrowser) return of(MOCK_HEROES)
     return this.http.get<Hero[]>('/api/heroes').pipe(catchError(() => of(MOCK_HEROES)))
+  }
+
+  getBrands(): Observable<Brand[]> {
+    if (!this.isBrowser) return of(MOCK_BRANDS)
+    return this.http.get<Brand[]>('/api/brands').pipe(catchError(() => of(MOCK_BRANDS)))
+  }
+
+  getCategories(): Observable<Category[]> {
+    if (!this.isBrowser) return of(MOCK_CATEGORIES)
+    return this.http.get<Category[]>('/api/categories').pipe(catchError(() => of(MOCK_CATEGORIES)))
+  }
+
+  getGenders(): Observable<Gender[]> {
+    if (!this.isBrowser) return of(MOCK_GENDERS)
+    return this.http.get<Gender[]>('/api/genders').pipe(catchError(() => of(MOCK_GENDERS)))
   }
 }

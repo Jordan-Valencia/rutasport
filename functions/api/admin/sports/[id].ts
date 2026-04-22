@@ -25,6 +25,7 @@ export const onRequestPut: PagesFunction<Env> = async ({ env, request, params })
 export const onRequestDelete: PagesFunction<Env> = async ({ env, request, params }) => {
   if (request.headers.get('x-admin-key') !== ADMIN_KEY) return unauthorized()
   try {
+    await env.DB.prepare('DELETE FROM product_sports WHERE sport_id = ?').bind(params.id).run()
     const result = await env.DB.prepare('DELETE FROM sports WHERE id = ?').bind(params.id).run()
     if (result.meta.changes === 0) return json({ error: 'Sport not found' }, 404)
     return json({ success: true })

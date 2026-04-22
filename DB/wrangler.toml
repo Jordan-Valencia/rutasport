@@ -1,8 +1,12 @@
 name = "rutasport"
 compatibility_date = "2024-01-01"
-pages_build_output_dir = "../dist/CalzadoAndres/browser"
+pages_build_output_dir = "dist/CalzadoAndres/browser"
 
 [[d1_databases]]
 binding = "DB"
 database_name = "rutasport"
-database_id = "51dfde01-249b-4320-8056-8179ea69f025"
+database_id = "7f449638-dc50-4869-ae4a-928fa4e1a6ba"
+
+[[r2_buckets]]
+binding = "IMAGES"
+bucket_name = "rutasport"

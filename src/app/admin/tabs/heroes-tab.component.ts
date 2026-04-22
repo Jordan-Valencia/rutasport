@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, inject, PLATFORM_ID } from '@angular/core'
+import { Component, OnInit, signal, computed, inject, PLATFORM_ID } from '@angular/core'
 import { CommonModule, isPlatformBrowser } from '@angular/common'
 import { FormsModule } from '@angular/forms'
 import { AdminService } from '../admin.service'
@@ -14,6 +14,7 @@ export class HeroesTabComponent implements OnInit {
   protected svc = inject(AdminService)
 
   items = signal<any[]>([])
+  hero = computed(() => this.items()[0] ?? null)
   loading = signal(false)
   saving = signal(false)
   imageUploading = signal(false)
@@ -39,7 +40,7 @@ export class HeroesTabComponent implements OnInit {
 
   openAdd() {
     this.modalMode.set('add')
-    this.formData = { campaignName: '', category: '', description: '', imageUrl: '', videoUrl: '', ctaText: 'COMPRAR AHORA', isActive: true, order: 0 }
+    this.formData = { campaignName: '', category: '', description: '', imageUrl: '', ctaText: 'COMPRAR AHORA', isActive: true, order: 0 }
     this.formErrors = {}
     this.showModal.set(true)
     this.animateModal()
@@ -75,10 +76,7 @@ export class HeroesTabComponent implements OnInit {
   }
 
   async save() {
-    const e: Record<string, string> = {}
-    if (!this.formData.campaignName?.trim()) e['campaignName'] = 'El nombre de campaña es requerido'
-    this.formErrors = e
-    if (Object.keys(e).length > 0) return
+    this.formErrors = {}
     this.saving.set(true)
     this.apiError.set('')
     const { id, createdAt, ...data } = this.formData

@@ -1,7 +1,7 @@
 import { Component, inject, signal, computed, PLATFORM_ID, afterNextRender } from '@angular/core'
 import { CommonModule, isPlatformBrowser } from '@angular/common'
 import { FormsModule } from '@angular/forms'
-import { RouterModule, ActivatedRoute } from '@angular/router'
+import { RouterModule, ActivatedRoute, Router } from '@angular/router'
 import { DataService } from '../../services/data.service'
 import { CartService } from '../../services/cart.service'
 import { HeaderComponent } from '../header/header.component'
@@ -17,19 +17,29 @@ import { Product } from '../../models/product'
 export class CatalogComponent {
   private dataService = inject(DataService)
   private route       = inject(ActivatedRoute)
+  private router      = inject(Router)
   private platformId  = inject(PLATFORM_ID)
   protected cart      = inject(CartService)
 
   allProducts = signal<Product[]>([])
   loading     = signal(true)
 
-  selectedCategory = signal('')
-  selectedBrand    = signal('')
-  selectedSport    = signal('')
-  searchQuery      = signal('')
-  sortBy           = signal('default')
+  selectedCategory   = signal('')
+  selectedBrand      = signal('')
+  selectedSport      = signal('')
+  selectedGender     = signal('')
+  filterBestSeller   = signal(false)
+  filterIsNew        = signal(false)
+  searchQuery        = signal('')
+  sortBy             = signal('default')
 
   sizePickerProduct = signal<Product | null>(null)
+  filterPanelOpen   = signal(false)
+  sportOpen         = signal(true)
+  categoryOpen      = signal(true)
+  brandOpen         = signal(true)
+  genderOpen        = signal(true)
+  specialOpen       = signal(true)
 
   readonly SPORT_COLORS: Record<string, string | undefined> = {
     'Fútbol':     '#22c55e',
@@ -41,15 +51,21 @@ export class CatalogComponent {
     'Trail':      '#92400e',
   }
 
-  categories = computed(() =>
-    [...new Set(this.allProducts().map(p => p.category).filter((v): v is string => !!v))].sort()
-  )
-  brands = computed(() =>
-    [...new Set(this.allProducts().map(p => p.brand).filter((v): v is string => !!v))].sort()
-  )
-  sports = computed(() =>
-    [...new Set(this.allProducts().map(p => p.sport).filter((v): v is string => !!v))].sort()
-  )
+  categories = signal<string[]>([])
+  brands     = signal<string[]>([])
+  sports     = signal<string[]>([])
+  genders    = signal<string[]>([])
+
+  activeFilterCount = computed(() => {
+    let n = 0
+    if (this.selectedSport()) n++
+    if (this.selectedCategory()) n++
+    if (this.selectedBrand()) n++
+    if (this.selectedGender()) n++
+    if (this.filterBestSeller()) n++
+    if (this.filterIsNew()) n++
+    return n
+  })
 
   filteredProducts = computed(() => {
     let products = this.allProducts()
@@ -59,13 +75,19 @@ export class CatalogComponent {
     const q     = this.searchQuery().toLowerCase().trim()
     const sort  = this.sortBy()
 
-    if (cat)   products = products.filter(p => p.category === cat)
+    const gender = this.selectedGender()
+
+    if (cat)   products = products.filter(p => p.categories?.split(',').map(s => s.trim()).includes(cat))
     if (brand) products = products.filter(p => p.brand === brand)
-    if (sport) products = products.filter(p => p.sport === sport)
+    if (sport) products = products.filter(p => p.sports?.split(',').map(s => s.trim()).includes(sport))
+    if (gender) products = products.filter(p => p.gender === gender)
+    if (this.filterBestSeller())   products = products.filter(p => p.isBestSeller)
+    if (this.filterIsNew())        products = products.filter(p => p.isNew)
     if (q)     products = products.filter(p =>
       p.name.toLowerCase().includes(q) ||
+      (p.model ?? '').toLowerCase().includes(q) ||
       (p.brand ?? '').toLowerCase().includes(q) ||
-      (p.category ?? '').toLowerCase().includes(q)
+      (p.categories ?? '').toLowerCase().includes(q)
     )
 
     if (sort === 'price-asc')  return [...products].sort((a, b) => this.parsePrice(a.price) - this.parsePrice(b.price))
@@ -80,18 +102,46 @@ export class CatalogComponent {
       this.allProducts.set(data)
       this.loading.set(false)
     })
+    this.dataService.getBrands().subscribe(data =>
+      this.brands.set(data.map(b => b.name).filter(Boolean).sort())
+    )
+    this.dataService.getCategories().subscribe(data =>
+      this.categories.set(data.map(c => c.name).filter(Boolean).sort())
+    )
+    this.dataService.getSports().subscribe(data =>
+      this.sports.set(data.map(s => s.name).filter(Boolean).sort())
+    )
+    this.dataService.getGenders().subscribe(data =>
+      this.genders.set(data.map(g => g.name).filter(Boolean).sort())
+    )
     this.route.queryParams.subscribe(params => {
-      if (params['categoria']) this.selectedCategory.set(params['categoria'])
-      if (params['marca'])     this.selectedBrand.set(params['marca'])
-      if (params['deporte'])   this.selectedSport.set(params['deporte'])
+      if (params['categoria'])  this.selectedCategory.set(params['categoria'])
+      if (params['marca'])      this.selectedBrand.set(params['marca'])
+      if (params['deporte'])    this.selectedSport.set(params['deporte'])
+      if (params['genero'])     this.selectedGender.set(params['genero'])
+      if (params['novedades'])  this.filterIsNew.set(true)
+      if (params['bestSeller']) this.filterBestSeller.set(true)
     })
-    afterNextRender(() => this.animateIn())
+    afterNextRender(() => this.animateCardsIn())
+  }
+
+  firstSport(product: Product): string {
+    return product.sports?.split(',')[0]?.trim() ?? ''
   }
 
   parsePrice(p: string): number { return parseInt(p.replace(/[^\d]/g, '')) || 0 }
 
   getSizes(product: Product): string[] {
     return product.sizes ? product.sizes.split(',').map(s => s.trim()).filter(Boolean) : []
+  }
+
+  openProduct(product: Product, event: Event) {
+    event.stopPropagation()
+    if (this.sizePickerProduct()?.id === product.id) {
+      this.sizePickerProduct.set(null)
+      return
+    }
+    this.router.navigate(['/producto', product.id])
   }
 
   onAddClick(product: Product, event: Event) {
@@ -113,17 +163,46 @@ export class CatalogComponent {
     this.selectedCategory.set('')
     this.selectedBrand.set('')
     this.selectedSport.set('')
+    this.selectedGender.set('')
+    this.filterBestSeller.set(false)
+    this.filterIsNew.set(false)
     this.searchQuery.set('')
     this.sortBy.set('default')
   }
 
-  private async animateIn() {
+  async openFilterPanel() {
+    if (!isPlatformBrowser(this.platformId)) return
+    this.filterPanelOpen.set(true)
+    await new Promise(r => setTimeout(r, 16))
+    const { gsap } = await import('gsap')
+    gsap.fromTo('.rs-filter-panel',
+      { x: '-100%' },
+      { x: '0%', duration: 0.42, ease: 'power3.out' }
+    )
+    gsap.fromTo('.rs-filter-backdrop',
+      { opacity: 0 },
+      { opacity: 1, duration: 0.28 }
+    )
+  }
+
+  async closeFilterPanel() {
     if (!isPlatformBrowser(this.platformId)) return
     const { gsap } = await import('gsap')
-    gsap.from('.catalog-card', { y: 30, opacity: 0, duration: 0.4, stagger: 0.04, ease: 'power2.out', clearProps: 'all' })
+    gsap.to('.rs-filter-backdrop', { opacity: 0, duration: 0.25 })
+    gsap.to('.rs-filter-panel', {
+      x: '-100%', duration: 0.35, ease: 'power3.in',
+      onComplete: () => this.filterPanelOpen.set(false)
+    })
+  }
+
+  private async animateCardsIn() {
+    if (!isPlatformBrowser(this.platformId)) return
+    const { gsap } = await import('gsap')
+    gsap.from('.catalog-card', { y: 28, opacity: 0, duration: 0.4, stagger: 0.04, ease: 'power2.out', clearProps: 'all' })
   }
 
   get hasActiveFilters() {
-    return this.selectedCategory() || this.selectedBrand() || this.selectedSport() || this.searchQuery()
+    return this.selectedCategory() || this.selectedBrand() || this.selectedSport() || this.selectedGender()
+        || this.filterBestSeller() || this.filterIsNew() || this.searchQuery()
   }
 }

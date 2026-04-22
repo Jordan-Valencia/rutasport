@@ -1,0 +1,217 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
+
+/* ── Stage (dark gallery panel) ─────────────────────────────── */
+.pd-stage {
+  background: #07070e;
+  width: 100%;
+  min-height: 68vw;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+@media (min-width: 1024px) {
+  .pd-stage {
+    min-height: unset;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+  }
+}
+
+/* Sport color accent bar */
+.pd-sport-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  transform-origin: left center;
+  transform: scaleX(0);
+  transition: transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: 2;
+}
+
+.pd-sport-bar.visible {
+  transform: scaleX(1);
+}
+
+/* Main image */
+.pd-main-img {
+  width: 72%;
+  max-width: 400px;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+
+.pd-main-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 2rem;
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  cursor: zoom-in;
+  user-select: none;
+}
+
+.pd-main-img img:hover {
+  transform: scale(1.06);
+}
+
+/* Thumbnails */
+.pd-thumbs {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 2;
+}
+
+.pd-thumb {
+  width: 50px;
+  height: 50px;
+  border: 2px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.pd-thumb:hover {
+  border-color: rgba(255, 255, 255, 0.35);
+  transform: translateY(-2px);
+}
+
+.pd-thumb.active {
+  border-color: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* ── Info panel ─────────────────────────────────────────────── */
+.pd-info-panel {
+  background: #ffffff;
+  font-family: 'DM Sans', system-ui, sans-serif;
+}
+
+/* ── Product name (Bebas Neue editorial) ────────────────────── */
+.pd-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(56px, 8vw, 96px);
+  line-height: 0.88;
+  letter-spacing: 0.025em;
+  color: #07070e;
+  word-break: break-word;
+}
+
+/* ── Size buttons ───────────────────────────────────────────── */
+.pd-size-btn {
+  padding: 10px 18px;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: 'DM Sans', system-ui, sans-serif;
+  border: 2px solid #e5e7eb;
+  color: #374151;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+  border-radius: 0;
+  letter-spacing: 0.03em;
+  min-width: 52px;
+  text-align: center;
+}
+
+.pd-size-btn:hover {
+  border-color: #07070e;
+  color: #07070e;
+  transform: translateY(-2px);
+}
+
+.pd-size-btn:active {
+  transform: scale(0.91) translateY(0);
+}
+
+.pd-size-btn.active {
+  background: #07070e;
+  border-color: #07070e;
+  color: #ffffff;
+}
+
+/* ── CTA button ─────────────────────────────────────────────── */
+.pd-cta {
+  width: 100%;
+  padding: 20px 28px;
+  font-size: 12px;
+  font-weight: 800;
+  font-family: 'DM Sans', system-ui, sans-serif;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  background: #07070e;
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.25s ease, transform 0.1s ease;
+}
+
+.pd-cta::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.09), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.55s ease;
+}
+
+.pd-cta:hover:not(:disabled)::before {
+  transform: translateX(100%);
+}
+
+.pd-cta:hover:not(:disabled) {
+  background: #1a237e;
+}
+
+.pd-cta:active:not(:disabled) {
+  transform: scale(0.99);
+}
+
+.pd-cta.success {
+  background: #059669;
+  cursor: default;
+}
+
+.pd-cta.disabled {
+  background: #f3f4f6;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+/* ── Details list ───────────────────────────────────────────── */
+.pd-detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #f5f5f3;
+  font-family: 'DM Sans', system-ui, sans-serif;
+}
+
+.pd-detail-row:last-child {
+  border-bottom: none;
+}

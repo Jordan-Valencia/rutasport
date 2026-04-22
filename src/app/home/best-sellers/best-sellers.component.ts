@@ -1,4 +1,4 @@
-import { Component, inject, signal, ElementRef, viewChild, afterNextRender, PLATFORM_ID } from '@angular/core'
+import { Component, inject, signal, ElementRef, viewChild, PLATFORM_ID, effect } from '@angular/core'
 import { CommonModule, isPlatformBrowser } from '@angular/common'
 import { RouterModule } from '@angular/router'
 import { DataService } from '../../services/data.service'
@@ -22,7 +22,15 @@ export class BestSellersComponent {
       this.products.set(data)
       this.loading.set(false)
     })
-    afterNextRender(() => this.animateCards())
+    let hasAnimated = false
+    effect(() => {
+      const section = this.sectionRef()?.nativeElement
+      const loaded = !this.loading()
+      if (loaded && section && !hasAnimated) {
+        hasAnimated = true
+        this.animateCards()
+      }
+    })
   }
 
   private async animateCards() {

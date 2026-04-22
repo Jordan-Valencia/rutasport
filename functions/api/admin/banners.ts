@@ -13,9 +13,13 @@ export const onRequestGet: PagesFunction<Env> = async ({ env, request }) => {
 
 export const onRequestPost: PagesFunction<Env> = async ({ env, request }) => {
   if (request.headers.get('x-admin-key') !== ADMIN_KEY) return unauthorized()
-  const b = await request.json() as any
-  const result = await env.DB.prepare(
-    'INSERT INTO feature_banners (title, subtitle, description, image, buttonText, bgColor, "order", isActive) VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
-  ).bind(b.title, b.subtitle, b.description || null, b.image, b.buttonText, b.bgColor, b.order ?? 0, b.isActive ? 1 : 0).run()
-  return json({ id: result.meta.last_row_id }, 201)
+  try {
+    const b = await request.json() as any
+    const result = await env.DB.prepare(
+      'INSERT INTO feature_banners (title, subtitle, description, image, buttonText, bgColor, "order", isActive) VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
+    ).bind(b.title || null, b.subtitle || null, b.description || null, b.image || null, b.buttonText || null, b.bgColor || null, b.order ?? 0, b.isActive ? 1 : 0).run()
+    return json({ id: result.meta.last_row_id }, 201)
+  } catch (e: any) {
+    return json({ error: e.message ?? 'Internal error' }, 500)
+  }
 }

@@ -1,17 +1,16 @@
 import { sqliteTable, AnySQLiteColumn, integer, text, numeric, uniqueIndex } from "drizzle-orm/sqlite-core"
-  import { sql } from "drizzle-orm"
+import { sql } from "drizzle-orm"
 
 export const heroes = sqliteTable("heroes", {
 	id: integer().primaryKey({ autoIncrement: true }),
-	campaignName: text().notNull(),
-	category: text().notNull(),
+	campaignName: text(),
+	category: text(),
 	description: text(),
-	imageUrl: text().notNull(),
-	videoUrl: text(),
-	ctaText: text().default("COMPRAR AHORA"),
-	isActive: numeric().default(1),
+	imageUrl: text(),
+	ctaText: text(),
+	isActive: integer().default(1),
 	order: integer().default(0),
-	createdAt: text().default("sql`(datetime('now'))`"),
+	createdAt: text(),
 });
 
 export const brands = sqliteTable("brands", {
@@ -19,7 +18,7 @@ export const brands = sqliteTable("brands", {
 	name: text().notNull(),
 	logo: text(),
 	order: integer().default(0),
-	isActive: integer().default(true),
+	isActive: integer().default(1),
 },
 (table) => [
 	uniqueIndex("brands_name_unique").on(table.name),
@@ -29,7 +28,7 @@ export const categories = sqliteTable("categories", {
 	id: integer().primaryKey({ autoIncrement: true }).notNull(),
 	name: text().notNull(),
 	order: integer().default(0),
-	isActive: integer().default(true),
+	isActive: integer().default(1),
 },
 (table) => [
 	uniqueIndex("categories_name_unique").on(table.name),
@@ -55,14 +54,15 @@ export const productImages = sqliteTable("product_images", {
 export const products = sqliteTable("products", {
 	id: integer().primaryKey({ autoIncrement: true }).notNull(),
 	name: text().notNull(),
+	model: text(),
 	price: text().notNull(),
 	brandId: integer("brand_id"),
 	categoryId: integer("category_id"),
 	sportId: integer("sport_id"),
 	genderId: integer("gender_id"),
 	image: text().default("").notNull(),
-	isBestSeller: integer().default(false),
-	isNew: integer().default(false),
+	isBestSeller: integer().default(0),
+	isNew: integer().default(0),
 	description: text(),
 	sizes: text(),
 	createdAt: text().default("2026-04-19T01:59:30.678Z"),
@@ -70,15 +70,14 @@ export const products = sqliteTable("products", {
 
 export const featureBanners = sqliteTable("feature_banners", {
 	id: integer().primaryKey({ autoIncrement: true }).notNull(),
-	title: text().notNull(),
-	subtitle: text().notNull(),
+	title: text(),
+	subtitle: text(),
 	description: text(),
-	image: text().notNull(),
-	buttonText: text().notNull(),
-	bgColor: text().notNull(),
+	image: text(),
+	buttonText: text(),
+	bgColor: text(),
 	order: integer().default(0),
-	isActive: integer().default(true),
-	createdAt: text().default("2026-04-19T01:59:30.679Z"),
+	createdAt: text(),
 });
 
 export const sports = sqliteTable("sports", {
@@ -86,7 +85,6 @@ export const sports = sqliteTable("sports", {
 	name: text().notNull(),
 	icon: text(),
 	order: integer().default(0),
-	isActive: integer().default(true),
 },
 (table) => [
 	uniqueIndex("sports_name_unique").on(table.name),

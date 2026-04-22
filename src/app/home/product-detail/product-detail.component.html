@@ -1,0 +1,296 @@
+<app-header />
+<app-cart-drawer />
+
+<!-- ── Loading Skeleton ──────────────────────────────────────── -->
+@if (loading()) {
+  <div class="min-h-screen bg-white grid lg:grid-cols-2 animate-pulse">
+    <div class="bg-[#07070e] min-h-[68vw] lg:min-h-0"></div>
+    <div class="p-8 lg:p-14 flex flex-col gap-5">
+      <div class="h-3 bg-gray-100 rounded-full w-1/4"></div>
+      <div class="h-16 bg-gray-100 rounded w-4/5"></div>
+      <div class="h-8 bg-gray-100 rounded-full w-1/4 mt-2"></div>
+      <div class="h-px bg-gray-100 mt-4"></div>
+      <div class="flex gap-2 mt-2">
+        @for (i of [1,2,3,4]; track i) {
+          <div class="w-14 h-11 bg-gray-100"></div>
+        }
+      </div>
+      <div class="h-16 bg-gray-100 mt-4"></div>
+    </div>
+  </div>
+}
+
+<!-- ── Product Page ──────────────────────────────────────────── -->
+@if (!loading() && product()) {
+  <div class="min-h-screen bg-white">
+
+    <!-- Breadcrumb nav -->
+    <div class="bg-white border-b border-gray-100 px-5 lg:px-12 py-3 flex items-center gap-2.5">
+      <a routerLink="/catalogo"
+        class="flex items-center gap-1.5 text-[13px] font-medium text-gray-400 hover:text-[#1a237e] transition-colors group">
+        <svg class="w-4 h-4 transition-transform group-hover:-translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+        Catálogo
+      </a>
+      @if (product()!.brand) {
+        <span class="text-gray-200">/</span>
+        <span class="text-[13px] text-gray-400">{{ product()!.brand }}</span>
+      }
+      <span class="text-gray-200">/</span>
+      <span class="text-[13px] text-gray-700 font-semibold truncate max-w-[200px]">{{ product()!.name }}</span>
+    </div>
+
+    <!-- Main layout: dark gallery left, white info right -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 items-start">
+
+      <!-- ═══ GALLERY PANEL (dark stage) ═══ -->
+      <div class="pd-gallery-panel">
+        <div class="pd-stage">
+
+          <!-- Sport color accent bar -->
+          <div class="pd-sport-bar"
+            [class.visible]="sportBarVisible()"
+            [style.backgroundColor]="sportColor()"></div>
+
+          <!-- Radial sport glow behind product -->
+          <div class="absolute inset-0 pointer-events-none"
+            [style.background]="'radial-gradient(ellipse at 50% 55%, ' + sportColor() + '14 0%, transparent 60%)'">
+          </div>
+
+          <!-- Main product image -->
+          <div class="pd-main-img">
+            @if (images()[activeIndex()]) {
+              <img
+                [src]="images()[activeIndex()]"
+                [alt]="product()!.name"
+                (click)="cycleImage()"
+                onerror="this.style.opacity='0'" />
+            } @else {
+              <div class="w-full h-full flex items-center justify-center opacity-20">
+                <svg class="w-28 h-28 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="0.75"
+                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                </svg>
+              </div>
+            }
+          </div>
+
+          <!-- Floating badges -->
+          <div class="absolute top-5 left-5 flex flex-col gap-2 z-10">
+            @if (product()!.isNew) {
+              <span class="bg-white text-[#07070e] px-3 py-1 text-[9px] font-black tracking-[0.2em] uppercase">
+                NUEVO
+              </span>
+            }
+            @if (product()!.isBestSeller) {
+              <span class="bg-[#1a237e] text-white px-3 py-1 text-[9px] font-black tracking-[0.2em] uppercase">
+                ★ TOP
+              </span>
+            }
+          </div>
+
+          <!-- Image count indicator -->
+          @if (images().length > 1) {
+            <div class="absolute top-5 right-5 z-10">
+              <span class="text-white/30 text-[11px] font-semibold tracking-widest">
+                {{ activeIndex() + 1 }}/{{ images().length }}
+              </span>
+            </div>
+          }
+
+          <!-- Thumbnail strip -->
+          @if (images().length > 1) {
+            <div class="pd-thumbs">
+              @for (img of images(); track $index) {
+                <button (click)="setImage($index)"
+                  class="pd-thumb"
+                  [class.active]="activeIndex() === $index">
+                  <img [src]="img" [alt]="'Vista ' + ($index + 1)"
+                    class="w-full h-full object-contain p-1"
+                    onerror="this.style.opacity='0'" />
+                </button>
+              }
+            </div>
+          }
+
+        </div>
+      </div>
+
+      <!-- ═══ INFO PANEL (white editorial) ═══ -->
+      <div class="pd-info-panel">
+        <div class="px-6 py-10 lg:px-12 lg:py-14 max-w-[560px]">
+
+          <!-- Brand + meta chips -->
+          <div class="pd-reveal flex flex-wrap items-center gap-2 mb-5">
+            @if (product()!.brand) {
+              <span class="text-[11px] font-black uppercase tracking-[0.22em] text-gray-400">
+                {{ product()!.brand }}
+              </span>
+            }
+            @if (product()!.gender) {
+              <span class="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-gray-100 text-gray-500">
+                {{ product()!.gender }}
+              </span>
+            }
+            @for (sport of (product()!.sports ?? '').split(',').map(s => s.trim()).filter(s => s); track sport) {
+              <span class="text-[11px] font-bold px-2.5 py-1 rounded-full border"
+                [style.color]="SPORT_COLORS[sport] ?? '#1a237e'"
+                [style.borderColor]="(SPORT_COLORS[sport] ?? '#1a237e') + '50'"
+                [style.backgroundColor]="(SPORT_COLORS[sport] ?? '#1a237e') + '10'">
+                {{ sport }}
+              </span>
+            }
+          </div>
+
+          <!-- Product name – HUGE Bebas Neue -->
+          <h1 class="pd-name pd-reveal mb-6">{{ product()!.name }}</h1>
+
+          <!-- Price row -->
+          <div class="pd-reveal flex items-center gap-4 mb-8">
+            <span class="text-[30px] font-black text-[#07070e] tracking-tight leading-none">
+              {{ product()!.price }}
+            </span>
+            @if (product()!.isBestSeller) {
+              <span class="text-[11px] font-bold text-amber-600 bg-amber-50 px-2.5 py-1 rounded-full">
+                Más vendido
+              </span>
+            }
+            @if (product()!.isNew) {
+              <span class="text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full">
+                Novedad
+              </span>
+            }
+          </div>
+
+          <!-- Divider -->
+          <div class="pd-reveal h-px bg-gray-100 mb-8"></div>
+
+          <!-- Size selector -->
+          @if (sizes().length > 0) {
+            <div class="pd-reveal mb-8">
+              <div class="flex items-center justify-between mb-3.5">
+                <span class="text-[10px] font-black uppercase tracking-[0.22em] text-gray-400">Talla</span>
+                @if (!selectedSize()) {
+                  <span class="text-[12px] text-red-400 font-medium">Elige tu talla</span>
+                } @else {
+                  <span class="text-[12px] font-bold" [style.color]="sportColor()">
+                    Talla {{ selectedSize() }} ✓
+                  </span>
+                }
+              </div>
+              <div class="flex flex-wrap gap-2">
+                @for (size of sizes(); track size) {
+                  <button
+                    (click)="selectedSize.set(size === selectedSize() ? '' : size)"
+                    class="pd-size-btn"
+                    [class.active]="selectedSize() === size">
+                    {{ size }}
+                  </button>
+                }
+              </div>
+            </div>
+          }
+
+          <!-- Add to cart CTA -->
+          <div class="pd-reveal mb-8">
+            <button
+              (click)="addToCart()"
+              class="pd-cta"
+              [class.success]="justAdded()"
+              [class.disabled]="sizes().length > 0 && !selectedSize() && !justAdded()">
+              @if (justAdded()) {
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/>
+                </svg>
+                ¡Agregado al carrito!
+              } @else if (sizes().length > 0 && !selectedSize()) {
+                Selecciona una talla para continuar
+              } @else {
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                </svg>
+                Agregar al carrito
+              }
+            </button>
+
+            <!-- Trust signals -->
+            <div class="flex items-center gap-5 mt-4">
+              <span class="flex items-center gap-1.5 text-[11px] text-gray-400 font-medium">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                </svg>
+                Compra segura
+              </span>
+              <span class="flex items-center gap-1.5 text-[11px] text-gray-400 font-medium">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                </svg>
+                Envío rápido
+              </span>
+              <span class="flex items-center gap-1.5 text-[11px] text-gray-400 font-medium">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                </svg>
+                Cambios fáciles
+              </span>
+            </div>
+          </div>
+
+          <!-- Description -->
+          @if (product()!.description) {
+            <div class="pd-reveal border-t border-gray-100 pt-7 mb-7">
+              <span class="block text-[10px] font-black uppercase tracking-[0.22em] text-gray-400 mb-3">Descripción</span>
+              <p class="text-[14px] text-gray-600 leading-relaxed whitespace-pre-line">
+                {{ product()!.description }}
+              </p>
+            </div>
+          }
+
+          <!-- Product details table -->
+          <div class="pd-reveal border-t border-gray-100 pt-7">
+            <span class="block text-[10px] font-black uppercase tracking-[0.22em] text-gray-400 mb-3">Detalles del producto</span>
+            <div>
+              @if (product()!.categories) {
+                <div class="pd-detail-row">
+                  <span class="text-[13px] text-gray-400 font-medium">Categoría</span>
+                  <span class="text-[13px] text-gray-800 font-semibold">{{ product()!.categories }}</span>
+                </div>
+              }
+              @if (product()!.brand) {
+                <div class="pd-detail-row">
+                  <span class="text-[13px] text-gray-400 font-medium">Marca</span>
+                  <span class="text-[13px] text-gray-800 font-semibold">{{ product()!.brand }}</span>
+                </div>
+              }
+              @if (product()!.gender) {
+                <div class="pd-detail-row">
+                  <span class="text-[13px] text-gray-400 font-medium">Género</span>
+                  <span class="text-[13px] text-gray-800 font-semibold">{{ product()!.gender }}</span>
+                </div>
+              }
+              @if (product()!.sports) {
+                <div class="pd-detail-row">
+                  <span class="text-[13px] text-gray-400 font-medium">Deporte</span>
+                  <span class="text-[13px] font-bold" [style.color]="sportColor()">{{ product()!.sports }}</span>
+                </div>
+              }
+              @if (sizes().length > 0) {
+                <div class="pd-detail-row">
+                  <span class="text-[13px] text-gray-400 font-medium">Tallas disponibles</span>
+                  <span class="text-[13px] text-gray-800 font-semibold">{{ sizes().join(' · ') }}</span>
+                </div>
+              }
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+}

@@ -34,7 +34,7 @@ export class AdminComponent implements OnInit {
   readonly tabs: { id: AdminTab; label: string; icon: string }[] = [
     { id: 'products',   label: 'Productos',   icon: '📦' },
     { id: 'banners',    label: 'Banners',      icon: '🖼️' },
-    { id: 'heroes',     label: 'Portada Home', icon: '🎯' },
+    { id: 'heroes',     label: 'Portada',      icon: '🎯' },
     { id: 'sports',     label: 'Deportes',     icon: '⚽' },
     { id: 'brands',     label: 'Marcas',       icon: '🏷️' },
     { id: 'categories', label: 'Categorías',   icon: '🗂️' },
@@ -43,39 +43,49 @@ export class AdminComponent implements OnInit {
 
   async ngOnInit() {
     await this.svc.tryAuthFromStorage()
-    if (this.svc.isAuthenticated()) this.animateEntry()
+    if (this.svc.isAuthenticated()) this.runEntryAnimation()
   }
 
   async login() {
     this.passwordError.set(false)
     const ok = await this.svc.login(this.passwordInput)
-    if (ok) {
-      this.animateEntry()
-    } else {
-      this.passwordError.set(true)
-    }
+    if (ok) this.runEntryAnimation()
+    else this.passwordError.set(true)
   }
 
   setTab(tab: AdminTab) {
     this.activeTab.set(tab)
-    this.animateContent()
+    this.runContentAnimation()
   }
 
-  private async animateEntry() {
+  private async runEntryAnimation() {
     if (!isPlatformBrowser(this.platformId)) return
-    await new Promise(r => setTimeout(r, 40))
+    await new Promise(r => setTimeout(r, 80))
     const { gsap } = await import('gsap')
-    const tl = gsap.timeline()
-    tl.from('.rs-sidebar',      { x: -50, duration: 0.45, ease: 'power3.out' })
-      .from('.rs-nav-item',     { x: -20, opacity: 0, stagger: 0.07, duration: 0.35, ease: 'power3.out' }, '-=0.25')
-      .from('.rs-topbar',       { y: -20, opacity: 0, duration: 0.4,  ease: 'power3.out' }, '-=0.3')
-      .from('.rs-content-card', { y: 20,  opacity: 0, duration: 0.4,  ease: 'power3.out' }, '-=0.2')
+    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
+    tl.fromTo('.rs-sidebar',
+        { x: -56, opacity: 0 },
+        { x: 0,   opacity: 1, duration: 0.55, clearProps: 'transform,opacity' })
+      .fromTo('.rs-nav-item',
+        { x: -16, opacity: 0 },
+        { x: 0,   opacity: 1, stagger: 0.055, duration: 0.32, clearProps: 'transform,opacity', ease: 'power2.out' },
+        '-=0.38')
+      .fromTo('.rs-topbar',
+        { y: -20, opacity: 0 },
+        { y: 0,   opacity: 1, duration: 0.42, clearProps: 'transform,opacity' },
+        '-=0.32')
+      .fromTo('.rs-main-content',
+        { y: 22, opacity: 0 },
+        { y: 0,  opacity: 1, duration: 0.38, clearProps: 'transform,opacity' },
+        '-=0.28')
   }
 
-  private async animateContent() {
+  private async runContentAnimation() {
     if (!isPlatformBrowser(this.platformId)) return
     await new Promise(r => setTimeout(r, 20))
     const { gsap } = await import('gsap')
-    gsap.from('.rs-content-card', { y: 18, autoAlpha: 0, duration: 0.32, ease: 'power3.out' })
+    gsap.fromTo('.rs-main-content',
+      { y: 16, opacity: 0 },
+      { y: 0,  opacity: 1, duration: 0.28, ease: 'power2.out', clearProps: 'transform,opacity' })
   }
 }

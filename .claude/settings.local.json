@@ -40,7 +40,9 @@
       "Bash(python *)",
       "Bash(ls *)",
       "Bash(python3 *)",
-      "Bash(node *)"
+      "Bash(node *)",
+      "Bash(pip install *)",
+      "mcp__plugin_everything-claude-code_exa__web_search_exa"
     ],
     "additionalDirectories": [
       "C:\\Users\\Jordan\\Desktop\\trabajos\\RutaSport\\backend",

@@ -51,6 +51,19 @@ export class CartService {
 
   remove(index: number) { this.items.update(arr => arr.filter((_, i) => i !== index)) }
 
+  increment(index: number) {
+    this.items.update(arr => arr.map((i, n) => n === index ? { ...i, quantity: i.quantity + 1 } : i))
+  }
+
+  decrement(index: number) {
+    const item = this.items()[index]
+    if (item.quantity <= 1) {
+      this.remove(index)
+    } else {
+      this.items.update(arr => arr.map((i, n) => n === index ? { ...i, quantity: i.quantity - 1 } : i))
+    }
+  }
+
   clear() { this.items.set([]) }
 
   checkout() {

@@ -8,14 +8,13 @@ const unauthorized = () => json({ error: 'Unauthorized' }, 401)
 export const onRequestPut: PagesFunction<Env> = async ({ env, request, params }) => {
   if (request.headers.get('x-admin-key') !== ADMIN_KEY) return unauthorized()
   try {
+    const existing = await env.DB.prepare('SELECT * FROM heroes WHERE id = ?').bind(params.id).first() as any
+    if (!existing) return json({ error: 'Hero not found' }, 404)
     const b = await request.json() as any
-    if (!b.campaignName || !b.category || !b.imageUrl) {
-      return json({ error: 'Missing required fields: campaignName, category, imageUrl' }, 400)
-    }
-    const result = await env.DB.prepare(
-      'UPDATE heroes SET campaignName=?, category=?, description=?, imageUrl=?, videoUrl=?, ctaText=?, isActive=?, "order"=? WHERE id=?'
-    ).bind(b.campaignName, b.category, b.description || null, b.imageUrl, b.videoUrl || null, b.ctaText || 'COMPRAR AHORA', b.isActive ? 1 : 0, b.order ?? 0, params.id).run()
-    if (result.meta.changes === 0) return json({ error: 'Hero not found' }, 404)
+    const merged = { ...existing, ...b }
+    await env.DB.prepare(
+      'UPDATE heroes SET campaignName=?, category=?, description=?, imageUrl=?, ctaText=?, isActive=?, "order"=? WHERE id=?'
+    ).bind(merged.campaignName || null, merged.category || null, merged.description || null, merged.imageUrl || null, merged.ctaText || 'COMPRAR AHORA', merged.isActive ? 1 : 0, merged.order ?? 0, params.id).run()
     return json({ success: true })
   } catch (e: any) {
     return json({ error: e.message ?? 'Internal error' }, 500)

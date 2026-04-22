@@ -8,14 +8,13 @@ const unauthorized = () => json({ error: 'Unauthorized' }, 401)
 export const onRequestPut: PagesFunction<Env> = async ({ env, request, params }) => {
   if (request.headers.get('x-admin-key') !== ADMIN_KEY) return unauthorized()
   try {
+    const existing = await env.DB.prepare('SELECT * FROM feature_banners WHERE id = ?').bind(params.id).first() as any
+    if (!existing) return json({ error: 'Banner not found' }, 404)
     const b = await request.json() as any
-    if (!b.title || !b.subtitle || !b.image || !b.buttonText || !b.bgColor) {
-      return json({ error: 'Missing required fields: title, subtitle, image, buttonText, bgColor' }, 400)
-    }
-    const result = await env.DB.prepare(
+    const m = { ...existing, ...b }
+    await env.DB.prepare(
       'UPDATE feature_banners SET title=?, subtitle=?, description=?, image=?, buttonText=?, bgColor=?, "order"=?, isActive=? WHERE id=?'
-    ).bind(b.title, b.subtitle, b.description || null, b.image, b.buttonText, b.bgColor, b.order ?? 0, b.isActive ? 1 : 0, params.id).run()
-    if (result.meta.changes === 0) return json({ error: 'Banner not found' }, 404)
+    ).bind(m.title || null, m.subtitle || null, m.description || null, m.image || null, m.buttonText || null, m.bgColor || null, m.order ?? 0, m.isActive ? 1 : 0, params.id).run()
     return json({ success: true })
   } catch (e: any) {
     return json({ error: e.message ?? 'Internal error' }, 500)

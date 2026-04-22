@@ -36,6 +36,14 @@ app.use(
 );
 
 /**
+ * Return 404 for /images/ paths not found as static files.
+ * This lets wrangler Pages Functions handle R2-served images instead of Angular SSR.
+ */
+app.use('/images', (_req, res) => {
+  res.status(404).end();
+});
+
+/**
  * Handle all other requests by rendering the Angular application.
  */
 app.use((req, res, next) => {

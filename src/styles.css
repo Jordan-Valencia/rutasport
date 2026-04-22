@@ -1,3 +1,249 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import 'tailwindcss';
+
+/* ─── Cart Drawer Animations ────────────────────────────────────────────────── */
+@keyframes cart-slide-in {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+@keyframes cart-slide-out-anim {
+  from { transform: translateX(0); }
+  to   { transform: translateX(100%); }
+}
+@keyframes cart-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes cart-fade-out-anim {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+.cart-panel {
+  animation: cart-slide-in 0.35s cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+.cart-panel.cart-slide-out {
+  animation: cart-slide-out-anim 0.32s cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+.cart-backdrop {
+  background-color: rgb(0 0 0 / 0.5);
+  backdrop-filter: blur(3px);
+  animation: cart-fade-in 0.25s ease both;
+}
+.cart-backdrop.cart-fade-out {
+  animation: cart-fade-out-anim 0.32s ease both;
+}
+.cart-item {
+  animation: cart-fade-in 0.2s ease both;
+}
+
+/* ─── Admin Design System ──────────────────────────────────────────────────── */
+@layer components {
+
+  /* Layout */
+  .rs-content-card {
+    @apply bg-white rounded-2xl shadow-sm overflow-hidden;
+  }
+
+  /* Loading */
+  .rs-loading {
+    @apply flex items-center justify-center py-16 text-slate-400 text-sm;
+  }
+
+  /* Toolbar */
+  .rs-tab-toolbar {
+    @apply flex items-center justify-between mb-4;
+  }
+  .rs-count {
+    @apply text-sm font-medium text-slate-500;
+  }
+
+  /* Buttons */
+  .rs-btn {
+    @apply inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-150 cursor-pointer;
+  }
+  .rs-btn-primary {
+    @apply bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow hover:opacity-90 active:scale-[0.98];
+  }
+  .rs-btn-ghost {
+    @apply text-slate-600 hover:bg-slate-100;
+  }
+  .rs-btn-danger {
+    @apply text-red-500 hover:bg-red-50 hover:text-red-700;
+  }
+  .rs-btn-sm {
+    @apply px-3 py-1.5 text-xs rounded-lg;
+  }
+  .rs-btn:disabled {
+    @apply opacity-50 cursor-not-allowed;
+  }
+
+  /* Alerts */
+  .rs-alert {
+    @apply px-4 py-3 rounded-xl text-sm mb-4;
+  }
+  .rs-alert-error {
+    @apply bg-red-50 text-red-700 border border-red-200;
+  }
+
+  /* Table */
+  .rs-table-wrap {
+    @apply overflow-x-auto rounded-xl border border-slate-100;
+  }
+  .rs-table {
+    @apply w-full text-sm text-left border-collapse;
+  }
+  .rs-table thead tr {
+    @apply bg-slate-50;
+  }
+  .rs-table th {
+    @apply px-3 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap border-b border-slate-100;
+  }
+  .rs-table td {
+    @apply px-3 py-2.5 text-slate-700 border-b border-slate-50 align-middle;
+  }
+  .rs-table tbody tr:last-child td {
+    @apply border-b-0;
+  }
+  .rs-table tbody tr:hover {
+    @apply bg-slate-50/60;
+  }
+  .rs-td-id {
+    @apply text-slate-400 text-xs w-10;
+  }
+  .rs-td-actions {
+    @apply whitespace-nowrap;
+  }
+  .rs-thumb {
+    @apply w-10 h-10 rounded-lg object-cover border border-slate-100;
+  }
+  .rs-no-img {
+    @apply text-slate-300 text-xs;
+  }
+  .rs-empty-row {
+    @apply text-center py-14 text-slate-400;
+  }
+  .rs-empty-icon {
+    @apply block text-4xl mb-2;
+  }
+
+  /* Sizes */
+  .rs-sizes-list {
+    @apply flex flex-wrap gap-0.5;
+  }
+  .rs-size-badge {
+    @apply px-1.5 py-0.5 bg-slate-100 text-slate-600 text-xs rounded-md;
+  }
+  .rs-badge-count {
+    @apply px-2 py-0.5 bg-blue-50 text-blue-600 text-xs font-medium rounded-full;
+  }
+
+  /* Tags */
+  .rs-tag {
+    @apply px-2 py-0.5 rounded-full text-xs font-semibold;
+  }
+  .rs-tag-gold {
+    @apply bg-amber-50 text-amber-700;
+  }
+  .rs-tag-blue {
+    @apply bg-blue-50 text-blue-700;
+  }
+
+  /* Modal */
+  .rs-modal-overlay {
+    @apply fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4;
+  }
+  .rs-modal-card {
+    @apply bg-white rounded-2xl shadow-2xl w-full max-w-xl max-h-[92vh] overflow-y-auto flex flex-col;
+  }
+  .rs-modal-header {
+    @apply flex items-center justify-between px-6 py-5 border-b border-slate-100 shrink-0;
+  }
+  .rs-modal-title {
+    @apply font-semibold text-slate-800 text-base;
+  }
+  .rs-modal-close {
+    @apply cursor-pointer w-8 h-8 flex items-center justify-center rounded-lg hover:bg-slate-100 text-slate-400 text-sm transition-colors;
+  }
+  .rs-modal-body {
+    @apply px-6 py-5 flex-1 space-y-4 overflow-y-auto;
+  }
+  .rs-modal-footer {
+    @apply flex items-center justify-end gap-3 px-6 py-4 border-t border-slate-100 bg-slate-50 rounded-b-2xl shrink-0;
+  }
+
+  /* Form fields */
+  .rs-field {
+    @apply flex flex-col gap-1.5;
+  }
+  .rs-field-row {
+    @apply flex-row items-center gap-6;
+  }
+  .rs-label {
+    @apply text-xs font-semibold text-slate-500 uppercase tracking-wide;
+  }
+  .rs-input {
+    @apply w-full px-3 py-2.5 rounded-xl border border-slate-200 text-sm text-slate-800 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-400 transition-all;
+  }
+  .rs-input-sm {
+    @apply mt-1.5 text-xs py-1.5;
+  }
+  .rs-textarea {
+    @apply resize-none leading-relaxed;
+  }
+  .rs-error {
+    @apply text-xs text-red-500;
+  }
+  .rs-hint {
+    @apply text-xs text-slate-400;
+  }
+  .rs-grid-2 {
+    @apply grid grid-cols-2 gap-4;
+  }
+  .rs-checkbox-label {
+    @apply flex items-center gap-2 cursor-pointer text-sm text-slate-600;
+  }
+  .rs-count-badge {
+    @apply inline-flex items-center justify-center min-w-5 h-5 px-1 rounded-full bg-blue-500 text-white text-[10px] font-bold ml-1.5;
+  }
+
+  /* Size selector */
+  .rs-sizes-grid {
+    @apply flex flex-wrap gap-1.5;
+  }
+  .rs-size-btn {
+    @apply px-3 py-1.5 rounded-lg border border-slate-200 text-xs font-medium text-slate-600 cursor-pointer hover:border-blue-400 hover:text-blue-600 transition-all;
+  }
+  .rs-size-btn-active {
+    @apply border-blue-500 bg-blue-500 text-white hover:border-blue-600 hover:text-white;
+  }
+
+  /* Upload */
+  .rs-upload-btn {
+    @apply inline-flex items-center gap-2 cursor-pointer px-4 py-2 rounded-xl border-2 border-dashed border-slate-200 text-sm text-slate-500 hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50 transition-all;
+  }
+  .rs-preview-img {
+    @apply w-full h-36 rounded-xl object-cover border border-slate-200;
+  }
+
+  /* Gallery */
+  .rs-gallery-grid {
+    @apply grid grid-cols-4 gap-2;
+  }
+  .rs-gallery-item {
+    @apply relative rounded-xl overflow-hidden aspect-square border border-slate-100;
+  }
+  .rs-gallery-thumb {
+    @apply w-full h-full object-cover;
+  }
+  .rs-gallery-remove {
+    @apply absolute top-1 right-1 w-5 h-5 flex items-center justify-center rounded-full bg-red-500 text-white text-xs cursor-pointer hover:bg-red-600 transition-colors;
+  }
+  .rs-url-row {
+    @apply flex gap-2 mt-2;
+  }
+  .rs-url-row .rs-input {
+    @apply flex-1;
+  }
+}

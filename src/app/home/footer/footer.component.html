@@ -1,27 +1,14 @@
 <footer class="bg-black text-white">
   <div class="px-4 lg:px-8 py-16">
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 mb-12">
+
       <!-- Productos -->
       <div>
         <h4 class="font-bold mb-5 text-sm tracking-wide">PRODUCTOS</h4>
         <ul class="space-y-3 text-sm text-gray-400">
-          <li><a routerLink="/calzado" class="hover:text-white transition-colors">Calzado</a></li>
-          <li><a routerLink="/ropa" class="hover:text-white transition-colors">Ropa</a></li>
-          <li><a routerLink="/accesorios" class="hover:text-white transition-colors">Accesorios</a></li>
-          <li><a routerLink="/outlet" class="hover:text-white transition-colors">Outlet</a></li>
-          <li><a routerLink="/nuevos" class="hover:text-white transition-colors">Nuevos Lanzamientos</a></li>
-        </ul>
-      </div>
-
-      <!-- Deportes -->
-      <div>
-        <h4 class="font-bold mb-5 text-sm tracking-wide">DEPORTES</h4>
-        <ul class="space-y-3 text-sm text-gray-400">
-          <li><a routerLink="/futbol" class="hover:text-white transition-colors">Fútbol</a></li>
-          <li><a routerLink="/running" class="hover:text-white transition-colors">Running</a></li>
-          <li><a routerLink="/basketball" class="hover:text-white transition-colors">Basketball</a></li>
-          <li><a routerLink="/training" class="hover:text-white transition-colors">Training</a></li>
-          <li><a routerLink="/outdoor" class="hover:text-white transition-colors">Outdoor</a></li>
+          <li><a routerLink="/catalogo" class="hover:text-white transition-colors">Todos los Tenis</a></li>
+          <li><a routerLink="/catalogo" [queryParams]="{orden: 'nuevo'}" class="hover:text-white transition-colors">Nuevos Lanzamientos</a></li>
+          <li><a routerLink="/catalogo" [queryParams]="{orden: 'precio'}" class="hover:text-white transition-colors">Outlet / Ofertas</a></li>
         </ul>
       </div>
 
@@ -29,23 +16,33 @@
       <div>
         <h4 class="font-bold mb-5 text-sm tracking-wide">AYUDA</h4>
         <ul class="space-y-3 text-sm text-gray-400">
-          <li><a routerLink="/ayuda" class="hover:text-white transition-colors">Centro de Ayuda</a></li>
-          <li><a routerLink="/pedido" class="hover:text-white transition-colors">Estado del Pedido</a></li>
-          <li><a routerLink="/devoluciones" class="hover:text-white transition-colors">Devoluciones</a></li>
-          <li><a routerLink="/tallas" class="hover:text-white transition-colors">Guía de Tallas</a></li>
-          <li><a routerLink="/contacto" class="hover:text-white transition-colors">Contacto</a></li>
+          <li>
+            <button
+              (click)="abrirGuiaTallas()"
+              class="hover:text-white transition-colors text-left cursor-pointer">
+              Guía de Tallas
+            </button>
+          </li>
+          <li class="pt-2">
+            <p class="text-gray-500 text-xs mb-1">¿Tienes alguna duda?</p>
+            <a href="https://wa.me/573011186124" target="_blank" class="hover:text-white transition-colors flex items-center gap-2">
+              <svg class="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+                <path d="M12 0C5.373 0 0 5.373 0 12c0 2.062.524 4.003 1.443 5.694L0 24l6.479-1.42A11.944 11.944 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.812 9.812 0 01-5.003-1.366l-.359-.213-3.844.843.875-3.738-.234-.374A9.793 9.793 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182c5.43 0 9.818 4.388 9.818 9.818 0 5.43-4.388 9.818-9.818 9.818z"/>
+              </svg>
+              <span>3011186124</span>
+            </a>
+          </li>
         </ul>
       </div>
 
-      <!-- Sobre Nosotros -->
+      <!-- Legal -->
       <div>
-        <h4 class="font-bold mb-5 text-sm tracking-wide">SOBRE NOSOTROS</h4>
+        <h4 class="font-bold mb-5 text-sm tracking-wide">LEGAL</h4>
         <ul class="space-y-3 text-sm text-gray-400">
-          <li><a routerLink="/historia" class="hover:text-white transition-colors">Nuestra Historia</a></li>
-          <li><a routerLink="/sostenibilidad" class="hover:text-white transition-colors">Sostenibilidad</a></li>
-          <li><a routerLink="/carreras" class="hover:text-white transition-colors">Carreras</a></li>
-          <li><a routerLink="/inversores" class="hover:text-white transition-colors">Inversores</a></li>
-          <li><a routerLink="/prensa" class="hover:text-white transition-colors">Prensa</a></li>
+          <li><a routerLink="/terminos" class="hover:text-white transition-colors">Términos y Condiciones</a></li>
+          <li><a routerLink="/terminos" fragment="privacidad" class="hover:text-white transition-colors">Política de Privacidad</a></li>
+          <li><a routerLink="/terminos" fragment="garantia" class="hover:text-white transition-colors">Garantía y Devoluciones</a></li>
         </ul>
       </div>
     </div>
@@ -58,3 +55,93 @@
     </div>
   </div>
 </footer>
+
+<!-- Modal Guía de Tallas -->
+@if (guiaTallasAbierta()) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center p-4" (click)="cerrarGuiaTallas()">
+    <div class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+    <div class="relative bg-white text-gray-900 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl" (click)="$event.stopPropagation()">
+
+      <!-- Header modal -->
+      <div class="flex items-center justify-between p-6 border-b border-gray-200">
+        <h2 class="text-xl font-bold">Guía de Tallas — Tenis</h2>
+        <button (click)="cerrarGuiaTallas()" class="text-gray-400 hover:text-gray-700 transition-colors">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Contenido -->
+      <div class="p-6 space-y-6">
+        <p class="text-sm text-gray-600">
+          Para encontrar tu talla correcta, mide tu pie descalzo desde el talón hasta el dedo más largo.
+          Usa esa medida en centímetros para guiarte en la tabla.
+        </p>
+
+        <!-- Tabla hombre -->
+        <div>
+          <h3 class="font-semibold text-sm mb-3 flex items-center gap-2">
+            <span class="bg-black text-white text-xs px-2 py-0.5 rounded-full">HOMBRE</span>
+          </h3>
+          <div class="overflow-x-auto rounded-lg border border-gray-200">
+            <table class="w-full text-xs text-center">
+              <thead class="bg-gray-50 font-semibold text-gray-700">
+                <tr>
+                  <th class="py-2 px-3">Colombia / EUR</th>
+                  <th class="py-2 px-3">USA</th>
+                  <th class="py-2 px-3">UK</th>
+                  <th class="py-2 px-3">CM</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-100 text-gray-600">
+                <tr><td class="py-2 px-3">38</td><td>6</td><td>5.5</td><td>24.0</td></tr>
+                <tr class="bg-gray-50"><td class="py-2 px-3">39</td><td>7</td><td>6.5</td><td>24.5</td></tr>
+                <tr><td class="py-2 px-3">40</td><td>7.5</td><td>7</td><td>25.0</td></tr>
+                <tr class="bg-gray-50"><td class="py-2 px-3">41</td><td>8</td><td>7.5</td><td>25.5</td></tr>
+                <tr><td class="py-2 px-3">42</td><td>8.5</td><td>8</td><td>26.0</td></tr>
+                <tr class="bg-gray-50"><td class="py-2 px-3">43</td><td>9.5</td><td>9</td><td>27.0</td></tr>
+                <tr><td class="py-2 px-3">44</td><td>10</td><td>9.5</td><td>27.5</td></tr>
+                <tr class="bg-gray-50"><td class="py-2 px-3">45</td><td>11</td><td>10.5</td><td>28.5</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Tabla mujer -->
+        <div>
+          <h3 class="font-semibold text-sm mb-3 flex items-center gap-2">
+            <span class="bg-gray-700 text-white text-xs px-2 py-0.5 rounded-full">MUJER</span>
+          </h3>
+          <div class="overflow-x-auto rounded-lg border border-gray-200">
+            <table class="w-full text-xs text-center">
+              <thead class="bg-gray-50 font-semibold text-gray-700">
+                <tr>
+                  <th class="py-2 px-3">Colombia / EUR</th>
+                  <th class="py-2 px-3">USA</th>
+                  <th class="py-2 px-3">UK</th>
+                  <th class="py-2 px-3">CM</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-100 text-gray-600">
+                <tr><td class="py-2 px-3">35</td><td>5</td><td>3</td><td>22.0</td></tr>
+                <tr class="bg-gray-50"><td class="py-2 px-3">36</td><td>6</td><td>4</td><td>22.5</td></tr>
+                <tr><td class="py-2 px-3">37</td><td>6.5</td><td>4.5</td><td>23.0</td></tr>
+                <tr class="bg-gray-50"><td class="py-2 px-3">38</td><td>7.5</td><td>5.5</td><td>24.0</td></tr>
+                <tr><td class="py-2 px-3">39</td><td>8.5</td><td>6.5</td><td>25.0</td></tr>
+                <tr class="bg-gray-50"><td class="py-2 px-3">40</td><td>9</td><td>7</td><td>25.5</td></tr>
+                <tr><td class="py-2 px-3">41</td><td>10</td><td>8</td><td>26.0</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Tip -->
+        <div class="bg-gray-50 rounded-xl p-4 text-sm text-gray-600">
+          <p class="font-semibold text-gray-800 mb-1">¿No encuentras tu talla?</p>
+          <p>Escríbenos al <strong>3011186124</strong> y te ayudamos a elegir la opción correcta.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+}

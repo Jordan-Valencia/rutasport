@@ -19,12 +19,9 @@ export const onRequestPost: PagesFunction<Env> = async ({ env, request }) => {
   if (request.headers.get('x-admin-key') !== ADMIN_KEY) return unauthorized()
   try {
     const b = await request.json() as any
-    if (!b.campaignName || !b.category || !b.imageUrl) {
-      return json({ error: 'Missing required fields: campaignName, category, imageUrl' }, 400)
-    }
     const result = await env.DB.prepare(
-      'INSERT INTO heroes (campaignName, category, description, imageUrl, videoUrl, ctaText, isActive, "order") VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
-    ).bind(b.campaignName, b.category, b.description || null, b.imageUrl, b.videoUrl || null, b.ctaText || 'COMPRAR AHORA', b.isActive ? 1 : 0, b.order ?? 0).run()
+      'INSERT INTO heroes (campaignName, category, description, imageUrl, ctaText, isActive, "order") VALUES (?, ?, ?, ?, ?, ?, ?)'
+    ).bind(b.campaignName || null, b.category || null, b.description || null, b.imageUrl || null, b.ctaText || 'COMPRAR AHORA', b.isActive ? 1 : 0, b.order ?? 0).run()
     return json({ id: result.meta.last_row_id }, 201)
   } catch (e: any) {
     return json({ error: e.message ?? 'Internal error' }, 500)

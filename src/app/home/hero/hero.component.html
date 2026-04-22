@@ -1,40 +1,55 @@
 <section class="relative h-[70vh] lg:h-[85vh] overflow-hidden bg-[#1a237e]">
 
-  @if (heroes().length > 0) {
-    @let hero = heroes()[activeIndex()];
+  @if (loading()) {
+    <div class="hero-skeleton absolute inset-0">
+      <div class="skeleton-img absolute inset-0 bg-[#232f8a]"></div>
+      <div class="absolute inset-0 bg-linear-to-r from-[#1a237e]/90 via-[#1a237e]/55 to-transparent"></div>
+      <div class="absolute inset-0 flex items-center px-4 lg:px-16">
+        <div class="max-w-3xl w-full">
+          <div class="skeleton-block h-5 w-24 mb-6 rounded-sm"></div>
+          <div class="skeleton-block h-16 lg:h-24 w-3/4 mb-3 rounded-sm"></div>
+          <div class="skeleton-block h-16 lg:h-24 w-1/2 mb-6 rounded-sm"></div>
+          <div class="skeleton-block h-4 w-96 max-w-full mb-2 rounded-sm"></div>
+          <div class="skeleton-block h-4 w-72 max-w-full mb-8 rounded-sm"></div>
+          <div class="flex gap-4">
+            <div class="skeleton-block h-14 w-40 rounded-sm"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
 
-    <!-- Background image -->
+  @let h = hero();
+  @if (h) {
     <img
-      [src]="hero.imageUrl || '/images/hero-lifestyle-2.jpg'"
-      [alt]="hero.campaignName"
+      [src]="h.imageUrl"
+      [alt]="h.campaignName"
       class="hero-img absolute inset-0 w-full h-full object-cover"
     />
 
-    <!-- Gradient overlay -->
     <div class="absolute inset-0 bg-linear-to-r from-[#1a237e]/90 via-[#1a237e]/55 to-transparent"></div>
 
-    <!-- Content -->
     <div class="hero-slide-content absolute inset-0 flex items-center">
       <div class="px-4 lg:px-16 max-w-3xl">
         <span class="hero-badge inline-block border border-white/50 text-white px-4 py-1 text-xs font-bold tracking-widest mb-6">
-          {{ hero.category || 'LIFESTYLE' }}
+          {{ h.category}}
         </span>
         <h1 class="hero-title text-white text-5xl lg:text-8xl font-black mb-6 leading-none">
-          {{ hero.campaignName }}
+          {{ h.campaignName }}
         </h1>
-        @if (hero.description) {
+        @if (h.description) {
           <p class="hero-desc text-white/80 text-lg lg:text-xl mb-8 max-w-lg">
-            {{ hero.description }}
+            {{ h.description }}
           </p>
         }
         <div class="flex flex-wrap gap-4">
-          <button class="hero-btn bg-white text-[#1a237e] px-8 py-4 font-bold text-sm tracking-wide hover:bg-gray-100 transition-colors flex items-center gap-2">
-            {{ hero.ctaText || 'COMPRAR AHORA' }}
+          <a href="/catalogo" class="hero-btn bg-white text-[#1a237e] px-8 py-4 font-bold text-sm tracking-wide hover:bg-gray-100 transition-colors flex items-center gap-2">
+            {{ h.ctaText }}
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
             </svg>
-          </button>
-          @if (hero.videoUrl) {
+          </a>
+          @if (h.videoUrl) {
             <button class="hero-btn border-2 border-white text-white px-8 py-4 font-bold text-sm tracking-wide hover:bg-white hover:text-[#1a237e] transition-colors flex items-center gap-3">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
@@ -46,28 +61,5 @@
         </div>
       </div>
     </div>
-
-    <!-- Arrows (only if multiple heroes) -->
-    @if (heroes().length > 1) {
-      <button (click)="prev()" class="cursor-pointer absolute left-4 lg:left-6 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/20 hover:bg-white/40 backdrop-blur-sm rounded-full flex items-center justify-center text-white transition-all z-10">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/>
-        </svg>
-      </button>
-      <button (click)="next()" class="cursor-pointer absolute right-4 lg:right-6 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/20 hover:bg-white/40 backdrop-blur-sm rounded-full flex items-center justify-center text-white transition-all z-10">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
-        </svg>
-      </button>
-
-      <!-- Dots -->
-      <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-10">
-        @for (h of heroes(); track h.id; let i = $index) {
-          <button (click)="goTo(i)" class="hero-nav-dot cursor-pointer h-2 rounded-full transition-all duration-300"
-            [class]="i === activeIndex() ? 'bg-white w-6' : 'bg-white/50 w-2 hover:bg-white/80'">
-          </button>
-        }
-      </div>
-    }
   }
 </section>

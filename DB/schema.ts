@@ -1,4 +1,4 @@
-import { int, text, sqliteTable } from 'drizzle-orm/sqlite-core'
+import { int, text, sqliteTable, primaryKey } from 'drizzle-orm/sqlite-core'
 
 // ─── Lookup tables ────────────────────────────────────────────────────────────
 
@@ -38,8 +38,6 @@ export const productsTable = sqliteTable('products', {
   name:         text().notNull(),
   price:        text().notNull(),
   brand_id:     int(),               // FK → brands.id
-  category_id:  int(),               // FK → categories.id
-  sport_id:     int(),               // FK → sports.id
   gender_id:    int(),               // FK → genders.id
   image:        text().notNull().default(''),  // imagen principal / thumbnail
   isBestSeller: int({ mode: 'boolean' }).default(false),
@@ -48,6 +46,22 @@ export const productsTable = sqliteTable('products', {
   sizes:        text(),              // tallas disponibles separadas por coma: "7,7.5,8"
   createdAt:    text().default(new Date().toISOString()),
 })
+
+// ─── Relaciones many-to-many de productos ─────────────────────────────────────
+
+export const productCategoriesTable = sqliteTable('product_categories', {
+  product_id:  int().notNull(),     // FK → products.id
+  category_id: int().notNull(),     // FK → categories.id
+}, (t) => [
+  primaryKey({ columns: [t.product_id, t.category_id] }),
+])
+
+export const productSportsTable = sqliteTable('product_sports', {
+  product_id: int().notNull(),      // FK → products.id
+  sport_id:   int().notNull(),      // FK → sports.id
+}, (t) => [
+  primaryKey({ columns: [t.product_id, t.sport_id] }),
+])
 
 // ─── Galería de imágenes (vistas del modelo) ──────────────────────────────────
 

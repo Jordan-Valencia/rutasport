@@ -5,129 +5,246 @@
       <button (click)="apiError.set('')" class="cursor-pointer text-red-400 hover:text-red-600">✕</button>
     </div>
   }
+
+  <!-- Header -->
   <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100">
     <div class="flex items-center gap-3">
       <span class="text-xl">🎯</span>
       <div>
         <h2 class="font-semibold text-slate-800">Portada Home</h2>
-        <p class="text-xs text-slate-400">{{ items().length }} registros</p>
+        <p class="text-xs text-slate-400">{{ hero() ? '1 héroe configurado' : 'Sin héroe configurado' }}</p>
       </div>
     </div>
-    <button (click)="openAdd()" class="cursor-pointer flex items-center gap-2 px-4 py-2 rounded-xl bg-linear-to-r from-blue-600 to-indigo-600 text-white text-sm font-medium shadow hover:opacity-90 transition-all">
-      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-      Nuevo héroe
-    </button>
+    @if (!hero()) {
+      <button (click)="openAdd()" class="cursor-pointer flex items-center gap-2 px-4 py-2 rounded-xl bg-linear-to-r from-blue-600 to-indigo-600 text-white text-sm font-medium shadow hover:opacity-90 transition-all">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+        Configurar héroe
+      </button>
+    }
   </div>
 
   @if (loading()) {
     <div class="flex items-center justify-center py-20"><div class="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div></div>
-  } @else {
-    <div class="divide-y divide-slate-50">
-      @for (item of items(); track trackById($index, item)) {
-        <div class="group flex items-center gap-4 px-6 py-4 hover:bg-slate-50 transition-colors">
-          @if (item.imageUrl) {
-            <img [src]="item.imageUrl" [alt]="item.campaignName" class="w-16 h-10 rounded-lg object-cover border border-slate-200 shrink-0">
-          } @else {
-            <div class="w-16 h-10 rounded-lg bg-slate-100 shrink-0 flex items-center justify-center text-slate-300 text-xs">sin img</div>
-          }
-          <div class="flex-1 min-w-0">
-            <p class="font-medium text-slate-800 truncate">{{ item.campaignName }}</p>
-            <p class="text-xs text-slate-400 truncate">{{ item.category }}</p>
-          </div>
-          <div class="flex items-center gap-2">
-            <span class="px-2 py-0.5 rounded-full text-xs font-medium" [class]="item.isActive ? 'bg-green-50 text-green-700' : 'bg-slate-100 text-slate-500'">{{ item.isActive ? 'Activo' : 'Inactivo' }}</span>
-          </div>
-          <div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-            <button (click)="openEdit(item)" class="cursor-pointer w-7 h-7 flex items-center justify-center rounded-lg hover:bg-blue-50 text-slate-400 hover:text-blue-600 transition-colors">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
-            </button>
-            <button (click)="deleteItem(item.id)" class="cursor-pointer w-7 h-7 flex items-center justify-center rounded-lg hover:bg-red-50 text-slate-400 hover:text-red-600 transition-colors">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-            </button>
+  } @else if (hero(); as h) {
+
+    <!-- Rich preview -->
+    <div class="p-6 space-y-5">
+
+      <!-- Hero visual preview -->
+      <div class="relative rounded-2xl overflow-hidden shadow-lg" style="aspect-ratio: 16/7; min-height: 220px;">
+        @if (h.imageUrl) {
+          <img [src]="h.imageUrl" [alt]="h.campaignName" class="absolute inset-0 w-full h-full object-cover">
+        } @else {
+          <div class="absolute inset-0 bg-gradient-to-br from-slate-700 to-slate-900"></div>
+        }
+        <div class="absolute inset-0 bg-linear-to-r from-[#1a237e]/90 via-[#1a237e]/55 to-transparent"></div>
+
+        <!-- Hero content -->
+        <div class="absolute inset-0 flex items-center px-8 py-6">
+          <div class="max-w-md">
+            <span class="inline-block border border-white/50 text-white px-3 py-0.5 text-[10px] font-bold tracking-widest mb-3 rounded-sm">
+              {{ h.category || 'LIFESTYLE' }}
+            </span>
+            <h1 class="text-white text-2xl lg:text-4xl font-black leading-tight mb-3">
+              {{ h.campaignName }}
+            </h1>
+            @if (h.description) {
+              <p class="text-white/80 text-sm mb-4 leading-relaxed">{{ h.description }}</p>
+            }
+            <div class="flex flex-wrap gap-3">
+              <span class="bg-white text-[#1a237e] px-5 py-2 text-xs font-bold tracking-wide rounded-sm flex items-center gap-1.5">
+                {{ h.ctaText || 'COMPRAR AHORA' }}
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+              </span>
+            </div>
           </div>
         </div>
-      } @empty {
-        <div class="px-6 py-16 text-center text-slate-400"><div class="text-4xl mb-2">🎯</div><p>No hay héroes. Crea el primero.</p></div>
+
+        <!-- Status badge -->
+        <div class="absolute top-3 left-3">
+          <span class="px-2.5 py-1 rounded-full text-xs font-semibold backdrop-blur-sm"
+            [class]="h.isActive ? 'bg-green-500/90 text-white' : 'bg-slate-500/80 text-white'">
+            {{ h.isActive ? '● Activo' : '○ Inactivo' }}
+          </span>
+        </div>
+
+        <!-- Action buttons -->
+        <div class="absolute top-3 right-3 flex gap-2">
+          <button (click)="openEdit(h)" class="cursor-pointer flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/90 backdrop-blur-sm text-slate-700 text-xs font-medium hover:bg-white transition-colors shadow">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+            Editar
+          </button>
+          <button (click)="deleteItem(h.id)" class="cursor-pointer flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-500/90 backdrop-blur-sm text-white text-xs font-medium hover:bg-red-500 transition-colors shadow">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+            Eliminar
+          </button>
+        </div>
+
+        <!-- "Vista previa real" label -->
+        <div class="absolute bottom-3 right-3">
+          <span class="text-[10px] text-white/50 font-medium tracking-wide">VISTA PREVIA</span>
+        </div>
+      </div>
+
+      <!-- Detail cards -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <div class="bg-slate-50 rounded-xl p-3">
+          <p class="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1">Campaña</p>
+          <p class="text-sm font-medium text-slate-700 truncate">{{ h.campaignName }}</p>
+        </div>
+        <div class="bg-slate-50 rounded-xl p-3">
+          <p class="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1">Categoría</p>
+          <p class="text-sm font-medium text-slate-700 truncate">{{ h.category || '—' }}</p>
+        </div>
+        <div class="bg-slate-50 rounded-xl p-3">
+          <p class="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1">Botón CTA</p>
+          <p class="text-sm font-medium text-slate-700 truncate">{{ h.ctaText || '—' }}</p>
+        </div>
+        <div class="bg-slate-50 rounded-xl p-3">
+          <p class="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1">Estado</p>
+          <p class="text-sm font-medium" [class]="h.isActive ? 'text-green-600' : 'text-slate-400'">{{ h.isActive ? 'Activo' : 'Inactivo' }}</p>
+        </div>
+      </div>
+
+      @if (h.description) {
+        <div class="bg-slate-50 rounded-xl p-3">
+          <p class="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1">Descripción</p>
+          <p class="text-sm text-slate-700">{{ h.description }}</p>
+        </div>
       }
+    </div>
+
+  } @else {
+    <!-- Empty state -->
+    <div class="flex flex-col items-center justify-center py-20 px-6 text-center">
+      <div class="w-20 h-20 rounded-2xl bg-blue-50 flex items-center justify-center mb-4 text-4xl">🎯</div>
+      <p class="font-semibold text-slate-700 mb-1">Sin portada configurada</p>
+      <p class="text-sm text-slate-400 mb-6 max-w-xs">La sección hero es lo primero que ven tus visitantes. Configúrala para destacar tu mejor campaña.</p>
+      <button (click)="openAdd()" class="cursor-pointer flex items-center gap-2 px-5 py-2.5 rounded-xl bg-linear-to-r from-blue-600 to-indigo-600 text-white text-sm font-medium shadow hover:opacity-90 transition-all">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+        Configurar héroe
+      </button>
     </div>
   }
 </div>
 
 @if (showModal()) {
   <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" (click)="closeModal()">
-    <div class="rs-modal-card bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto" (click)="$event.stopPropagation()">
+    <div class="rs-modal-card bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[92vh] overflow-y-auto" (click)="$event.stopPropagation()">
+
+      <!-- Modal header -->
       <div class="flex items-center justify-between px-6 py-5 border-b border-slate-100">
-        <h3 class="font-semibold text-slate-800">{{ modalMode() === 'add' ? 'Nuevo héroe' : 'Editar héroe' }}</h3>
+        <h3 class="font-semibold text-slate-800">{{ modalMode() === 'add' ? 'Configurar héroe' : 'Editar héroe' }}</h3>
         <button (click)="closeModal()" class="cursor-pointer w-8 h-8 flex items-center justify-center rounded-lg hover:bg-slate-100 text-slate-400">✕</button>
       </div>
-      <div class="p-6 grid grid-cols-2 gap-4">
 
-        <div class="col-span-2">
-          <label class="block text-xs font-medium text-slate-500 mb-1.5">Nombre de campaña *</label>
-          <input [(ngModel)]="formData.campaignName" type="text" class="w-full px-3 py-2 rounded-xl border text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            [class.border-red-400]="formErrors['campaignName']" [class.border-slate-200]="!formErrors['campaignName']">
-          @if (formErrors['campaignName']) { <p class="text-xs text-red-500 mt-1">{{ formErrors['campaignName'] }}</p> }
-        </div>
+      <!-- Modal body: form + live preview -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-0 divide-y lg:divide-y-0 lg:divide-x divide-slate-100">
 
-        <div>
-          <label class="block text-xs font-medium text-slate-500 mb-1.5">Categoría</label>
-          <input [(ngModel)]="formData.category" type="text" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-        </div>
+        <!-- Form -->
+        <div class="p-6 space-y-4">
+          <div>
+            <label class="block text-xs font-medium text-slate-500 mb-1.5">Nombre de campaña</label>
+            <input [(ngModel)]="formData.campaignName" type="text" placeholder="Ej: Nueva Temporada 2025"
+              class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+          </div>
 
-        <div>
-          <label class="block text-xs font-medium text-slate-500 mb-1.5">Texto CTA</label>
-          <input [(ngModel)]="formData.ctaText" type="text" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-        </div>
-
-        <div class="col-span-2">
-          <label class="block text-xs font-medium text-slate-500 mb-1.5">Descripción</label>
-          <textarea [(ngModel)]="formData.description" rows="2" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"></textarea>
-        </div>
-
-        <div>
-          <label class="block text-xs font-medium text-slate-500 mb-1.5">Orden</label>
-          <input [(ngModel)]="formData.order" type="number" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-        </div>
-
-        <div class="flex items-center gap-2 mt-6">
-          <input [(ngModel)]="formData.isActive" type="checkbox" id="heroActive" class="cursor-pointer w-4 h-4 rounded text-blue-600">
-          <label for="heroActive" class="cursor-pointer text-sm text-slate-600">Activo</label>
-        </div>
-
-        <!-- Imagen -->
-        <div class="col-span-2">
-          <label class="block text-xs font-medium text-slate-500 mb-1.5">Imagen</label>
-          @if (formData.imageUrl) {
-            <div class="relative group rounded-xl overflow-hidden border border-slate-200 h-32 bg-slate-50">
-              <img [src]="formData.imageUrl" alt="preview" class="w-full h-full object-cover">
-              <div class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                <label class="cursor-pointer flex items-center gap-2 px-4 py-2 rounded-xl bg-white text-slate-800 text-sm font-medium">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
-                  Cambiar
-                  <input type="file" accept="image/*" (change)="uploadImage($event)" class="hidden">
-                </label>
-              </div>
-              @if (imageUploading()) { <div class="absolute inset-0 bg-white/80 flex items-center justify-center"><div class="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div></div> }
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-medium text-slate-500 mb-1.5">Categoría</label>
+              <input [(ngModel)]="formData.category" type="text" placeholder="Ej: RUNNING"
+                class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
-          } @else {
-            <label class="cursor-pointer flex flex-col items-center justify-center h-32 rounded-xl border-2 border-dashed border-slate-200 hover:border-blue-400 hover:bg-blue-50 transition-colors">
-              @if (imageUploading()) { <div class="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div> }
-              @else {
-                <svg class="w-8 h-8 text-slate-300 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
-                <span class="text-sm text-slate-400">Subir imagen</span>
-              }
-              <input type="file" accept="image/*" (change)="uploadImage($event)" class="hidden">
-            </label>
-          }
+            <div>
+              <label class="block text-xs font-medium text-slate-500 mb-1.5">Texto botón CTA</label>
+              <input [(ngModel)]="formData.ctaText" type="text" placeholder="COMPRAR AHORA"
+                class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-medium text-slate-500 mb-1.5">Descripción</label>
+            <textarea [(ngModel)]="formData.description" rows="3" placeholder="Texto descriptivo que aparece bajo el título..."
+              class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"></textarea>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <input [(ngModel)]="formData.isActive" type="checkbox" id="heroActive" class="cursor-pointer w-4 h-4 rounded text-blue-600">
+            <label for="heroActive" class="cursor-pointer text-sm text-slate-600">Activo (visible en el sitio)</label>
+          </div>
+
+          <!-- Image upload -->
+          <div>
+            <label class="block text-xs font-medium text-slate-500 mb-1.5">Imagen de fondo</label>
+            @if (formData.imageUrl) {
+              <div class="relative group rounded-xl overflow-hidden border border-slate-200 h-28 bg-slate-50">
+                <img [src]="formData.imageUrl" alt="preview" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  <label class="cursor-pointer flex items-center gap-2 px-4 py-2 rounded-xl bg-white text-slate-800 text-sm font-medium">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                    Cambiar imagen
+                    <input type="file" accept="image/*" (change)="uploadImage($event)" class="hidden">
+                  </label>
+                </div>
+                @if (imageUploading()) { <div class="absolute inset-0 bg-white/80 flex items-center justify-center"><div class="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div></div> }
+              </div>
+            } @else {
+              <label class="cursor-pointer flex flex-col items-center justify-center h-28 rounded-xl border-2 border-dashed border-slate-200 hover:border-blue-400 hover:bg-blue-50 transition-colors">
+                @if (imageUploading()) { <div class="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div> }
+                @else {
+                  <svg class="w-7 h-7 text-slate-300 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                  <span class="text-sm text-slate-400">Subir imagen de fondo</span>
+                  <span class="text-xs text-slate-300 mt-0.5">Recomendado: 1920×1080px</span>
+                }
+                <input type="file" accept="image/*" (change)="uploadImage($event)" class="hidden">
+              </label>
+            }
+          </div>
         </div>
 
+        <!-- Live preview -->
+        <div class="p-6 bg-slate-50 flex flex-col gap-3">
+          <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Vista previa en tiempo real</p>
+          <div class="relative rounded-xl overflow-hidden shadow-md" style="aspect-ratio: 16/9;">
+            @if (formData.imageUrl) {
+              <img [src]="formData.imageUrl" alt="preview" class="absolute inset-0 w-full h-full object-cover">
+            } @else {
+              <div class="absolute inset-0 bg-gradient-to-br from-slate-700 to-slate-900"></div>
+            }
+            <div class="absolute inset-0 bg-linear-to-r from-[#1a237e]/90 via-[#1a237e]/55 to-transparent"></div>
+            <div class="absolute inset-0 flex items-center px-5 py-4">
+              <div class="max-w-full">
+                <span class="inline-block border border-white/50 text-white px-2 py-0.5 text-[8px] font-bold tracking-widest mb-2 rounded-sm">
+                  {{ formData.category || 'CATEGORÍA' }}
+                </span>
+                <h1 class="text-white font-black leading-tight mb-2" style="font-size: clamp(10px, 2.5vw, 18px);">
+                  {{ formData.campaignName || 'Nombre de campaña' }}
+                </h1>
+                @if (formData.description) {
+                  <p class="text-white/70 mb-3" style="font-size: clamp(8px, 1.5vw, 11px); line-height: 1.4;">{{ formData.description }}</p>
+                }
+                <span class="bg-white text-[#1a237e] px-3 py-1 font-bold tracking-wide rounded-sm flex items-center gap-1 w-fit" style="font-size: clamp(7px, 1.2vw, 10px);">
+                  {{ formData.ctaText || 'COMPRAR AHORA' }}
+                  <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                </span>
+              </div>
+            </div>
+            @if (!formData.imageUrl) {
+              <div class="absolute bottom-2 left-0 right-0 text-center">
+                <span class="text-[9px] text-white/40">Sube una imagen para verla aquí</span>
+              </div>
+            }
+          </div>
+          <p class="text-[10px] text-slate-400 text-center">La previsualización se actualiza al escribir</p>
+        </div>
       </div>
-      @if (apiError()) { <div class="px-6 py-2 bg-red-50 text-red-700 text-sm">{{ apiError() }}</div> }
+
+      @if (apiError()) { <div class="px-6 py-2 bg-red-50 text-red-700 text-sm border-t border-red-100">{{ apiError() }}</div> }
       <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-slate-100 bg-slate-50 rounded-b-2xl">
         <button (click)="closeModal()" class="cursor-pointer px-4 py-2 rounded-xl text-slate-600 text-sm hover:bg-slate-100 transition-colors">Cancelar</button>
         <button (click)="save()" [disabled]="saving()" class="cursor-pointer flex items-center gap-2 px-5 py-2 rounded-xl bg-linear-to-r from-blue-600 to-indigo-600 text-white text-sm font-medium shadow hover:opacity-90 transition-all disabled:opacity-50">
           @if (saving()) { <div class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div> }
-          {{ saving() ? 'Guardando...' : 'Guardar' }}
+          {{ saving() ? 'Guardando...' : 'Guardar héroe' }}
         </button>
       </div>
     </div>

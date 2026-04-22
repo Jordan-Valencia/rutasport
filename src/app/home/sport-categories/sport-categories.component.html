@@ -1,48 +1,53 @@
 <section #sportCategoriesSection class="py-0 overflow-hidden" (click)="closePicker()">
 
-  <!-- Section header with dynamic accent -->
-  <div class="px-4 lg:px-8 pt-16 pb-8"
-    [style.background]="'linear-gradient(135deg, ' + activeMeta().color + '12 0%, transparent 60%)'">
-    <p class="text-xs font-black tracking-widest mb-2 uppercase"
-      [style.color]="activeMeta().color">POR DEPORTE</p>
-    <h2 class="text-3xl lg:text-5xl font-black mb-8 text-[#1a1a2e]">COMPRAR POR DEPORTE</h2>
+  <!-- Section header -->
+  <div class="px-4 lg:px-8 pt-16 pb-8 bg-white border-b border-slate-100">
+    <p class="text-[10px] font-black tracking-[0.35em] text-slate-400 mb-2 uppercase">Por deporte</p>
+    <h2 class="text-3xl lg:text-5xl font-black mb-8 text-[#1a1a2e]">EXPLORA TU DEPORTE</h2>
 
     <!-- Sport tabs -->
-    <div class="flex gap-3 overflow-x-auto pb-4 scrollbar-hide">
+    <div class="flex gap-2 overflow-x-auto pb-2 scrollbar-hide cursor-pointer">
       @for (sport of sports(); track sport.name) {
         @let meta = getMeta(sport.name);
         @let isActive = activeSport() === sport.name;
         <button
           (click)="setActiveSport(sport.name); $event.stopPropagation()"
-          class="sport-btn shrink-0 flex items-center gap-2.5 px-5 py-3 font-black text-sm whitespace-nowrap transition-all duration-300 rounded-full border-2"
-          [style.borderColor]="isActive ? meta.color : '#e5e7eb'"
-          [style.backgroundColor]="isActive ? meta.color : 'white'"
-          [style.color]="isActive ? 'white' : '#374151'"
-          [style.boxShadow]="isActive ? '0 4px 20px ' + meta.color + '55' : 'none'"
-          [style.transform]="isActive ? 'scale(1.05)' : 'scale(1)'">
-          <span class="text-base leading-none">{{ meta.icon }}</span>
-          <span class="tracking-wide">{{ sport.name | uppercase }}</span>
+          class="cursor-pointer sport-btn shrink-0 flex items-center gap-2 px-5 py-2.5 font-bold text-xs tracking-wide whitespace-nowrap transition-all duration-200 rounded-full border"
+          [class.border-slate-900]="isActive"
+          [class.bg-slate-900]="isActive"
+          [class.text-white]="isActive"
+          [class.border-slate-200]="!isActive"
+          [class.bg-white]="!isActive"
+          [class.text-slate-500]="!isActive"
+          [class.hover:border-slate-400]="!isActive">
+          <span class="text-sm leading-none">{{ meta.icon }}</span>
+          <span>{{ sport.name | uppercase }}</span>
         </button>
       }
     </div>
   </div>
 
-  <!-- Active sport hero banner -->
-  <div class="relative px-4 lg:px-8 py-8 mb-2 transition-all duration-500"
-    [style.background]="'linear-gradient(to right, ' + activeMeta().color + 'ee, ' + activeMeta().color + '88)'">
-    <div class="absolute inset-0 opacity-10"
-      style="background-image: url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')">
-    </div>
-    <div class="relative z-10 flex items-center justify-between">
+  <!-- Active sport bar -->
+  <div class="relative px-4 lg:px-8 py-6 bg-[#0f172a] flex items-center justify-between overflow-hidden">
+    <div class="absolute left-0 top-0 bottom-0 w-1 transition-colors duration-500" [style.background]="activeMeta().color"></div>
+    <div class="flex items-center gap-5 pl-4">
+      <span class="text-4xl">{{ activeMeta().icon }}</span>
       <div>
-        <div class="text-5xl lg:text-6xl mb-2">{{ activeMeta().icon }}</div>
-        <h3 class="text-white font-black text-2xl lg:text-4xl tracking-tight">{{ activeSport() | uppercase }}</h3>
-        <p class="text-white/70 text-sm mt-1">{{ filteredProducts().length }} producto(s) disponible(s)</p>
+        <p class="text-white/40 text-[10px] font-black tracking-widest uppercase">Colección</p>
+        <h3 class="text-white font-black text-xl lg:text-2xl tracking-tight">{{ activeSport() | uppercase }}</h3>
+        <p class="text-white/40 text-xs mt-0.5">{{ filteredProducts().length }} producto(s) disponible(s)</p>
       </div>
-      <div class="hidden lg:block text-right">
-        <p class="text-white/50 text-xs font-bold tracking-widest uppercase">Colección</p>
-        <p class="text-white/90 text-6xl font-black leading-none mt-1">{{ activeSport().charAt(0) }}</p>
-      </div>
+    </div>
+    <a [routerLink]="['/catalogo']" [queryParams]="{deporte: activeSport()}"
+      class="shrink-0 flex items-center gap-2 px-5 py-2.5 border border-white/20 text-white/70 text-xs font-bold tracking-wide
+             hover:border-white/60 hover:text-white transition-all duration-200 whitespace-nowrap">
+      Ver todo
+      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
+      </svg>
+    </a>
+    <div class="hidden lg:block text-right opacity-10">
+      <p class="text-white text-8xl font-black leading-none">{{ activeSport().charAt(0) }}</p>
     </div>
   </div>
 
@@ -110,10 +115,16 @@
               }
             </div>
 
-            @if (product.brand) { <p class="text-xs font-black uppercase tracking-wide mb-0.5" [style.color]="activeMeta().color">{{ product.brand }}</p> }
-            <p class="text-xs text-gray-400 mb-0.5">{{ product.category }}</p>
+            @if (product.brand) {
+              <p class="text-xs font-black uppercase tracking-wide mb-0.5" [style.color]="activeMeta().color">{{ product.brand }}</p>
+            }
+            <!-- Muestra la primera categoría disponible -->
+            @if (product.categories?.length) {
+              <p class="text-xs text-gray-400 mb-0.5">{{ product.categories![0] }}</p>
+            }
             <h3 class="font-bold text-sm mb-1 truncate text-gray-800">{{ product.name }}</h3>
             <p class="font-black text-sm">{{ product.price }}</p>
+
           </div>
         }
       </div>

@@ -11,13 +11,6 @@ export const teams: Team[] = [
   { name: '(Equipo 6)', country: '(País)' },
 ]
 
-export const products: Product[] = [
-  { name: '(Modelo del Tenis)', price: '(Precio)', category: 'Fútbol', image: '/images/product-running-1.jpg' },
-  { name: '(Modelo del Tenis)', price: '(Precio)', category: 'Running', image: '/images/product-training-1.jpg' },
-  { name: '(Modelo del Tenis)', price: '(Precio)', category: 'Basketball', image: '/images/product-basketball-1.jpg' },
-  { name: '(Modelo del Tenis)', price: '(Precio)', category: 'Training', image: '/images/product-casual-1.jpg' },
-]
-
 export const sports: string[] = ['Fútbol', 'Running', 'Basketball', 'Training', 'Tenis', 'Golf']
 
 export const featureBanners: FeatureBanner[] = [

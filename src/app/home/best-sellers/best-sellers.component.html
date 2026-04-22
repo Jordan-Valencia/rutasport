@@ -1,7 +1,10 @@
 <section #bestSellersSection class="py-16 px-4 lg:px-8">
-  <div class="section-heading flex items-center justify-between mb-10">
-    <h2 class="text-3xl lg:text-4xl font-black">LOS MÁS VENDIDOS</h2>
-    <a routerLink="/mas-vendidos" class="text-sm font-bold underline underline-offset-4 hover:text-[#1a237e]">Ver todo</a>
+  <div class="section-heading mb-10">
+    <p class="text-[10px] font-black tracking-[0.35em] text-[#1a237e] mb-2 uppercase">Selección de temporada</p>
+    <div class="flex items-end justify-between gap-4">
+      <h2 class="text-3xl lg:text-5xl font-black leading-none">LO QUE LLEVAN<br class="hidden lg:block"> LOS QUE VAN PRIMERO.</h2>
+      <a [routerLink]="['/catalogo']" [queryParams]="{bestSeller: true}" class="shrink-0 text-sm font-bold underline underline-offset-4 hover:text-[#1a237e] transition-colors pb-1">Ver todo →</a>
+    </div>
   </div>
 
   @if (loading()) {
@@ -38,7 +41,7 @@
               <span class="absolute top-3 left-3 bg-black text-white px-2 py-1 text-xs font-bold">NUEVO</span>
             }
           </div>
-          <p class="text-xs text-gray-500 mb-1">{{ product.category }}</p>
+          @if (product.categories) { <p class="text-xs text-gray-500 mb-1">{{ product.categories }}</p> }
           <h3 class="font-bold text-sm mb-1">{{ product.name }}</h3>
           <p class="font-bold text-sm">{{ product.price }}</p>
         </div>

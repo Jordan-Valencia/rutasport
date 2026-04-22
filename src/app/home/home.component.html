@@ -2,65 +2,111 @@
 
 <app-hero />
 
+<!-- BEST SELLERS -->
+<app-best-sellers />
+
+<!-- Separador -->
+<div class="h-px bg-slate-100 mx-8 lg:mx-16"></div>
+
 <!-- MUJER -->
-<section id="mujer" class="relative overflow-hidden bg-[#1a1a2e] py-24 px-4 lg:px-16 flex items-center min-h-[50vh]">
-  <div class="absolute inset-0 bg-linear-to-br from-pink-900/60 via-[#1a1a2e]/80 to-[#1a1a2e]"></div>
-  <div class="absolute top-0 right-0 w-1/2 h-full opacity-10">
-    <div class="w-full h-full" style="background: radial-gradient(circle at 80% 50%, #f9a8d4 0%, transparent 60%)"></div>
-  </div>
-  <div class="relative z-10 max-w-2xl">
-    <span class="inline-block text-pink-300 text-xs font-black tracking-widest mb-4 border border-pink-300/40 px-3 py-1">COLECCIÓN MUJER</span>
-    <h2 class="text-white text-5xl lg:text-7xl font-black leading-none mb-5">ELLA<br>DOMINA.</h2>
-    <p class="text-white/60 text-lg mb-8 max-w-md">Diseño y rendimiento para cada momento. Encuentra el estilo que te define.</p>
-    <a [routerLink]="['/catalogo']" class="inline-flex items-center gap-3 bg-white text-[#1a1a2e] px-8 py-4 font-black text-sm tracking-wide hover:bg-pink-50 transition-colors">
-      VER COLECCIÓN
-      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
-    </a>
+<section id="mujer" class="py-20 lg:py-28 px-6 lg:px-16 bg-[#faf8f6] overflow-hidden">
+  <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+
+    <!-- Texto -->
+    <div class="gender-text">
+      <span class="inline-block text-[10px] font-black tracking-[0.4em] text-rose-400 mb-6 uppercase">Colección Mujer</span>
+      <h2 class="text-6xl lg:text-8xl font-black leading-[0.88] mb-6 text-slate-900">ELLA<br>DOMINA.</h2>
+      <p class="text-slate-400 text-base mb-10 max-w-sm leading-relaxed">Diseño y rendimiento para cada momento. Encuentra el estilo que te define.</p>
+      <a [routerLink]="['/catalogo']" [queryParams]="{genero: 'Mujer'}"
+        class="inline-flex items-center gap-3 border-2 border-slate-900 text-slate-900 px-8 py-3.5 font-black text-xs tracking-widest hover:bg-slate-900 hover:text-white transition-all duration-200">
+        VER COLECCIÓN
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+
+    <!-- Imagen producto -->
+    <div class="gender-img relative">
+      <div class="relative bg-[#f0ece8] aspect-square max-w-md mx-auto lg:mx-0 lg:ml-auto overflow-hidden">
+        @if (featuredMujer()?.image) {
+          <img [src]="featuredMujer()!.image" [alt]="featuredMujer()!.name"
+            class="w-full h-full object-contain p-10 hover:scale-105 transition-transform duration-700" />
+        } @else {
+          <div class="w-full h-full flex items-center justify-center">
+            <svg class="w-28 h-28 text-rose-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="0.8" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+          </div>
+        }
+        @if (featuredMujer()?.isBestSeller) {
+          <span class="absolute top-4 left-4 bg-slate-900 text-white text-[10px] font-black tracking-widest px-3 py-1.5">BEST SELLER</span>
+        }
+      </div>
+      <!-- Detalle decorativo -->
+      <div class="absolute -bottom-6 -right-6 w-32 h-32 bg-rose-100 rounded-full -z-10"></div>
+    </div>
+
   </div>
 </section>
+
+<!-- Separador -->
+<div class="h-px bg-slate-200"></div>
 
 <!-- HOMBRE -->
-<section id="hombre" class="relative overflow-hidden bg-[#0f172a] py-24 px-4 lg:px-16 flex items-center min-h-[50vh]">
-  <div class="absolute inset-0 bg-linear-to-tl from-blue-900/50 via-[#0f172a]/80 to-[#0f172a]"></div>
-  <div class="absolute bottom-0 left-0 w-2/3 h-full opacity-10">
-    <div class="w-full h-full" style="background: radial-gradient(circle at 20% 70%, #93c5fd 0%, transparent 60%)"></div>
-  </div>
-  <div class="relative z-10 max-w-2xl ml-auto text-right">
-    <span class="inline-block text-blue-300 text-xs font-black tracking-widest mb-4 border border-blue-300/40 px-3 py-1">COLECCIÓN HOMBRE</span>
-    <h2 class="text-white text-5xl lg:text-7xl font-black leading-none mb-5">SIN<br>LÍMITES.</h2>
-    <p class="text-white/60 text-lg mb-8 max-w-md ml-auto">Alto rendimiento para los que van más lejos. Tecnología en cada paso.</p>
-    <a [routerLink]="['/catalogo']" class="inline-flex items-center gap-3 bg-white text-[#0f172a] px-8 py-4 font-black text-sm tracking-wide hover:bg-blue-50 transition-colors">
-      VER COLECCIÓN
-      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
-    </a>
+<section id="hombre" class="py-20 lg:py-28 px-6 lg:px-16 bg-[#0f172a] overflow-hidden">
+  <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+
+    <!-- Imagen producto (izquierda en hombre) -->
+    <div class="gender-img relative order-2 lg:order-1">
+      <div class="relative bg-[#1e293b] aspect-square max-w-md mx-auto lg:mr-0 overflow-hidden">
+        @if (featuredHombre()?.image) {
+          <img [src]="featuredHombre()!.image" [alt]="featuredHombre()!.name"
+            class="w-full h-full object-contain p-10 hover:scale-105 transition-transform duration-700" />
+        } @else {
+          <div class="w-full h-full flex items-center justify-center">
+            <svg class="w-28 h-28 text-blue-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="0.8" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+          </div>
+        }
+        @if (featuredHombre()?.isBestSeller) {
+          <span class="absolute top-4 left-4 bg-white text-slate-900 text-[10px] font-black tracking-widest px-3 py-1.5">BEST SELLER</span>
+        }
+      </div>
+      <div class="absolute -bottom-6 -left-6 w-32 h-32 bg-blue-900/40 rounded-full -z-10"></div>
+    </div>
+
+    <!-- Texto (derecha en hombre) -->
+    <div class="gender-text order-1 lg:order-2">
+      <span class="inline-block text-[10px] font-black tracking-[0.4em] text-blue-400 mb-6 uppercase">Colección Hombre</span>
+      <h2 class="text-6xl lg:text-8xl font-black leading-[0.88] mb-6 text-white">SIN<br>LÍMITES.</h2>
+      <p class="text-white/40 text-base mb-10 max-w-sm leading-relaxed">Alto rendimiento para los que van más lejos. Tecnología en cada paso.</p>
+      <a [routerLink]="['/catalogo']" [queryParams]="{genero: 'Hombre'}"
+        class="inline-flex items-center gap-3 border-2 border-white/70 text-white px-8 py-3.5 font-black text-xs tracking-widest hover:bg-white hover:text-[#0f172a] transition-all duration-200">
+        VER COLECCIÓN
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+
   </div>
 </section>
 
-<!-- NIÑOS -->
-<section id="ninos" class="relative overflow-hidden bg-[#fafaf9] py-20 px-4 lg:px-16 flex items-center min-h-[44vh] border-t border-gray-100">
-  <div class="absolute inset-0" style="background: radial-gradient(circle at 90% 50%, #fde68a44 0%, transparent 55%), radial-gradient(circle at 10% 50%, #bbf7d044 0%, transparent 55%)"></div>
-  <div class="relative z-10 text-center w-full">
-    <span class="inline-block text-gray-400 text-xs font-black tracking-widest mb-4 border border-gray-200 px-3 py-1">COLECCIÓN NIÑOS</span>
-    <h2 class="text-[#1a1a2e] text-5xl lg:text-7xl font-black leading-none mb-5">JUEGA<br>GRANDE.</h2>
-    <p class="text-gray-500 text-lg mb-8 max-w-lg mx-auto">Los mejores modelos para los campeones del mañana. Comodidad y estilo sin límites.</p>
-    <a [routerLink]="['/catalogo']" [queryParams]="{categoria: 'Niños'}" class="inline-flex items-center gap-3 bg-[#1a1a2e] text-white px-8 py-4 font-black text-sm tracking-wide hover:opacity-80 transition-opacity">
-      VER COLECCIÓN NIÑOS
-      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
-    </a>
-  </div>
-</section>
+<!-- Espaciado antes de banners -->
+<div class="h-16 lg:h-24 bg-white"></div>
 
 <!-- Banners destacados -->
 <app-feature-banners />
 
-<!-- DEPORTE (sport categories) -->
-<div id="deporte">
-  <app-sport-categories />
-</div>
+<!-- Espaciado antes de novedades -->
+<div class="h-4 bg-white"></div>
 
 <!-- NOVEDADES -->
 <div id="novedades">
   <app-new-releases />
+</div>
+
+<!-- DEPORTE -->
+<div id="deporte">
+  <app-sport-categories />
 </div>
 
 <app-footer />

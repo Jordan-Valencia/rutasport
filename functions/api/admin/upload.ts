@@ -11,15 +11,16 @@ export const onRequestPost: PagesFunction<Env> = async ({ env, request }) => {
   if (request.headers.get('x-admin-key') !== ADMIN_KEY) return unauthorized()
   try {
     const formData = await request.formData()
-    const file = formData.get('file') as File | null
-    if (!file) return json({ error: 'No file provided' }, 400)
+    const entry = formData.get('file')
+    if (!entry || typeof entry === 'string') return json({ error: 'No file provided' }, 400)
+    const file: File = entry
 
     const ext = file.name.split('.').pop()?.toLowerCase() ?? 'jpg'
-    const key = `images/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`
+    const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_')
+    const key = `images/${Date.now()}-${safeName}`
+    const contentType = file.type || `image/${ext === 'jpg' ? 'jpeg' : ext}`
 
-    await env.IMAGES.put(key, await file.arrayBuffer(), {
-      httpMetadata: { contentType: file.type || `image/${ext}` },
-    })
+    await env.IMAGES.put(key, file, { httpMetadata: { contentType } })
 
     return json({ path: `/${key}`, key })
   } catch (e: any) {
