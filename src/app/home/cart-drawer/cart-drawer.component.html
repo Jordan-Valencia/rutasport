@@ -20,15 +20,21 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
           </svg>
         </div>
+
         <div>
           <h2 class="font-black text-white tracking-wider text-sm uppercase">Mi Carrito</h2>
           <p class="text-white/40 text-xs mt-0.5">
-            @if (cart.count() === 0) { Sin productos }
-            @else if (cart.count() === 1) { 1 producto }
-            @else { {{ cart.count() }} productos }
+            @if (cart.count() === 0) {
+              Sin productos
+            } @else if (cart.count() === 1) {
+              1 producto
+            } @else {
+              {{ cart.count() }} productos
+            }
           </p>
         </div>
       </div>
+
       <button
         (click)="closeWithAnimation()"
         class="cursor-pointer w-9 h-9 rounded-2xl bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-all active:scale-95">
@@ -48,20 +54,23 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
             </svg>
           </div>
+
           <div>
             <p class="font-black text-gray-800 text-lg">Carrito vacío</p>
-            <p class="text-gray-400 text-sm mt-1 leading-relaxed">Agrega productos para comenzar<br>tu pedido por WhatsApp</p>
+            <p class="text-gray-400 text-sm mt-1 leading-relaxed">
+              Agrega productos para comenzar<br>tu pedido por WhatsApp
+            </p>
           </div>
+
           <button
             (click)="closeWithAnimation()"
             class="cursor-pointer mt-2 px-8 py-3 bg-[#1a237e] text-white text-xs font-black tracking-widest hover:bg-[#0f1762] active:scale-[0.98] transition-all">
             VER PRODUCTOS
           </button>
         </div>
-
       } @else {
         <div class="space-y-3">
-          @for (item of cart.items(); track item.productId + (item.size ?? ''); let i = $index) {
+          @for (item of cart.items(); track item.productId + '-' + (item.size ?? '') + '-' + (item.model ?? ''); let i = $index) {
             <div class="bg-white rounded-2xl p-3 flex gap-3 shadow-sm hover:shadow-md transition-shadow cart-item">
 
               <!-- Image -->
@@ -73,9 +82,21 @@
               <div class="flex-1 min-w-0 flex flex-col justify-between py-0.5">
                 <div>
                   @if (item.brand) {
-                    <p class="text-[10px] text-gray-400 font-semibold uppercase tracking-widest leading-none mb-1">{{ item.brand }}</p>
+                    <p class="text-[10px] text-gray-400 font-semibold uppercase tracking-widest leading-none mb-1">
+                      {{ item.brand }}
+                    </p>
                   }
-                  <p class="font-bold text-gray-900 text-sm leading-snug line-clamp-2">{{ item.name }}</p>
+
+                  <p class="font-bold text-gray-900 text-sm leading-snug line-clamp-2">
+                    {{ item.name }}
+                  </p>
+
+                  @if (item.model) {
+                    <p class="text-[11px] text-gray-500 font-medium mt-1">
+                      Ref: {{ item.model }}
+                    </p>
+                  }
+
                   @if (item.size) {
                     <span class="inline-block mt-1.5 px-2 py-0.5 bg-gray-100 text-gray-500 text-[10px] font-semibold rounded-full tracking-wide">
                       Talla {{ item.size }}
@@ -85,14 +106,21 @@
 
                 <!-- Price + Qty controls -->
                 <div class="flex items-center justify-between mt-2.5">
-                  <p class="font-black text-[#1a237e] text-base leading-none">{{ item.price }}</p>
+                  <p class="font-black text-[#1a237e] text-base leading-none">
+                    {{ item.price }}
+                  </p>
+
                   <div class="flex items-center gap-0.5 bg-gray-100 rounded-full p-0.5">
                     <button
                       (click)="cart.decrement(i)"
                       class="cursor-pointer w-7 h-7 rounded-full flex items-center justify-center text-gray-600 hover:bg-white hover:shadow-sm active:scale-90 transition-all font-bold text-lg leading-none select-none">
                       −
                     </button>
-                    <span class="w-6 text-center text-sm font-black text-gray-800 select-none">{{ item.quantity }}</span>
+
+                    <span class="w-6 text-center text-sm font-black text-gray-800 select-none">
+                      {{ item.quantity }}
+                    </span>
+
                     <button
                       (click)="cart.increment(i)"
                       class="cursor-pointer w-7 h-7 rounded-full flex items-center justify-center text-gray-600 hover:bg-white hover:shadow-sm active:scale-90 transition-all font-bold text-lg leading-none select-none">
@@ -125,10 +153,17 @@
         <!-- Total row -->
         <div class="flex items-end justify-between gap-4">
           <div>
-            <p class="text-[11px] text-gray-400 font-semibold uppercase tracking-wider">Total estimado</p>
-            <p class="text-[11px] text-gray-400 mt-0.5 leading-relaxed">Envío se coordina por WhatsApp<br>según tu ubicación</p>
+            <p class="text-[11px] text-gray-400 font-semibold uppercase tracking-wider">
+              Total estimado
+            </p>
+            <p class="text-[11px] text-gray-400 mt-0.5 leading-relaxed">
+              Envío se coordina por WhatsApp<br>según tu ubicación
+            </p>
           </div>
-          <p class="font-black text-2xl text-gray-900 leading-none tracking-tight flex-shrink-0">{{ cart.totalFormatted() }}</p>
+
+          <p class="font-black text-2xl text-gray-900 leading-none tracking-tight flex-shrink-0">
+            {{ cart.totalFormatted() }}
+          </p>
         </div>
 
         <!-- WhatsApp CTA -->

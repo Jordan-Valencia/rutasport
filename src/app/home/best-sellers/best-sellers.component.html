@@ -26,11 +26,11 @@
             <img
               [src]="product.image"
               [alt]="product.name"
-              class="object-contain p-4 group-hover:scale-105 transition-transform duration-500 w-full h-full"
+              class="object-fill p-4 group-hover:scale-105 transition-transform duration-500 w-full h-full"
               onerror="this.parentElement.style.backgroundColor='#ccc'"
             />
             @if (product.isBestSeller) {
-              <span class="absolute top-3 left-3 bg-[#1a237e] text-white px-2 py-1 text-xs font-bold">BEST SELLER</span>
+              <span class="absolute top-3 left-3 bg-[#1a237e] text-white px-2 py-1 text-xs font-bold">Más vendidos</span>
             }
             @if (product.isNew) {
               <span class="absolute top-3 left-3 bg-black text-white px-2 py-1 text-xs font-bold">NUEVO</span>

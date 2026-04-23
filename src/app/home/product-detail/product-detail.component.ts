@@ -15,33 +15,38 @@ import { CartDrawerComponent } from '../cart-drawer/cart-drawer.component'
   styleUrl: './product-detail.component.css',
 })
 export class ProductDetailComponent implements OnInit {
-  private route       = inject(ActivatedRoute)
-  private router      = inject(Router)
+  private route = inject(ActivatedRoute)
+  private router = inject(Router)
   private dataService = inject(DataService)
-  private platformId  = inject(PLATFORM_ID)
-  protected cart      = inject(CartService)
+  private platformId = inject(PLATFORM_ID)
 
-  product          = signal<Product | null>(null)
-  loading          = signal(true)
-  activeIndex      = signal(0)
-  selectedSize     = signal('')
-  justAdded        = signal(false)
-  sportBarVisible  = signal(false)
+  protected cart = inject(CartService)
+
+  product = signal<Product | null>(null)
+  loading = signal(true)
+  activeIndex = signal(0)
+  selectedSize = signal('')
+  justAdded = signal(false)
+  sportBarVisible = signal(false)
 
   readonly SPORT_COLORS: Record<string, string | undefined> = {
-    'Fútbol':     '#22c55e',
-    'Running':    '#f97316',
+    'Fútbol': '#22c55e',
+    'Running': '#f97316',
     'Basketball': '#ef4444',
-    'Training':   '#3b82f6',
-    'Tenis':      '#eab308',
-    'Lifestyle':  '#a855f7',
-    'Trail':      '#92400e',
+    'Training': '#3b82f6',
+    'Tenis': '#eab308',
+    'Lifestyle': '#a855f7',
+    'Trail': '#92400e',
   }
 
   images = computed(() => {
     const p = this.product()
     if (!p) return []
-    const gallery = p.gallery ? p.gallery.split(',').map(s => s.trim()).filter(Boolean) : []
+
+    const gallery = p.gallery
+      ? p.gallery.split(',').map(s => s.trim()).filter(Boolean)
+      : []
+
     return p.image ? [p.image, ...gallery] : gallery
   })
 
@@ -58,12 +63,21 @@ export class ProductDetailComponent implements OnInit {
 
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id')
-    if (!id) { this.router.navigate(['/catalogo']); return }
+
+    if (!id) {
+      this.router.navigate(['/catalogo'])
+      return
+    }
 
     this.dataService.getProductById(+id).subscribe(p => {
-      if (!p) { this.router.navigate(['/catalogo']); return }
+      if (!p) {
+        this.router.navigate(['/catalogo'])
+        return
+      }
+
       this.product.set(p)
       this.loading.set(false)
+
       setTimeout(() => {
         this.sportBarVisible.set(true)
         this.runEntranceAnimation()
@@ -84,28 +98,34 @@ export class ProductDetailComponent implements OnInit {
     const p = this.product()
     if (!p) return
     if (this.sizes().length > 0 && !this.selectedSize()) return
+
     this.cart.add({
       productId: p.id!,
       name: p.name,
       brand: p.brand,
+      model: p.model,
       price: p.price,
       image: p.image,
       size: this.selectedSize() || undefined,
     })
+
     this.justAdded.set(true)
     setTimeout(() => this.justAdded.set(false), 2000)
   }
 
   private async runEntranceAnimation() {
     if (!isPlatformBrowser(this.platformId)) return
+
     const { gsap } = await import('gsap')
 
-    gsap.fromTo('.pd-gallery-panel',
+    gsap.fromTo(
+      '.pd-gallery-panel',
       { opacity: 0, x: -24 },
       { opacity: 1, x: 0, duration: 0.65, ease: 'power3.out', clearProps: 'all' }
     )
 
-    gsap.fromTo('.pd-reveal',
+    gsap.fromTo(
+      '.pd-reveal',
       { opacity: 0, y: 22 },
       { opacity: 1, y: 0, duration: 0.5, stagger: 0.09, ease: 'power2.out', delay: 0.15, clearProps: 'all' }
     )
