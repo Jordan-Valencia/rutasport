@@ -2,7 +2,7 @@ interface Env {
   IMAGES: R2Bucket
 }
 
-const ADMIN_KEY = '_Yvu|jxY6_90'
+const ADMIN_KEY = '1663017721@'
 const json = (data: unknown, status = 200) =>
   new Response(JSON.stringify(data), { status, headers: { 'Content-Type': 'application/json' } })
 const unauthorized = () => json({ error: 'Unauthorized' }, 401)
