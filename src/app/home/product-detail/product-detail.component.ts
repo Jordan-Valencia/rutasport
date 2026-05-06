@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, inject, computed, PLATFORM_ID } from '@angular/core'
+﻿import { Component, OnInit, signal, inject, computed, PLATFORM_ID } from '@angular/core'
 import { CommonModule, isPlatformBrowser } from '@angular/common'
 import { ActivatedRoute, Router, RouterModule } from '@angular/router'
 import { DataService } from '../../services/data.service'
@@ -58,7 +58,7 @@ export class ProductDetailComponent implements OnInit {
 
   sportColor = computed(() => {
     const firstSport = this.product()?.sports?.split(',')[0]?.trim() ?? ''
-    return this.SPORT_COLORS[firstSport] ?? '#1a237e'
+    return this.SPORT_COLORS[firstSport] ?? '#E31C1C'
   })
 
   ngOnInit() {

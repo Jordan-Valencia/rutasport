@@ -1,11 +1,11 @@
-<app-header />
+﻿<app-header />
 <app-cart-drawer />
 
 <!-- ── Loading Skeleton ──────────────────────────────────────── -->
 @if (loading()) {
-  <div class="min-h-screen bg-white grid lg:grid-cols-2 animate-pulse">
-    <div class="bg-gray-100 min-h-[68vw] lg:min-h-0"></div>
-    <div class="p-8 lg:p-14 flex flex-col gap-5">
+  <div class="min-h-screen bg-[#0d0d0d] grid lg:grid-cols-2 animate-pulse">
+    <div class="bg-[#1a1a1a] min-h-[68vw] lg:min-h-0"></div>
+    <div class="bg-[#0d0d0d] p-8 lg:p-14 flex flex-col gap-5">
       <div class="h-3 bg-gray-100 rounded-full w-1/4"></div>
       <div class="h-16 bg-gray-100 rounded w-4/5"></div>
       <div class="h-8 bg-gray-100 rounded-full w-1/4 mt-2"></div>
@@ -22,13 +22,13 @@
 
 <!-- ── Product Page ──────────────────────────────────────────── -->
 @if (!loading() && product()) {
-  <div class="min-h-screen bg-white">
+  <div class="min-h-screen bg-[#0d0d0d]">
 
     <!-- Breadcrumb nav -->
-    <div class="bg-white border-b border-gray-100 px-5 lg:px-12 py-3 flex items-center gap-2.5">
+    <div class="bg-black border-b border-white/10 px-5 lg:px-12 py-3 flex items-center gap-2.5">
       <a
         routerLink="/catalogo"
-        class="flex items-center gap-1.5 text-[13px] font-medium text-gray-400 hover:text-[#1a237e] transition-colors group"
+        class="flex items-center gap-1.5 text-[13px] font-medium text-white/40 hover:text-[#E31C1C] transition-colors group"
       >
         <svg class="w-4 h-4 transition-transform group-hover:-translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
@@ -37,12 +37,12 @@
       </a>
 
       @if (product()!.brand) {
-        <span class="text-gray-200">/</span>
-        <span class="text-[13px] text-gray-400">{{ product()!.brand }}</span>
+        <span class="text-white/20">/</span>
+        <span class="text-[13px] text-white/40">{{ product()!.brand }}</span>
       }
 
-      <span class="text-gray-200">/</span>
-      <span class="text-[13px] text-gray-700 font-semibold truncate max-w-[200px]">
+      <span class="text-white/20">/</span>
+      <span class="text-[13px] text-white/80 font-semibold truncate max-w-[200px]">
         {{ product()!.name }}
       </span>
     </div>
@@ -51,22 +51,14 @@
     <div class="grid grid-cols-1 lg:grid-cols-2 items-stretch">
 
       <!-- ═══ GALERÍA SIN FONDO NEGRO ═══ -->
-      <div class="bg-white lg:border-r border-gray-100">
+      <div class="bg-[#111] lg:border-r border-white/10">
         <div class="relative min-h-[58vw] sm:min-h-[520px] lg:min-h-[calc(100vh-53px)] flex items-center justify-center px-6 sm:px-10 lg:px-14 py-10">
 
           <!-- Badge -->
           <div class="absolute top-5 left-5 lg:top-6 lg:left-6 flex flex-col gap-2 z-10">
-            @if (product()!.isNew) {
-              <span class="bg-black text-white px-3 py-1 text-[9px] font-black tracking-[0.2em] uppercase">
-                NUEVO
-              </span>
-            }
-
-            @if (product()!.isBestSeller) {
-              <span class="bg-[#1a237e] text-white px-3 py-1 text-[9px] font-black tracking-[0.2em] uppercase">
-                ★ TOP
-              </span>
-            }
+            <span class="bg-[#E31C1C] text-white px-3 py-1 text-[9px] font-black tracking-[0.2em] uppercase">
+              ORIGINAL
+            </span>
           </div>
 
           <!-- Counter -->
@@ -109,7 +101,7 @@
                 <button
                   (click)="setImage($index)"
                   class="w-14 h-12 overflow-hidden border bg-white transition-all duration-200"
-                  [class.border-[#1a237e]]="activeIndex() === $index"
+                  [class.border-[#E31C1C]]="activeIndex() === $index"
                   [class.border-gray-200]="activeIndex() !== $index"
                   [class.opacity-100]="activeIndex() === $index"
                   [class.opacity-70]="activeIndex() !== $index"
@@ -129,19 +121,19 @@
       </div>
 
       <!-- ═══ INFO PANEL ═══ -->
-      <div class="bg-white">
+      <div class="bg-[#0d0d0d] lg:border-l border-white/5">
         <div class="px-6 py-10 lg:px-12 lg:py-14 max-w-[560px]">
 
           <!-- Brand + meta chips -->
           <div class="flex flex-wrap items-center gap-2 mb-5">
             @if (product()!.brand) {
-              <span class="text-[11px] font-black uppercase tracking-[0.22em] text-gray-400">
+              <span class="text-[11px] font-black uppercase tracking-[0.22em] text-white/40">
                 {{ product()!.brand }}
               </span>
             }
 
             @if (product()!.gender) {
-              <span class="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-gray-100 text-gray-500">
+              <span class="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-white/10 text-white/50">
                 {{ product()!.gender }}
               </span>
             }
@@ -149,46 +141,46 @@
             @for (sport of (product()!.sports ?? '').split(',').map(s => s.trim()).filter(s => s); track sport) {
               <span
                 class="text-[11px] font-bold px-2.5 py-1 rounded-full border"
-                [style.color]="SPORT_COLORS[sport] ?? '#1a237e'"
-                [style.borderColor]="(SPORT_COLORS[sport] ?? '#1a237e') + '50'"
-                [style.backgroundColor]="(SPORT_COLORS[sport] ?? '#1a237e') + '10'">
+                [style.color]="SPORT_COLORS[sport] ?? '#E31C1C'"
+                [style.borderColor]="(SPORT_COLORS[sport] ?? '#E31C1C') + '50'"
+                [style.backgroundColor]="(SPORT_COLORS[sport] ?? '#E31C1C') + '10'">
                 {{ sport }}
               </span>
             }
           </div>
 
           <!-- Product name -->
-          <h1 class="mb-6 text-[clamp(3rem,7vw,5.5rem)] leading-[0.92] tracking-[-0.03em] font-black text-[#07070e]">
+          <h1 class="mb-6 text-[clamp(3rem,7vw,5.5rem)] leading-[0.92] tracking-[-0.03em] font-black text-white">
             {{ product()!.name }}
           </h1>
 
           <!-- Price row -->
           <div class="flex items-center gap-4 mb-8">
-            <span class="text-[30px] font-black text-[#07070e] tracking-tight leading-none">
+            <span class="text-[30px] font-black text-white tracking-tight leading-none">
               {{ product()!.price }}
             </span>
 
             @if (product()!.isBestSeller) {
-              <span class="text-[11px] font-bold text-amber-600 bg-amber-50 px-2.5 py-1 rounded-full">
+              <span class="text-[11px] font-bold text-amber-400 bg-amber-400/10 px-2.5 py-1 rounded-full">
                 Más vendido
               </span>
             }
 
             @if (product()!.isNew) {
-              <span class="text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full">
+              <span class="text-[11px] font-bold text-emerald-400 bg-emerald-400/10 px-2.5 py-1 rounded-full">
                 Novedad
               </span>
             }
           </div>
 
           <!-- Divider -->
-          <div class="h-px bg-gray-100 mb-8"></div>
+          <div class="h-px bg-white/10 mb-8"></div>
 
           <!-- Size selector -->
           @if (sizes().length > 0) {
             <div class="mb-8">
               <div class="flex items-center justify-between mb-3.5">
-                <span class="text-[10px] font-black uppercase tracking-[0.22em] text-gray-400">Talla</span>
+                <span class="text-[10px] font-black uppercase tracking-[0.22em] text-white/40">Talla</span>
 
                 @if (!selectedSize()) {
                   <span class="text-[12px] text-red-400 font-medium">Elige tu talla</span>
@@ -204,11 +196,11 @@
                   <button
                     (click)="selectedSize.set(size === selectedSize() ? '' : size)"
                     class="min-w-[54px] h-11 px-4 border text-[15px] font-bold transition-all duration-150 active:scale-[0.97]"
-                    [class.border-[#1a237e]]="selectedSize() === size"
-                    [class.bg-[#1a237e]]="selectedSize() === size"
+                    [class.border-[#E31C1C]]="selectedSize() === size"
+                    [class.bg-[#E31C1C]]="selectedSize() === size"
                     [class.text-white]="selectedSize() === size"
-                    [class.border-gray-300]="selectedSize() !== size"
-                    [class.text-gray-700]="selectedSize() !== size"
+                    [class.border-white/20]="selectedSize() !== size"
+                    [class.text-white/70]="selectedSize() !== size"
                   >
                     {{ size }}
                   </button>
@@ -224,9 +216,9 @@
               class="w-full min-h-14 px-5 inline-flex items-center justify-center gap-3 text-[12px] font-black tracking-[0.16em] uppercase transition-all duration-200 active:scale-[0.985]"
               [class.bg-[#111827]]="justAdded()"
               [class.text-white]="justAdded()"
-              [class.bg-[#ececef]]="sizes().length > 0 && !selectedSize() && !justAdded()"
-              [class.text-gray-400]="sizes().length > 0 && !selectedSize() && !justAdded()"
-              [class.bg-[#1a237e]]="!justAdded() && !(sizes().length > 0 && !selectedSize())"
+              [class.bg-white/10]="sizes().length > 0 && !selectedSize() && !justAdded()"
+              [class.text-white/30]="sizes().length > 0 && !selectedSize() && !justAdded()"
+              [class.bg-[#E31C1C]]="!justAdded() && !(sizes().length > 0 && !selectedSize())"
               [class.text-white]="!justAdded() && !(sizes().length > 0 && !selectedSize())"
             >
               @if (justAdded()) {
@@ -246,7 +238,7 @@
             </button>
 
             <div class="flex items-center gap-5 mt-4 flex-wrap">
-              <span class="flex items-center gap-1.5 text-[11px] text-gray-400 font-medium">
+              <span class="flex items-center gap-1.5 text-[11px] text-white/30 font-medium">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
@@ -254,7 +246,7 @@
                 Compra segura
               </span>
 
-              <span class="flex items-center gap-1.5 text-[11px] text-gray-400 font-medium">
+              <span class="flex items-center gap-1.5 text-[11px] text-white/30 font-medium">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
@@ -262,7 +254,7 @@
                 Envío rápido
               </span>
 
-              <span class="flex items-center gap-1.5 text-[11px] text-gray-400 font-medium">
+              <span class="flex items-center gap-1.5 text-[11px] text-white/30 font-medium">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
@@ -274,55 +266,55 @@
 
           <!-- Description -->
           @if (product()!.description) {
-            <div class="border-t border-gray-100 pt-7 mb-7">
-              <span class="block text-[10px] font-black uppercase tracking-[0.22em] text-gray-400 mb-3">
+            <div class="border-t border-white/10 pt-7 mb-7">
+              <span class="block text-[10px] font-black uppercase tracking-[0.22em] text-white/40 mb-3">
                 Descripción
               </span>
-              <p class="text-[14px] text-gray-600 leading-relaxed whitespace-pre-line">
+              <p class="text-[14px] text-white/60 leading-relaxed whitespace-pre-line">
                 {{ product()!.description }}
               </p>
             </div>
           }
 
           <!-- Product details -->
-          <div class="border-t border-gray-100 pt-7">
-            <span class="block text-[10px] font-black uppercase tracking-[0.22em] text-gray-400 mb-3">
+          <div class="border-t border-white/10 pt-7">
+            <span class="block text-[10px] font-black uppercase tracking-[0.22em] text-white/40 mb-3">
               Detalles del producto
             </span>
 
             <div>
               @if (product()!.categories) {
-                <div class="flex justify-between gap-4 py-3.5 border-b border-gray-100 max-sm:flex-col max-sm:gap-1">
-                  <span class="text-[13px] text-gray-400 font-medium">Categoría</span>
-                  <span class="text-[13px] text-gray-800 font-semibold">{{ product()!.categories }}</span>
+                <div class="flex justify-between gap-4 py-3.5 border-b border-white/10 max-sm:flex-col max-sm:gap-1">
+                  <span class="text-[13px] text-white/40 font-medium">Categoría</span>
+                  <span class="text-[13px] text-white/80 font-semibold">{{ product()!.categories }}</span>
                 </div>
               }
 
               @if (product()!.brand) {
-                <div class="flex justify-between gap-4 py-3.5 border-b border-gray-100 max-sm:flex-col max-sm:gap-1">
-                  <span class="text-[13px] text-gray-400 font-medium">Marca</span>
-                  <span class="text-[13px] text-gray-800 font-semibold">{{ product()!.brand }}</span>
+                <div class="flex justify-between gap-4 py-3.5 border-b border-white/10 max-sm:flex-col max-sm:gap-1">
+                  <span class="text-[13px] text-white/40 font-medium">Marca</span>
+                  <span class="text-[13px] text-white/80 font-semibold">{{ product()!.brand }}</span>
                 </div>
               }
 
               @if (product()!.gender) {
-                <div class="flex justify-between gap-4 py-3.5 border-b border-gray-100 max-sm:flex-col max-sm:gap-1">
-                  <span class="text-[13px] text-gray-400 font-medium">Género</span>
-                  <span class="text-[13px] text-gray-800 font-semibold">{{ product()!.gender }}</span>
+                <div class="flex justify-between gap-4 py-3.5 border-b border-white/10 max-sm:flex-col max-sm:gap-1">
+                  <span class="text-[13px] text-white/40 font-medium">Género</span>
+                  <span class="text-[13px] text-white/80 font-semibold">{{ product()!.gender }}</span>
                 </div>
               }
 
               @if (product()!.sports) {
-                <div class="flex justify-between gap-4 py-3.5 border-b border-gray-100 max-sm:flex-col max-sm:gap-1">
-                  <span class="text-[13px] text-gray-400 font-medium">Deporte</span>
+                <div class="flex justify-between gap-4 py-3.5 border-b border-white/10 max-sm:flex-col max-sm:gap-1">
+                  <span class="text-[13px] text-white/40 font-medium">Deporte</span>
                   <span class="text-[13px] font-bold" [style.color]="sportColor()">{{ product()!.sports }}</span>
                 </div>
               }
 
               @if (sizes().length > 0) {
                 <div class="flex justify-between gap-4 py-3.5 max-sm:flex-col max-sm:gap-1">
-                  <span class="text-[13px] text-gray-400 font-medium">Tallas disponibles</span>
-                  <span class="text-[13px] text-gray-800 font-semibold">{{ sizes().join(' · ') }}</span>
+                  <span class="text-[13px] text-white/40 font-medium">Tallas disponibles</span>
+                  <span class="text-[13px] text-white/80 font-semibold">{{ sizes().join(' · ') }}</span>
                 </div>
               }
             </div>

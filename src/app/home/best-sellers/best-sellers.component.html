@@ -1,66 +1,142 @@
-<section #bestSellersSection class="py-16 px-4 lg:px-8" (click)="sizePickerProduct.set(null)">
-  <div class="section-heading mb-10">
-    <p class="text-[10px] font-black tracking-[0.35em] text-[#1a237e] mb-2 uppercase">Selección de temporada</p>
+<section #bestSellersSection class="py-20 lg:py-28 px-4 lg:px-12 bg-[#0d0d0d] overflow-hidden" (click)="sizePickerProduct.set(null)">
+
+  <!-- Header -->
+  <div class="section-heading max-w-[1400px] mx-auto mb-10 lg:mb-14">
     <div class="flex items-end justify-between gap-4">
-      <h2 class="text-3xl lg:text-5xl font-black leading-none">LO QUE LLEVAN<br class="hidden lg:block"> LOS QUE VAN PRIMERO.</h2>
-      <a [routerLink]="['/catalogo']" [queryParams]="{bestSeller: true}" class="shrink-0 text-sm font-bold underline underline-offset-4 hover:text-[#1a237e] transition-colors pb-1">Ver todo →</a>
+
+      <div>
+        <div class="flex items-center gap-3 mb-4">
+          <span class="w-6 h-[2px] bg-[#E31C1C] shrink-0"></span>
+          <p class="text-[10px] font-black tracking-[0.35em] text-[#E31C1C] uppercase">Selección de temporada</p>
+        </div>
+        <h2 class="text-4xl lg:text-6xl font-black leading-none text-white">LO QUE LLEVAN<br>
+          <span class="text-stroke">LOS QUE VAN PRIMERO.</span>
+        </h2>
+      </div>
+
+      <div class="flex items-center gap-3 shrink-0 pb-1">
+        <button (click)="prev()" [disabled]="!hasPrev()"
+          class="nav-btn w-10 h-10 border flex items-center justify-center transition-all duration-200"
+          [class]="hasPrev() ? 'border-white/25 text-white hover:border-[#E31C1C] hover:text-[#E31C1C] cursor-pointer' : 'border-white/10 text-white/20 cursor-not-allowed'">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+          </svg>
+        </button>
+        <button (click)="next()" [disabled]="!hasNext()"
+          class="nav-btn w-10 h-10 border flex items-center justify-center transition-all duration-200"
+          [class]="hasNext() ? 'border-white/25 text-white hover:border-[#E31C1C] hover:text-[#E31C1C] cursor-pointer' : 'border-white/10 text-white/20 cursor-not-allowed'">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+          </svg>
+        </button>
+        <a [routerLink]="['/catalogo']" [queryParams]="{bestSeller: true}"
+          class="hidden lg:flex items-center gap-2 ml-2 text-[10px] font-black tracking-[0.2em] text-white/35 hover:text-white transition-colors uppercase">
+          Ver todo
+          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Progress bar -->
+    <div class="mt-8 h-[1px] bg-white/8 relative overflow-hidden">
+      <div class="absolute left-0 top-0 h-full bg-[#E31C1C] transition-all duration-500 ease-out"
+        [style.width.%]="progressPercent()"></div>
     </div>
   </div>
 
+  <!-- Loading skeleton -->
   @if (loading()) {
-    <div class="grid grid-cols-2 lg:grid-cols-5 gap-4">
-      @for (i of [1,2,3,4,5]; track i) {
+    <div class="max-w-[1400px] mx-auto grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-5">
+      @for (i of [1,2,3,4]; track i) {
         <div class="animate-pulse">
-          <div class="bg-gray-200 aspect-square mb-3"></div>
-          <div class="h-3 bg-gray-200 rounded w-1/2 mb-2"></div>
-          <div class="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-          <div class="h-4 bg-gray-200 rounded w-1/3"></div>
+          <div class="bg-[#181818] aspect-[16/9] mb-3"></div>
+          <div class="h-2.5 bg-[#181818] rounded w-1/4 mb-2"></div>
+          <div class="h-3.5 bg-[#181818] rounded w-3/4 mb-1.5"></div>
+          <div class="h-3 bg-[#181818] rounded w-1/3"></div>
         </div>
       }
     </div>
+
+  } @else if (products().length === 0) {
+    <div class="max-w-[1400px] mx-auto text-center py-24">
+      <p class="text-white/20 text-sm font-bold tracking-widest uppercase">Próximamente los más vendidos</p>
+    </div>
+
   } @else {
-    <div class="grid grid-cols-2 lg:grid-cols-5 gap-4">
-      @for (product of products(); track product.name) {
-        <div class="product-card group cursor-pointer relative" (click)="openProduct(product, $event)">
-          <div class="relative bg-[#ebedee] aspect-square mb-3 overflow-hidden">
+    <div class="max-w-[1400px] mx-auto grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-5">
+      @for (product of visibleProducts(); track product.name) {
+
+        <div class="product-card group cursor-pointer" (click)="openProduct(product, $event)">
+
+          <!-- Image -->
+          <div class="relative aspect-[16/9] overflow-hidden bg-[#141414]">
             <img
               [src]="product.image"
               [alt]="product.name"
-              class="object-fill p-4 group-hover:scale-105 transition-transform duration-500 w-full h-full"
-              onerror="this.parentElement.style.backgroundColor='#ccc'"
+              class="object-cover w-full h-full transition-transform duration-700 ease-out group-hover:scale-110"
+              onerror="this.parentElement.style.backgroundColor='#1a1a1a'"
             />
-            @if (product.isBestSeller) {
-              <span class="absolute top-3 left-3 bg-[#1a237e] text-white px-2 py-1 text-xs font-bold">Más vendidos</span>
-            }
-            @if (product.isNew) {
-              <span class="absolute top-3 left-3 bg-black text-white px-2 py-1 text-xs font-bold">NUEVO</span>
-            }
 
+            <!-- Gradient bottom -->
+            <div class="absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-black/70 to-transparent pointer-events-none"></div>
+
+            <!-- Badge -->
+            <span class="absolute top-3 left-3 bg-[#E31C1C] text-white text-[8px] font-black tracking-[0.25em] px-2 py-1 uppercase leading-none">ORIGINAL</span>
+
+            <!-- Add to cart CTA -->
             <button (click)="onAddClick(product, $event)"
-              class="cursor-pointer absolute bottom-0 left-0 right-0 py-2.5 bg-[#1a237e] text-white text-xs font-black tracking-wide translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-              AGREGAR AL CARRITO
+              class="cursor-pointer absolute bottom-0 left-0 right-0 py-3 bg-white text-black text-[9px] font-black tracking-[0.2em] uppercase
+                     translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out">
+              + Agregar al carrito
             </button>
 
+            <!-- Size picker overlay -->
             @if (sizePickerProduct()?.id === product.id) {
-              <div class="absolute inset-0 bg-white/96 flex flex-col items-center justify-center p-3 gap-2" (click)="$event.stopPropagation()">
-                <p class="text-xs font-black tracking-wide">TALLA</p>
+              <div class="absolute inset-0 bg-black/96 flex flex-col items-center justify-center p-4 gap-3"
+                (click)="$event.stopPropagation()">
+                <p class="text-[9px] font-black tracking-[0.35em] text-white/60 uppercase">Selecciona talla</p>
                 <div class="flex flex-wrap gap-1.5 justify-center">
                   @for (size of getSizes(product); track size) {
                     <button (click)="addToCart(product, size)"
-                      class="cursor-pointer px-2 py-1.5 border-2 border-[#1a237e] text-[#1a237e] text-xs font-bold hover:bg-[#1a237e] hover:text-white transition-colors">
+                      class="cursor-pointer min-w-[2.5rem] h-10 px-2 border border-white/20 text-white text-xs font-bold
+                             hover:bg-[#E31C1C] hover:border-[#E31C1C] transition-all duration-150">
                       {{ size }}
                     </button>
                   }
                 </div>
-                <button (click)="sizePickerProduct.set(null)" class="cursor-pointer text-xs text-gray-400 hover:text-gray-600 mt-1">Cancelar</button>
+                <button (click)="sizePickerProduct.set(null)"
+                  class="cursor-pointer text-[9px] text-white/25 hover:text-white/50 tracking-widest uppercase transition-colors">
+                  Cancelar
+                </button>
               </div>
             }
           </div>
-          @if (product.categories) { <p class="text-xs text-gray-500 mb-1">{{ product.categories }}</p> }
-          <h3 class="font-bold text-sm mb-1">{{ product.name }}</h3>
-          <p class="font-bold text-sm">{{ product.price }}</p>
+
+          <!-- Info -->
+          <div class="pt-3">
+            @if (product.categories) {
+              <p class="text-[9px] font-black text-[#E31C1C] uppercase tracking-[0.2em] mb-1">{{ product.categories }}</p>
+            }
+            <h3 class="text-sm font-bold text-white leading-snug line-clamp-2 mb-1.5">{{ product.name }}</h3>
+            <p class="text-sm font-black text-white/60">{{ product.price }}</p>
+          </div>
         </div>
+
       }
     </div>
+
+    <!-- Mobile ver todo -->
+    <div class="max-w-[1400px] mx-auto mt-10 flex justify-center lg:hidden">
+      <a [routerLink]="['/catalogo']" [queryParams]="{bestSeller: true}"
+        class="inline-flex items-center gap-2 border border-white/15 px-8 py-3 text-[10px] font-black tracking-[0.2em] text-white/40 hover:text-white hover:border-white/30 transition-all uppercase">
+        Ver selección completa
+        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
+        </svg>
+      </a>
+    </div>
   }
+
 </section>

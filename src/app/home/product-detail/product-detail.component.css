@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
+﻿@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
 
 /* ── Stage (dark gallery panel) ─────────────────────────────── */
 .pd-stage {
@@ -184,7 +184,7 @@
 }
 
 .pd-cta:hover:not(:disabled) {
-  background: #1a237e;
+  background: #E31C1C;
 }
 
 .pd-cta:active:not(:disabled) {

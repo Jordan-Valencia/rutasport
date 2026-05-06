@@ -1,29 +1,27 @@
-<app-header />
+﻿<app-header />
 <app-cart-drawer />
 
 <!-- ── Filter Panel ──────────────────────────────────────────────── -->
 @if (filterPanelOpen()) {
 
 <!-- Backdrop -->
-<div class="rs-filter-backdrop fixed inset-0 z-40 bg-black/40 backdrop-blur-[2px] cursor-pointer"
+<div class="rs-filter-backdrop fixed inset-0 z-40 bg-black/60 backdrop-blur-[2px] cursor-pointer"
   (click)="closeFilterPanel()"></div>
 
 <!-- Sliding Panel -->
-<aside class="rs-filter-panel fixed left-0 top-0 h-full w-[340px] max-w-[90vw] z-50 bg-white flex flex-col shadow-2xl"
+<aside class="rs-filter-panel fixed left-0 top-0 h-full w-[320px] max-w-[90vw] z-50 bg-[#0d0d0d] flex flex-col border-r border-white/10"
   style="transform: translateX(-100%)">
 
   <!-- Panel header -->
-  <div class="flex items-center justify-between px-6 py-5 border-b border-gray-100">
+  <div class="flex items-center justify-between px-6 py-5 border-b border-white/10">
     <div>
-      <h2 class="text-xs font-black tracking-[0.18em] uppercase text-gray-900">Filtrar y ordenar</h2>
+      <h2 class="text-xs font-black tracking-[0.22em] uppercase text-white">Filtrar</h2>
       @if (activeFilterCount() > 0) {
-      <p class="text-xs text-[#1a237e] font-semibold mt-0.5">
-        {{ activeFilterCount() }} filtro(s) activo(s)
-      </p>
+        <p class="text-[11px] text-[#E31C1C] font-bold mt-0.5">{{ activeFilterCount() }} filtro(s) activo(s)</p>
       }
     </div>
     <button (click)="closeFilterPanel()"
-      class="cursor-pointer w-8 h-8 flex items-center justify-center rounded-full text-gray-400 hover:bg-gray-100 hover:text-gray-700 transition-all duration-200">
+      class="cursor-pointer w-8 h-8 flex items-center justify-center text-white/40 hover:text-white transition-colors">
       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" />
       </svg>
@@ -33,20 +31,18 @@
   <!-- Scrollable body -->
   <div class="flex-1 overflow-y-auto">
 
-
-
     <!-- DEPORTE -->
     @if (sports().length > 0) {
-    <div class="border-b border-gray-50">
+    <div class="border-b border-white/5">
       <button (click)="sportOpen.set(!sportOpen())"
-        class="w-full flex items-center justify-between px-6 py-5 cursor-pointer hover:bg-gray-50/60 transition-colors duration-200 group">
+        class="w-full flex items-center justify-between px-6 py-4 cursor-pointer hover:bg-white/5 transition-colors duration-200">
         <div class="flex items-center gap-2.5">
-          <span class="text-[11px] font-black uppercase tracking-[0.16em] text-gray-800">Deporte</span>
+          <span class="text-[11px] font-black uppercase tracking-[0.18em] text-white/70">Deporte</span>
           @if (selectedSport()) {
-          <span class="px-2 py-0.5 bg-[#1a237e] text-white text-[9px] font-black rounded-full">1</span>
+            <span class="px-1.5 py-0.5 bg-[#E31C1C] text-white text-[9px] font-black rounded-full">1</span>
           }
         </div>
-        <svg class="w-3.5 h-3.5 text-gray-400 transition-transform duration-300" [class.rotate-180]="sportOpen()"
+        <svg class="w-3.5 h-3.5 text-white/30 transition-transform duration-300" [class.rotate-180]="sportOpen()"
           fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
         </svg>
@@ -54,29 +50,24 @@
 
       <div class="overflow-hidden transition-all duration-300 ease-in-out"
         [style.maxHeight]="sportOpen() ? '500px' : '0px'" [style.opacity]="sportOpen() ? '1' : '0'">
-        <div class="px-6 pb-5 space-y-0.5">
+        <div class="px-4 pb-4 space-y-0.5">
           @for (s of sports(); track s) {
           <button (click)="selectedSport.set(s === selectedSport() ? '' : s)"
-            class="w-full flex items-center gap-3 cursor-pointer py-2 px-3 rounded-lg transition-all duration-200 group/item"
-            [class]="selectedSport() === s ? 'bg-gray-50' : 'hover:bg-gray-50/60'">
-
-            <!-- Custom checkbox -->
+            class="w-full flex items-center gap-3 cursor-pointer py-2.5 px-3 transition-all duration-150"
+            [class]="selectedSport() === s ? 'bg-white/10' : 'hover:bg-white/5'">
             <span
-              class="w-4 h-4 rounded border-2 flex items-center justify-center flex-shrink-0 transition-all duration-200"
-              [style.borderColor]="selectedSport() === s ? (SPORT_COLORS[s] ?? '#1a237e') : '#d1d5db'"
-              [style.backgroundColor]="selectedSport() === s ? (SPORT_COLORS[s] ?? '#1a237e') : 'transparent'">
+              class="w-4 h-4 rounded-sm border-2 flex items-center justify-center flex-shrink-0 transition-all duration-150"
+              [style.borderColor]="selectedSport() === s ? (SPORT_COLORS[s] ?? '#E31C1C') : 'rgba(255,255,255,0.2)'"
+              [style.backgroundColor]="selectedSport() === s ? (SPORT_COLORS[s] ?? '#E31C1C') : 'transparent'">
               @if (selectedSport() === s) {
-              <svg class="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd"
-                  d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" />
-              </svg>
+                <svg class="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" />
+                </svg>
               }
             </span>
-
-            <span class="text-sm text-gray-700 font-medium flex-1 text-left">{{ s }}</span>
-
-            <!-- Sport color dot -->
-            <span class="w-2 h-2 rounded-full shrink-0" [style.backgroundColor]="SPORT_COLORS[s] ?? '#94a3b8'"></span>
+            <span class="text-sm font-medium flex-1 text-left"
+              [class]="selectedSport() === s ? 'text-white' : 'text-white/50'">{{ s }}</span>
+            <span class="w-2 h-2 rounded-full shrink-0" [style.backgroundColor]="SPORT_COLORS[s] ?? 'rgba(255,255,255,0.15)'"></span>
           </button>
           }
         </div>
@@ -86,16 +77,16 @@
 
     <!-- GÉNERO -->
     @if (genders().length > 0) {
-    <div class="border-b border-gray-50">
+    <div class="border-b border-white/5">
       <button (click)="genderOpen.set(!genderOpen())"
-        class="w-full flex items-center justify-between px-6 py-5 cursor-pointer hover:bg-gray-50/60 transition-colors duration-200">
+        class="w-full flex items-center justify-between px-6 py-4 cursor-pointer hover:bg-white/5 transition-colors duration-200">
         <div class="flex items-center gap-2.5">
-          <span class="text-[11px] font-black uppercase tracking-[0.16em] text-gray-800">Género</span>
+          <span class="text-[11px] font-black uppercase tracking-[0.18em] text-white/70">Género</span>
           @if (selectedGender()) {
-          <span class="px-2 py-0.5 bg-[#1a237e] text-white text-[9px] font-black rounded-full">1</span>
+            <span class="px-1.5 py-0.5 bg-[#E31C1C] text-white text-[9px] font-black rounded-full">1</span>
           }
         </div>
-        <svg class="w-3.5 h-3.5 text-gray-400 transition-transform duration-300" [class.rotate-180]="genderOpen()"
+        <svg class="w-3.5 h-3.5 text-white/30 transition-transform duration-300" [class.rotate-180]="genderOpen()"
           fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
         </svg>
@@ -103,20 +94,18 @@
 
       <div class="overflow-hidden transition-all duration-300 ease-in-out"
         [style.maxHeight]="genderOpen() ? '300px' : '0px'" [style.opacity]="genderOpen() ? '1' : '0'">
-        <div class="px-6 pb-5 flex flex-wrap gap-2">
+        <div class="px-4 pb-4 flex gap-2">
           @for (g of genders().filter(g => g === 'Hombre' || g === 'Mujer'); track g) {
           <button (click)="selectedGender.set(g === selectedGender() ? '' : g)"
-            class="flex items-center gap-2 cursor-pointer px-4 py-2 border-2 rounded-sm text-sm font-bold transition-all duration-200 active:scale-[0.96]"
+            class="flex-1 flex items-center justify-center gap-2 cursor-pointer px-3 py-2.5 border text-sm font-bold transition-all duration-150 active:scale-[0.97]"
             [class]="selectedGender() === g
-                    ? 'border-[#1a237e] bg-[#1a237e] text-white'
-                    : 'border-gray-200 text-gray-600 hover:border-[#1a237e] hover:text-[#1a237e]'">
+                    ? 'border-[#E31C1C] bg-[#E31C1C] text-white'
+                    : 'border-white/20 text-white/50 hover:border-white/40 hover:text-white/80'">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               @if (g === 'Hombre') {
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M16 3h5m0 0v5m0-5l-6 6M5 3a6 6 0 100 12A6 6 0 005 3z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 3h5m0 0v5m0-5l-6 6M5 3a6 6 0 100 12A6 6 0 005 3z" />
               } @else {
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M12 15a6 6 0 100-12 6 6 0 000 12zm0 0v6m-3-3h6" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15a6 6 0 100-12 6 6 0 000 12zm0 0v6m-3-3h6" />
               }
             </svg>
             {{ g }}
@@ -126,19 +115,20 @@
       </div>
     </div>
     }
+
     <!-- ESPECIALES -->
-    <div class="border-b border-gray-50">
+    <div class="border-b border-white/5">
       <button (click)="specialOpen.set(!specialOpen())"
-        class="w-full flex items-center justify-between px-6 py-5 cursor-pointer hover:bg-gray-50/60 transition-colors duration-200">
+        class="w-full flex items-center justify-between px-6 py-4 cursor-pointer hover:bg-white/5 transition-colors duration-200">
         <div class="flex items-center gap-2.5">
-          <span class="text-[11px] font-black uppercase tracking-[0.16em] text-gray-800">Especiales</span>
+          <span class="text-[11px] font-black uppercase tracking-[0.18em] text-white/70">Especiales</span>
           @if (filterBestSeller() || filterIsNew()) {
-          <span class="px-2 py-0.5 bg-[#1a237e] text-white text-[9px] font-black rounded-full">
-            {{ (filterBestSeller() ? 1 : 0) + (filterIsNew() ? 1 : 0) }}
-          </span>
+            <span class="px-1.5 py-0.5 bg-[#E31C1C] text-white text-[9px] font-black rounded-full">
+              {{ (filterBestSeller() ? 1 : 0) + (filterIsNew() ? 1 : 0) }}
+            </span>
           }
         </div>
-        <svg class="w-3.5 h-3.5 text-gray-400 transition-transform duration-300" [class.rotate-180]="specialOpen()"
+        <svg class="w-3.5 h-3.5 text-white/30 transition-transform duration-300" [class.rotate-180]="specialOpen()"
           fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
         </svg>
@@ -146,68 +136,56 @@
 
       <div class="overflow-hidden transition-all duration-300 ease-in-out"
         [style.maxHeight]="specialOpen() ? '200px' : '0px'" [style.opacity]="specialOpen() ? '1' : '0'">
-        <div class="px-6 pb-5 flex flex-col gap-1.5">
-
-          <!-- Best Seller -->
+        <div class="px-4 pb-4 space-y-1">
           <button (click)="filterBestSeller.set(!filterBestSeller())"
-            class="flex items-center gap-3 cursor-pointer py-2 px-3 rounded-lg transition-all duration-200"
-            [class]="filterBestSeller() ? 'bg-amber-50' : 'hover:bg-gray-50/60'">
-            <span class="w-4 h-4 rounded border-2 flex items-center justify-center shrink-0 transition-all duration-200"
-              [class]="filterBestSeller() ? 'border-amber-500 bg-amber-500' : 'border-gray-300'">
+            class="w-full flex items-center gap-3 cursor-pointer py-2.5 px-3 transition-all duration-150"
+            [class]="filterBestSeller() ? 'bg-amber-500/10' : 'hover:bg-white/5'">
+            <span class="w-4 h-4 rounded-sm border-2 flex items-center justify-center shrink-0 transition-all duration-150"
+              [class]="filterBestSeller() ? 'border-amber-500 bg-amber-500' : 'border-white/20'">
               @if (filterBestSeller()) {
-              <svg class="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd"
-                  d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" />
-              </svg>
+                <svg class="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" />
+                </svg>
               }
             </span>
-            <span class="flex items-center gap-2 text-sm font-medium"
-              [class]="filterBestSeller() ? 'text-amber-700' : 'text-gray-700'">
-              <svg class="w-3.5 h-3.5 text-amber-500" fill="currentColor" viewBox="0 0 20 20">
-                <path
-                  d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-              </svg>
-              Más Vendidos
-            </span>
+            <svg class="w-3.5 h-3.5 text-amber-400 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+            </svg>
+            <span class="text-sm font-medium" [class]="filterBestSeller() ? 'text-amber-400' : 'text-white/50'">Más Vendidos</span>
           </button>
 
-          <!-- Novedades -->
           <button (click)="filterIsNew.set(!filterIsNew())"
-            class="flex items-center gap-3 cursor-pointer py-2 px-3 rounded-lg transition-all duration-200"
-            [class]="filterIsNew() ? 'bg-emerald-50' : 'hover:bg-gray-50/60'">
-            <span class="w-4 h-4 rounded border-2 flex items-center justify-center shrink-0 transition-all duration-200"
-              [class]="filterIsNew() ? 'border-emerald-500 bg-emerald-500' : 'border-gray-300'">
+            class="w-full flex items-center gap-3 cursor-pointer py-2.5 px-3 transition-all duration-150"
+            [class]="filterIsNew() ? 'bg-emerald-500/10' : 'hover:bg-white/5'">
+            <span class="w-4 h-4 rounded-sm border-2 flex items-center justify-center shrink-0 transition-all duration-150"
+              [class]="filterIsNew() ? 'border-emerald-500 bg-emerald-500' : 'border-white/20'">
               @if (filterIsNew()) {
-              <svg class="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd"
-                  d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" />
-              </svg>
+                <svg class="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" />
+                </svg>
               }
             </span>
-            <span class="flex items-center gap-2 text-sm font-medium"
-              [class]="filterIsNew() ? 'text-emerald-700' : 'text-gray-700'">
-              <svg class="w-3.5 h-3.5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
-              Novedades
-            </span>
+            <svg class="w-3.5 h-3.5 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+            <span class="text-sm font-medium" [class]="filterIsNew() ? 'text-emerald-400' : 'text-white/50'">Novedades</span>
           </button>
-
         </div>
       </div>
     </div>
+
     <!-- CATEGORÍA -->
     @if (categories().length > 0) {
-    <div class="border-b border-gray-50">
+    <div class="border-b border-white/5">
       <button (click)="categoryOpen.set(!categoryOpen())"
-        class="w-full flex items-center justify-between px-6 py-5 cursor-pointer hover:bg-gray-50/60 transition-colors duration-200">
+        class="w-full flex items-center justify-between px-6 py-4 cursor-pointer hover:bg-white/5 transition-colors duration-200">
         <div class="flex items-center gap-2.5">
-          <span class="text-[11px] font-black uppercase tracking-[0.16em] text-gray-800">Categoría</span>
+          <span class="text-[11px] font-black uppercase tracking-[0.18em] text-white/70">Categoría</span>
           @if (selectedCategory()) {
-          <span class="px-2 py-0.5 bg-[#1a237e] text-white text-[9px] font-black rounded-full">1</span>
+            <span class="px-1.5 py-0.5 bg-[#E31C1C] text-white text-[9px] font-black rounded-full">1</span>
           }
         </div>
-        <svg class="w-3.5 h-3.5 text-gray-400 transition-transform duration-300" [class.rotate-180]="categoryOpen()"
+        <svg class="w-3.5 h-3.5 text-white/30 transition-transform duration-300" [class.rotate-180]="categoryOpen()"
           fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
         </svg>
@@ -215,21 +193,20 @@
 
       <div class="overflow-hidden transition-all duration-300 ease-in-out"
         [style.maxHeight]="categoryOpen() ? '500px' : '0px'" [style.opacity]="categoryOpen() ? '1' : '0'">
-        <div class="px-6 pb-5 space-y-0.5">
+        <div class="px-4 pb-4 space-y-0.5">
           @for (c of categories(); track c) {
           <button (click)="selectedCategory.set(c === selectedCategory() ? '' : c)"
-            class="w-full flex items-center gap-3 cursor-pointer py-2 px-3 rounded-lg transition-all duration-200"
-            [class]="selectedCategory() === c ? 'bg-gray-50' : 'hover:bg-gray-50/60'">
-            <span class="w-4 h-4 rounded border-2 flex items-center justify-center shrink-0 transition-all duration-200"
-              [class]="selectedCategory() === c ? 'border-[#1a237e] bg-[#1a237e]' : 'border-gray-300'">
+            class="w-full flex items-center gap-3 cursor-pointer py-2.5 px-3 transition-all duration-150"
+            [class]="selectedCategory() === c ? 'bg-white/10' : 'hover:bg-white/5'">
+            <span class="w-4 h-4 rounded-sm border-2 flex items-center justify-center shrink-0 transition-all duration-150"
+              [class]="selectedCategory() === c ? 'border-[#E31C1C] bg-[#E31C1C]' : 'border-white/20'">
               @if (selectedCategory() === c) {
-              <svg class="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd"
-                  d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" />
-              </svg>
+                <svg class="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" />
+                </svg>
               }
             </span>
-            <span class="text-sm text-gray-700 font-medium text-left">{{ c }}</span>
+            <span class="text-sm font-medium text-left" [class]="selectedCategory() === c ? 'text-white' : 'text-white/50'">{{ c }}</span>
           </button>
           }
         </div>
@@ -241,14 +218,14 @@
     @if (brands().length > 0) {
     <div>
       <button (click)="brandOpen.set(!brandOpen())"
-        class="w-full flex items-center justify-between px-6 py-5 cursor-pointer hover:bg-gray-50/60 transition-colors duration-200">
+        class="w-full flex items-center justify-between px-6 py-4 cursor-pointer hover:bg-white/5 transition-colors duration-200">
         <div class="flex items-center gap-2.5">
-          <span class="text-[11px] font-black uppercase tracking-[0.16em] text-gray-800">Marca</span>
+          <span class="text-[11px] font-black uppercase tracking-[0.18em] text-white/70">Marca</span>
           @if (selectedBrand()) {
-          <span class="px-2 py-0.5 bg-gray-800 text-white text-[9px] font-black rounded-full">1</span>
+            <span class="px-1.5 py-0.5 bg-[#E31C1C] text-white text-[9px] font-black rounded-full">1</span>
           }
         </div>
-        <svg class="w-3.5 h-3.5 text-gray-400 transition-transform duration-300" [class.rotate-180]="brandOpen()"
+        <svg class="w-3.5 h-3.5 text-white/30 transition-transform duration-300" [class.rotate-180]="brandOpen()"
           fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
         </svg>
@@ -256,21 +233,20 @@
 
       <div class="overflow-hidden transition-all duration-300 ease-in-out"
         [style.maxHeight]="brandOpen() ? '500px' : '0px'" [style.opacity]="brandOpen() ? '1' : '0'">
-        <div class="px-6 pb-5 space-y-0.5">
+        <div class="px-4 pb-4 space-y-0.5">
           @for (b of brands(); track b) {
           <button (click)="selectedBrand.set(b === selectedBrand() ? '' : b)"
-            class="w-full flex items-center gap-3 cursor-pointer py-2 px-3 rounded-lg transition-all duration-200"
-            [class]="selectedBrand() === b ? 'bg-gray-50' : 'hover:bg-gray-50/60'">
-            <span class="w-4 h-4 rounded border-2 flex items-center justify-center shrink-0 transition-all duration-200"
-              [class]="selectedBrand() === b ? 'border-gray-900 bg-gray-900' : 'border-gray-300'">
+            class="w-full flex items-center gap-3 cursor-pointer py-2.5 px-3 transition-all duration-150"
+            [class]="selectedBrand() === b ? 'bg-white/10' : 'hover:bg-white/5'">
+            <span class="w-4 h-4 rounded-sm border-2 flex items-center justify-center shrink-0 transition-all duration-150"
+              [class]="selectedBrand() === b ? 'border-white bg-white' : 'border-white/20'">
               @if (selectedBrand() === b) {
-              <svg class="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd"
-                  d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" />
-              </svg>
+                <svg class="w-2.5 h-2.5 text-black" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" />
+                </svg>
               }
             </span>
-            <span class="text-sm text-gray-700 font-medium text-left">{{ b }}</span>
+            <span class="text-sm font-medium text-left" [class]="selectedBrand() === b ? 'text-white' : 'text-white/50'">{{ b }}</span>
           </button>
           }
         </div>
@@ -280,17 +256,18 @@
   </div>
 
   <!-- Panel footer -->
-  <div class="px-5 py-4 border-t border-gray-100 bg-gray-50/80 flex gap-2.5">
+  <div class="px-4 py-4 border-t border-white/10 flex gap-2.5">
     @if (hasActiveFilters) {
-    <button (click)="clearFilters()" class="cursor-pointer flex-1 py-3 border-2 border-gray-200 text-xs font-black tracking-widest uppercase text-gray-600
-                 hover:border-gray-400 hover:text-gray-800 transition-all duration-200 active:scale-[0.98]">
-      Limpiar todo
+    <button (click)="clearFilters()"
+      class="cursor-pointer flex-1 py-3 border border-white/20 text-xs font-black tracking-widest uppercase text-white/50
+             hover:border-white/40 hover:text-white/80 transition-all duration-200 active:scale-[0.98]">
+      Limpiar
     </button>
     }
     <button (click)="closeFilterPanel()"
-      class="cursor-pointer flex-1 py-3 bg-[#1a237e] text-white text-xs font-black tracking-widest uppercase
-               hover:bg-[#1a237e]/90 transition-all duration-200 active:scale-[0.98] flex items-center justify-center gap-2">
-      Ver {{ filteredProducts().length }} productos
+      class="cursor-pointer flex-1 py-3 bg-[#E31C1C] text-white text-xs font-black tracking-widest uppercase
+             hover:bg-[#C41515] transition-all duration-200 active:scale-[0.98] flex items-center justify-center gap-2">
+      Ver {{ filteredProducts().length }} resultados
       <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
       </svg>
@@ -299,12 +276,11 @@
 
 </aside>
 }
-
 <!-- ── Page ──────────────────────────────────────────────────────── -->
-<div class="min-h-screen bg-[#f8f8f8]">
+<div class="min-h-screen bg-[#0d0d0d]">
 
   <!-- Hero -->
-  <div class="relative bg-[#1a237e] overflow-hidden">
+  <div class="relative bg-[#E31C1C] overflow-hidden">
     <div class="absolute inset-0 opacity-[0.06] pointer-events-none">
       <div class="absolute -top-24 -right-24 w-md h-112 rounded-full bg-white"></div>
       <div class="absolute -bottom-12 -left-16 w-72 h-72 rounded-full bg-white"></div>
@@ -323,23 +299,22 @@
   </div>
 
   <!-- Toolbar -->
-  <div class="sticky top-0 z-30 bg-white border-b border-gray-100 shadow-sm">
+  <div class="sticky top-0 z-30 bg-black border-b border-white/10 shadow-none">
     <div class="px-4 lg:px-10 py-3 flex flex-col sm:flex-row gap-2.5">
 
       <!-- Search -->
       <div
-        class="flex-1 flex items-center gap-3 border border-gray-200 bg-gray-50 px-4 py-2.5 rounded-sm
-                  focus-within:border-[#1a237e] focus-within:bg-white focus-within:shadow-[0_0_0_3px_rgba(26,35,126,0.07)] transition-all duration-200">
-        <svg class="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        class="flex-1 flex items-center gap-3 border border-white/10 bg-[#1a1a1a] px-4 py-2.5 rounded-sm focus-within:border-[#E31C1C] transition-all duration-200">
+        <svg class="w-4 h-4 text-white/30 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
             d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
         </svg>
         <input [ngModel]="searchQuery()" (ngModelChange)="searchQuery.set($event)"
           placeholder="Buscar por nombre, marca..."
-          class="flex-1 outline-none text-sm bg-transparent text-gray-700 placeholder-gray-400">
+          class="flex-1 outline-none text-sm bg-transparent text-white placeholder-white/30">
         @if (searchQuery()) {
         <button (click)="searchQuery.set('')"
-          class="cursor-pointer text-gray-300 hover:text-gray-500 transition-colors">
+          class="cursor-pointer text-white/30 hover:text-white/60 transition-colors">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" />
           </svg>
@@ -349,9 +324,7 @@
 
       <div class="flex gap-2.5">
         <!-- Filter button -->
-        <button (click)="openFilterPanel()" class="cursor-pointer relative flex items-center gap-2 px-5 py-2.5 border border-gray-200 bg-white rounded-sm
-                 text-sm font-bold text-gray-700 hover:border-[#1a237e] hover:text-[#1a237e] hover:bg-blue-50/30
-                 transition-all duration-200 active:scale-[0.98] whitespace-nowrap">
+        <button (click)="openFilterPanel()" class="cursor-pointer relative flex items-center gap-2 px-5 py-2.5 border border-white/20 bg-[#1a1a1a] rounded-sm text-sm font-bold text-white/70 hover:border-[#E31C1C] hover:text-[#E31C1C] transition-all duration-200 active:scale-[0.98] whitespace-nowrap">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
               d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L13 13.414V19a1 1 0 01-.553.894l-4 2A1 1 0 017 21v-7.586L3.293 6.707A1 1 0 013 6V4z" />
@@ -359,7 +332,7 @@
           Filtrar y ordenar
           @if (activeFilterCount() > 0) {
           <span
-            class="absolute -top-1.5 -right-1.5 min-w-4.5 h-4.5 px-1 bg-[#1a237e] text-white text-[9px] font-black rounded-full flex items-center justify-center">
+            class="absolute -top-1.5 -right-1.5 min-w-4.5 h-4.5 px-1 bg-[#E31C1C] text-white text-[9px] font-black rounded-full flex items-center justify-center">
             {{ activeFilterCount() }}
           </span>
           }
@@ -367,8 +340,7 @@
 
         <!-- Sort -->
         <select [ngModel]="sortBy()" (ngModelChange)="sortBy.set($event)"
-          class="cursor-pointer border border-gray-200 bg-white px-3 py-2.5 text-sm font-medium text-gray-700 rounded-sm
-                 outline-none focus:border-[#1a237e] focus:shadow-[0_0_0_3px_rgba(26,35,126,0.07)] transition-all duration-200">
+          class="cursor-pointer border border-white/20 bg-[#1a1a1a] px-3 py-2.5 text-sm font-medium text-white/70 rounded-sm outline-none focus:border-[#E31C1C] transition-all duration-200">
           <option value="default">Relevancia</option>
           <option value="price-asc">Precio ↑</option>
           <option value="price-desc">Precio ↓</option>
@@ -381,12 +353,12 @@
     <!-- Active filter pills -->
     @if (hasActiveFilters) {
     <div class="px-4 lg:px-10 pb-3 flex flex-wrap items-center gap-2">
-      <span class="text-[10px] font-black uppercase tracking-[0.15em] text-gray-400">Filtros:</span>
+      <span class="text-[10px] font-black uppercase tracking-[0.15em] text-white/30">Filtros:</span>
 
       @if (selectedSport()) {
       <button (click)="selectedSport.set('')" class="cursor-pointer flex items-center gap-1.5 pl-3 pr-2 py-1 rounded-full text-white text-xs font-bold
                    hover:opacity-75 transition-opacity duration-200 active:scale-[0.95]"
-        [style.backgroundColor]="SPORT_COLORS[selectedSport()] ?? '#1a237e'">
+        [style.backgroundColor]="SPORT_COLORS[selectedSport()] ?? '#E31C1C'">
         {{ selectedSport() }}
         <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" />
@@ -395,7 +367,7 @@
       }
 
       @if (selectedCategory()) {
-      <button (click)="selectedCategory.set('')" class="cursor-pointer flex items-center gap-1.5 pl-3 pr-2 py-1 rounded-full bg-[#1a237e] text-white text-xs font-bold
+      <button (click)="selectedCategory.set('')" class="cursor-pointer flex items-center gap-1.5 pl-3 pr-2 py-1 rounded-full bg-[#E31C1C] text-white text-xs font-bold
                    hover:opacity-75 transition-opacity duration-200 active:scale-[0.95]">
         {{ selectedCategory() }}
         <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -415,7 +387,7 @@
       }
 
       @if (selectedGender()) {
-      <button (click)="selectedGender.set('')" class="cursor-pointer flex items-center gap-1.5 pl-3 pr-2 py-1 rounded-full bg-[#1a237e] text-white text-xs font-bold
+      <button (click)="selectedGender.set('')" class="cursor-pointer flex items-center gap-1.5 pl-3 pr-2 py-1 rounded-full bg-[#E31C1C] text-white text-xs font-bold
                    hover:opacity-75 transition-opacity duration-200 active:scale-[0.95]">
         {{ selectedGender() }}
         <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -445,7 +417,7 @@
       }
 
       <button (click)="clearFilters()"
-        class="cursor-pointer text-[11px] text-gray-400 hover:text-gray-600 underline underline-offset-2 transition-colors ml-1">
+        class="cursor-pointer text-[11px] text-white/30 hover:text-white/60 underline underline-offset-2 transition-colors ml-1">
         Limpiar todo
       </button>
     </div>
@@ -457,13 +429,13 @@
 
     <!-- Loading skeleton -->
     @if (loading()) {
-    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 lg:gap-5">
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-5">
       @for (i of [1,2,3,4,5,6,7,8,9,10]; track i) {
       <div class="animate-pulse">
-        <div class="bg-gray-200 aspect-square mb-3 rounded-sm"></div>
-        <div class="h-2 bg-gray-200 rounded-full w-1/3 mb-2"></div>
-        <div class="h-3 bg-gray-200 rounded-full w-5/6 mb-2"></div>
-        <div class="h-3 bg-gray-200 rounded-full w-2/5"></div>
+        <div class="bg-[#1a1a1a] aspect-[16/9] mb-3 rounded-sm"></div>
+        <div class="h-2 bg-[#1a1a1a] rounded-full w-1/3 mb-2"></div>
+        <div class="h-3 bg-[#1a1a1a] rounded-full w-5/6 mb-2"></div>
+        <div class="h-3 bg-[#1a1a1a] rounded-full w-2/5"></div>
       </div>
       }
     </div>
@@ -471,37 +443,37 @@
     <!-- Empty state -->
     } @else if (filteredProducts().length === 0) {
     <div class="py-28 text-center">
-      <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-5">
-        <svg class="w-7 h-7 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div class="w-16 h-16 bg-[#1a1a1a] rounded-full flex items-center justify-center mx-auto mb-5">
+        <svg class="w-7 h-7 text-white/20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
             d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
       </div>
-      <p class="font-black text-gray-800 text-lg mb-1">Sin resultados</p>
-      <p class="text-gray-400 text-sm mb-6">Ningún producto coincide con los filtros aplicados</p>
+      <p class="font-black text-white text-lg mb-1">Sin resultados</p>
+      <p class="text-white/40 text-sm mb-6">Ningún producto coincide con los filtros aplicados</p>
       <button (click)="clearFilters()"
-        class="cursor-pointer px-7 py-3 bg-[#1a237e] text-white text-sm font-black tracking-wide hover:opacity-90 transition-opacity active:scale-[0.98]">
+        class="cursor-pointer px-7 py-3 bg-[#E31C1C] text-white text-sm font-black tracking-wide hover:opacity-90 transition-opacity active:scale-[0.98]">
         Limpiar filtros
       </button>
     </div>
 
     <!-- Product grid -->
     } @else {
-    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 lg:gap-5"
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-5"
       (click)="sizePickerProduct.set(null)">
 
       @for (product of filteredProducts(); track product.id ?? product.name) {
       <article class="catalog-card group cursor-pointer" (click)="openProduct(product, $event)">
 
         <!-- Image container -->
-        <div class="relative bg-[#f0f0f0] aspect-square mb-3 overflow-hidden rounded-sm">
+        <div class="relative bg-[#1a1a1a] aspect-[16/9] mb-3 overflow-hidden rounded-sm">
 
           @if (product.image) {
-          <img [src]="product.image" [alt]="product.name" class="w-full h-full object-fill transition-transform duration-500 ease-out
+          <img [src]="product.image" [alt]="product.name" class="w-full h-full object-cover transition-transform duration-500 ease-out
            group-hover:scale-[1.08]" onerror="this.parentElement.style.backgroundColor='#e5e7eb'" />
           } @else {
           <div class="w-full h-full flex items-center justify-center">
-            <svg class="w-12 h-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-12 h-12 text-white/20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
                 d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
@@ -510,12 +482,7 @@
 
           <!-- Badges -->
           <div class="absolute top-2 left-2 flex flex-col gap-1 pointer-events-none">
-            @if (product.isNew) {
-            <span class="bg-black text-white px-2 py-0.5 text-[9px] font-black tracking-[0.15em]">NUEVO</span>
-            }
-            @if (product.isBestSeller) {
-            <span class="bg-[#1a237e] text-white px-2 py-0.5 text-[9px] font-black tracking-[0.15em]">TOP</span>
-            }
+            <span class="bg-[#E31C1C] text-white px-2 py-0.5 text-[9px] font-black tracking-[0.15em]">ORIGINAL</span>
           </div>
 
           <!-- Sport accent bar on hover -->
@@ -526,28 +493,28 @@
           }
 
           <!-- Add to cart CTA -->
-          <button (click)="onAddClick(product, $event)" class="cursor-pointer absolute bottom-0 left-0 right-0 py-3 bg-[#1a237e] text-white
+          <button (click)="onAddClick(product, $event)" class="cursor-pointer absolute bottom-0 left-0 right-0 py-3 bg-[#E31C1C] text-white
                        text-[10px] font-black tracking-[0.14em] uppercase
                        translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out
-                       hover:bg-[#283593] active:scale-y-95">
+                       hover:bg-[#C41515] active:scale-y-95">
             Agregar al carrito
           </button>
 
           <!-- Size picker overlay -->
           @if (sizePickerProduct()?.id === product.id) {
-          <div class="absolute inset-0 bg-white/97 flex flex-col items-center justify-center p-3 gap-3"
+          <div class="absolute inset-0 bg-black/95 flex flex-col items-center justify-center p-3 gap-3"
             (click)="$event.stopPropagation()">
-            <p class="text-[9px] font-black tracking-[0.2em] text-gray-700">ELIGE TU TALLA</p>
+            <p class="text-[9px] font-black tracking-[0.2em] text-white">ELIGE TU TALLA</p>
             <div class="flex flex-wrap gap-1.5 justify-center">
               @for (size of getSizes(product); track size) {
-              <button (click)="addToCart(product, size)" class="cursor-pointer px-3 py-1.5 border-2 border-[#1a237e] text-[#1a237e] text-xs font-black
-                               hover:bg-[#1a237e] hover:text-white transition-colors duration-150 active:scale-[0.95]">
+              <button (click)="addToCart(product, size)" class="cursor-pointer px-3 py-1.5 border-2 border-[#E31C1C] text-[#E31C1C] text-xs font-black
+                               hover:bg-[#E31C1C] hover:text-white transition-colors duration-150 active:scale-[0.95]">
                 {{ size }}
               </button>
               }
             </div>
             <button (click)="sizePickerProduct.set(null)"
-              class="cursor-pointer text-[10px] text-gray-300 hover:text-gray-500 transition-colors tracking-wide">
+              class="cursor-pointer text-[10px] text-white/30 hover:text-white/60 transition-colors tracking-wide">
               CANCELAR
             </button>
           </div>
@@ -557,11 +524,11 @@
         <!-- Product info -->
         <div>
           @if (product.brand) {
-          <p class="text-[10px] text-gray-400 font-bold uppercase tracking-[0.14em] mb-0.5">{{ product.brand }}</p>
+          <p class="text-[10px] text-[#E31C1C] font-bold uppercase tracking-[0.14em] mb-0.5">{{ product.brand }}</p>
           }
-          <h3 class="font-bold text-sm text-gray-900 truncate leading-snug mb-1">{{ product.name }}</h3>
+          <h3 class="font-bold text-sm text-white truncate leading-snug mb-1">{{ product.name }}</h3>
           <div class="flex items-center justify-between">
-            <p class="font-black text-sm text-gray-900">{{ product.price }}</p>
+            <p class="font-black text-sm text-white/80">{{ product.price }}</p>
             @if (firstSport(product) && SPORT_COLORS[firstSport(product)]) {
             <span class="w-2 h-2 rounded-full shrink-0"
               [style.backgroundColor]="SPORT_COLORS[firstSport(product)]"></span>

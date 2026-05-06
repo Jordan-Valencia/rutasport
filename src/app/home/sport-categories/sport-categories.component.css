@@ -1,1 +1,3 @@
-/* Sport Categories styles - Tailwind handles most styling */
+.product-card {
+  will-change: transform, opacity;
+}

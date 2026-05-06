@@ -1,24 +1,27 @@
 <app-header />
 
-<app-hero />
 
-<!-- BEST SELLERS -->
-<app-best-sellers />
+<div id="inicio">
+  <app-hero />
+
+  <!-- BEST SELLERS -->
+  <app-best-sellers />
+</div>
 
 <!-- Separador -->
-<div class="h-px bg-slate-100 mx-8 lg:mx-16"></div>
+<div class="h-px bg-white/5 mx-8 lg:mx-16"></div>
 
 <!-- MUJER -->
-<section id="mujer" class="py-20 lg:py-28 px-6 lg:px-16 bg-[#faf8f6] overflow-hidden">
+<section id="mujer" class="py-20 lg:py-28 px-6 lg:px-16 bg-[#0d0d0d] overflow-hidden">
   <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 
     <!-- Texto -->
     <div class="gender-text">
-      <span class="inline-block text-[10px] font-black tracking-[0.4em] text-rose-400 mb-6 uppercase">Colección Mujer</span>
-      <h2 class="text-6xl lg:text-8xl font-black leading-[0.88] mb-6 text-slate-900">ELLA<br>DOMINA.</h2>
-      <p class="text-slate-400 text-base mb-10 max-w-sm leading-relaxed">Diseño y rendimiento para cada momento. Encuentra el estilo que te define.</p>
+      <span class="inline-block text-[10px] font-black tracking-[0.4em] text-[#E31C1C] mb-6 uppercase">Colección Mujer</span>
+      <h2 class="text-6xl lg:text-8xl font-black leading-[0.88] mb-6 text-white">ELLA<br>DOMINA.</h2>
+      <p class="text-white/40 text-base mb-10 max-w-sm leading-relaxed">Diseño y rendimiento para cada momento. Encuentra el estilo que te define.</p>
       <a [routerLink]="['/catalogo']" [queryParams]="{genero: 'Mujer'}"
-        class="inline-flex items-center gap-3 border-2 border-slate-900 text-slate-900 px-8 py-3.5 font-black text-xs tracking-widest hover:bg-slate-900 hover:text-white transition-all duration-200">
+        class="inline-flex items-center gap-3 bg-[#E31C1C] text-white px-8 py-3.5 font-black text-xs tracking-widest hover:bg-[#C41515] transition-all duration-200">
         VER COLECCIÓN
         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
       </a>
@@ -26,62 +29,61 @@
 
     <!-- Imagen producto -->
     <div class="gender-img relative">
-      <div class="relative bg-[#f0ece8] aspect-square max-w-md mx-auto lg:mx-0 lg:ml-auto overflow-hidden">
+      <div class="relative bg-[#1a1a1a] aspect-[16/9] max-w-md mx-auto lg:mx-0 lg:ml-auto overflow-hidden">
         @if (featuredMujer()?.image) {
           <img [src]="featuredMujer()!.image" [alt]="featuredMujer()!.name"
-            class="w-full h-full object-fill p-10 hover:scale-105 transition-transform duration-700" />
+            class="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
         } @else {
           <div class="w-full h-full flex items-center justify-center">
-            <svg class="w-28 h-28 text-rose-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-28 h-28 text-[#E31C1C]/20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="0.8" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
             </svg>
           </div>
         }
         @if (featuredMujer()?.isBestSeller) {
-          <span class="absolute top-4 left-4 bg-slate-900 text-white text-[10px] font-black tracking-widest px-3 py-1.5">Más vendidos</span>
+          <span class="absolute top-4 left-4 bg-[#E31C1C] text-white text-[10px] font-black tracking-widest px-3 py-1.5">ORIGINAL</span>
         }
       </div>
-      <!-- Detalle decorativo -->
-      <div class="absolute -bottom-6 -right-6 w-32 h-32 bg-rose-100 rounded-full -z-10"></div>
+      <div class="absolute -bottom-6 -right-6 w-32 h-32 bg-[#E31C1C]/10 rounded-full -z-10"></div>
     </div>
 
   </div>
 </section>
 
 <!-- Separador -->
-<div class="h-px bg-slate-200"></div>
+<div class="h-px bg-white/5"></div>
 
 <!-- HOMBRE -->
-<section id="hombre" class="py-20 lg:py-28 px-6 lg:px-16 bg-[#0f172a] overflow-hidden">
+<section id="hombre" class="py-20 lg:py-28 px-6 lg:px-16 bg-black overflow-hidden">
   <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 
     <!-- Imagen producto (izquierda en hombre) -->
     <div class="gender-img relative order-2 lg:order-1">
-      <div class="relative bg-[#1e293b] aspect-square max-w-md mx-auto lg:mr-0 overflow-hidden">
+      <div class="relative bg-[#1a1a1a] aspect-[16/9] max-w-md mx-auto lg:mr-0 overflow-hidden">
         @if (featuredHombre()?.image) {
           <img [src]="featuredHombre()!.image" [alt]="featuredHombre()!.name"
-            class="w-full h-full object-fill p-10 hover:scale-105 transition-transform duration-700" />
+            class="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
         } @else {
           <div class="w-full h-full flex items-center justify-center">
-            <svg class="w-28 h-28 text-blue-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-28 h-28 text-[#E31C1C]/20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="0.8" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
             </svg>
           </div>
         }
         @if (featuredHombre()?.isBestSeller) {
-          <span class="absolute top-4 left-4 bg-white text-slate-900 text-[10px] font-black tracking-widest px-3 py-1.5">Más vendidos</span>
+          <span class="absolute top-4 left-4 bg-[#E31C1C] text-white text-[10px] font-black tracking-widest px-3 py-1.5">ORIGINAL</span>
         }
       </div>
-      <div class="absolute -bottom-6 -left-6 w-32 h-32 bg-blue-900/40 rounded-full -z-10"></div>
+      <div class="absolute -bottom-6 -left-6 w-32 h-32 bg-[#E31C1C]/10 rounded-full -z-10"></div>
     </div>
 
     <!-- Texto (derecha en hombre) -->
     <div class="gender-text order-1 lg:order-2">
-      <span class="inline-block text-[10px] font-black tracking-[0.4em] text-blue-400 mb-6 uppercase">Colección Hombre</span>
+      <span class="inline-block text-[10px] font-black tracking-[0.4em] text-[#E31C1C] mb-6 uppercase">Colección Hombre</span>
       <h2 class="text-6xl lg:text-8xl font-black leading-[0.88] mb-6 text-white">SIN<br>LÍMITES.</h2>
       <p class="text-white/40 text-base mb-10 max-w-sm leading-relaxed">Alto rendimiento para los que van más lejos. Tecnología en cada paso.</p>
       <a [routerLink]="['/catalogo']" [queryParams]="{genero: 'Hombre'}"
-        class="inline-flex items-center gap-3 border-2 border-white/70 text-white px-8 py-3.5 font-black text-xs tracking-widest hover:bg-white hover:text-[#0f172a] transition-all duration-200">
+        class="inline-flex items-center gap-3 border-2 border-white/30 text-white px-8 py-3.5 font-black text-xs tracking-widest hover:bg-white hover:text-black transition-all duration-200">
         VER COLECCIÓN
         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
       </a>
@@ -90,17 +92,11 @@
   </div>
 </section>
 
-<!-- Espaciado antes de banners -->
-<div class="h-16 lg:h-24 bg-white"></div>
-
 <!-- Banners destacados -->
 <app-feature-banners />
 
-<!-- Espaciado antes de novedades -->
-<div class="h-4 bg-white"></div>
-
 <!-- NOVEDADES -->
-<div id="novedades">
+<div id="novedades" class="bg-[#0d0d0d]">
   <app-new-releases />
 </div>
 
@@ -108,6 +104,61 @@
 <div id="deporte">
   <app-sport-categories />
 </div>
+
+<!-- Trust bar -->
+<section class="bg-black border-t border-white/10 py-8">
+  <div class="max-w-7xl mx-auto px-4 lg:px-8">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="flex items-center gap-4">
+        <div class="w-10 h-10 shrink-0 flex items-center justify-center text-[#E31C1C]">
+          <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8l1 12a2 2 0 002 2h8a2 2 0 002-2l1-12M10 14v-4m4 4v-4"/>
+          </svg>
+        </div>
+        <div>
+          <p class="text-white text-xs font-black tracking-wide">ENVÍOS RÁPIDOS</p>
+          <p class="text-white/40 text-[11px]">A todo Colombia</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <div class="w-10 h-10 shrink-0 flex items-center justify-center text-[#E31C1C]">
+          <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+          </svg>
+        </div>
+        <div>
+          <p class="text-white text-xs font-black tracking-wide">PRODUCTOS ORIGINALES</p>
+          <p class="text-white/40 text-[11px]">Marcas 100% auténticas</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <div class="w-10 h-10 shrink-0 flex items-center justify-center text-[#E31C1C]">
+          <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M5 13l4 4L19 7"/>
+          </svg>
+        </div>
+        <div>
+          <p class="text-white text-xs font-black tracking-wide">GARANTÍA DE CALIDAD</p>
+          <p class="text-white/40 text-[11px]">Compra con confianza</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <div class="w-10 h-10 shrink-0 flex items-center justify-center text-[#E31C1C]">
+          <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
+          </svg>
+        </div>
+        <div>
+          <p class="text-white text-xs font-black tracking-wide">ATENCIÓN PERSONALIZADA</p>
+          <p class="text-white/40 text-[11px]">Estamos para ayudarte</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <app-footer />
 <app-cart-drawer />

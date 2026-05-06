@@ -1,18 +1,18 @@
-<section class="relative h-[70vh] lg:h-[85vh] overflow-hidden bg-[#1a237e]">
+<section class="relative h-[75vh] lg:h-[88vh] overflow-hidden bg-black">
 
   @if (loading()) {
     <div class="hero-skeleton absolute inset-0">
-      <div class="skeleton-img absolute inset-0 bg-[#232f8a]"></div>
-      <div class="absolute inset-0 bg-linear-to-r from-[#1a237e]/90 via-[#1a237e]/55 to-transparent"></div>
+      <div class="skeleton-img absolute inset-0 bg-[#1a1a1a]"></div>
+      <div class="absolute inset-0 bg-linear-to-r from-black/90 via-black/60 to-transparent"></div>
       <div class="absolute inset-0 flex items-center px-4 lg:px-16">
         <div class="max-w-3xl w-full">
-          <div class="skeleton-block h-5 w-24 mb-6 rounded-sm"></div>
+          <div class="skeleton-block h-5 w-48 mb-6 rounded-sm"></div>
           <div class="skeleton-block h-16 lg:h-24 w-3/4 mb-3 rounded-sm"></div>
           <div class="skeleton-block h-16 lg:h-24 w-1/2 mb-6 rounded-sm"></div>
           <div class="skeleton-block h-4 w-96 max-w-full mb-2 rounded-sm"></div>
           <div class="skeleton-block h-4 w-72 max-w-full mb-8 rounded-sm"></div>
           <div class="flex gap-4">
-            <div class="skeleton-block h-14 w-40 rounded-sm"></div>
+            <div class="skeleton-block h-14 w-52 rounded-sm"></div>
           </div>
         </div>
       </div>
@@ -27,30 +27,57 @@
       class="hero-img absolute inset-0 w-full h-full object-cover"
     />
 
-    <div class="absolute inset-0 bg-linear-to-r from-[#1a237e]/90 via-[#1a237e]/55 to-transparent"></div>
+    <!-- Overlay oscuro -->
+    <div class="absolute inset-0 bg-linear-to-r from-black/95 via-black/70 to-black/20"></div>
 
+    <!-- Elemento decorativo rojo esquina -->
+    <div class="absolute right-0 bottom-0 w-0 h-0
+      border-l-[180px] border-l-transparent
+      border-b-[180px] border-b-[#E31C1C]
+      opacity-80 hidden lg:block">
+    </div>
+
+    <!-- Contenido -->
     <div class="hero-slide-content absolute inset-0 flex items-center">
-      <div class="px-4 lg:px-16 max-w-3xl">
-        <span class="hero-badge inline-block border border-white/50 text-white px-4 py-1 text-xs font-bold tracking-widest mb-6">
-          {{ h.category}}
-        </span>
-        <h1 class="hero-title text-white text-5xl lg:text-8xl font-black mb-6 leading-none">
-          {{ h.campaignName }}
+      <div class="px-4 lg:px-16 max-w-4xl">
+
+        <!-- Label -->
+        <div class="flex items-center gap-3 mb-5">
+          <span class="text-[#E31C1C] text-[11px] font-black tracking-[0.35em] uppercase">
+            {{ h.category || 'Equipamiento para cada disciplina' }}
+          </span>
+          <div class="h-px w-12 bg-[#E31C1C]"></div>
+        </div>
+
+        <!-- Título split -->
+        <h1 class="leading-none mb-6">
+          <span class="hero-title block text-white text-5xl lg:text-8xl font-black">
+            {{ h.campaignName }}
+          </span>
+          @if (h.description) {
+            <span class="hero-subtitle block text-[#E31C1C] text-4xl lg:text-7xl font-black italic mt-1">
+              LLEGA MÁS LEJOS.
+            </span>
+          }
         </h1>
+
         @if (h.description) {
-          <p class="hero-desc text-white/80 text-lg lg:text-xl mb-8 max-w-lg">
+          <p class="hero-desc text-white/60 text-base lg:text-lg mb-8 max-w-lg leading-relaxed">
             {{ h.description }}
           </p>
         }
-        <div class="flex flex-wrap gap-4">
-          <a href="/catalogo" class="hero-btn bg-white text-[#1a237e] px-8 py-4 font-bold text-sm tracking-wide hover:bg-gray-100 transition-colors flex items-center gap-2">
-            {{ h.ctaText }}
+
+        <!-- CTA -->
+        <div class="flex flex-wrap gap-4 mb-10 lg:mb-16">
+          <a href="/catalogo"
+            class="hero-btn bg-[#E31C1C] text-white px-8 py-4 font-black text-sm tracking-widest hover:bg-[#C41515] transition-colors flex items-center gap-3">
+            {{ h.ctaText || 'EXPLORAR COLECCIÓN' }}
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
             </svg>
           </a>
           @if (h.videoUrl) {
-            <button class="hero-btn border-2 border-white text-white px-8 py-4 font-bold text-sm tracking-wide hover:bg-white hover:text-[#1a237e] transition-colors flex items-center gap-3">
+            <button class="hero-btn border-2 border-white/40 text-white px-8 py-4 font-black text-sm tracking-widest hover:border-white transition-colors flex items-center gap-3">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -59,6 +86,46 @@
             </button>
           }
         </div>
+
+        <!-- Feature badges -->
+        <div class="flex flex-wrap gap-6 lg:gap-10">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 border border-[#E31C1C]/60 flex items-center justify-center shrink-0">
+              <svg class="w-4 h-4 text-[#E31C1C]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+              </svg>
+            </div>
+            <div>
+              <p class="text-white text-xs font-black tracking-wide">CALIDAD PREMIUM</p>
+              <p class="text-white/40 text-[10px]">Productos 100% originales</p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 border border-[#E31C1C]/60 flex items-center justify-center shrink-0">
+              <svg class="w-4 h-4 text-[#E31C1C]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+              </svg>
+            </div>
+            <div>
+              <p class="text-white text-xs font-black tracking-wide">MÁXIMO RENDIMIENTO</p>
+              <p class="text-white/40 text-[10px]">Tecnología que te impulsa</p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 border border-[#E31C1C]/60 flex items-center justify-center shrink-0">
+              <svg class="w-4 h-4 text-[#E31C1C]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+              </svg>
+            </div>
+            <div>
+              <p class="text-white text-xs font-black tracking-wide">COMPRA SEGURA</p>
+              <p class="text-white/40 text-[10px]">Tus datos siempre protegidos</p>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   }

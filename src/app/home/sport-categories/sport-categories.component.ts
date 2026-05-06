@@ -33,11 +33,11 @@ const SPORT_META: Record<string, SportMeta> = {
 }
 
 const DEFAULT_META: SportMeta = {
-  color: '#1a237e',
+  color: '#E31C1C',
   gradient: 'from-indigo-700 to-blue-600',
   bg: 'bg-indigo-700',
   icon: '🏅',
-  accent: '#1a237e'
+  accent: '#E31C1C'
 }
 
 @Component({
@@ -58,13 +58,14 @@ export class SportCategoriesComponent {
   protected sectionRef = viewChild<ElementRef>('sportCategoriesSection')
 
   protected sizePickerProduct = signal<Product | null>(null)
+  protected currentIndex = signal(0)
+  private isAnimating = false
+  private readonly VISIBLE = 4
 
   protected filteredProducts = computed(() => {
     const sport = this.activeSport()
     const products = this.allProducts()
-
     if (!sport) return products
-
     return products.filter(p =>
       p.sports?.includes(sport) || p.categories?.includes(sport)
     )
@@ -101,10 +102,123 @@ export class SportCategoriesComponent {
     })
   }
 
-  setActiveSport(sport: string): void {
+  async setActiveSport(sport: string): Promise<void> {
+    if (this.activeSport() === sport || this.isAnimating) return
+    this.isAnimating = true
+
+    // Phase 1: animate current cards out
+    await this.animateCardsOut()
+
+    // Phase 2: swap data
     this.activeSport.set(sport)
     this.sizePickerProduct.set(null)
-    this.animateProductsIn()
+    this.currentIndex.set(0)
+
+    // Phase 3: wait for Angular re-render
+    await new Promise(r => setTimeout(r, 40))
+
+    // Phase 4: animate new cards in
+    await this.animateCardsIn()
+
+    this.isAnimating = false
+  }
+
+  async prev() {
+    if (this.hasPrev() && !this.isAnimating) this.navigateProducts('prev')
+  }
+
+  async next() {
+    if (this.hasNext() && !this.isAnimating) this.navigateProducts('next')
+  }
+
+  private async navigateProducts(dir: 'prev' | 'next') {
+    if (!isPlatformBrowser(this.platformId)) return
+    this.isAnimating = true
+
+    const { gsap } = await import('gsap')
+    const section = this.sectionRef()?.nativeElement
+    const cards = Array.from(section?.querySelectorAll('.product-card') ?? []) as HTMLElement[]
+
+    const xOut = dir === 'next' ? -50 : 50
+
+    await new Promise<void>(resolve =>
+      gsap.to(cards, {
+        x: xOut,
+        opacity: 0,
+        duration: 0.22,
+        stagger: { each: 0.04, from: dir === 'next' ? 'start' : 'end' },
+        ease: 'power2.in',
+        onComplete: resolve,
+      })
+    )
+
+    if (dir === 'next') this.currentIndex.update(i => i + 1)
+    else this.currentIndex.update(i => i - 1)
+
+    await new Promise(r => setTimeout(r, 30))
+
+    const newCards = Array.from(section?.querySelectorAll('.product-card') ?? []) as HTMLElement[]
+    await new Promise<void>(resolve =>
+      gsap.fromTo(
+        newCards,
+        { x: -xOut, opacity: 0, scale: 0.97 },
+        {
+          x: 0,
+          opacity: 1,
+          scale: 1,
+          duration: 0.38,
+          stagger: { each: 0.07, from: dir === 'next' ? 'start' : 'end' },
+          ease: 'power3.out',
+          onComplete: resolve,
+        }
+      )
+    )
+
+    this.isAnimating = false
+  }
+
+  private async animateCardsOut(): Promise<void> {
+    if (!isPlatformBrowser(this.platformId)) return
+    const { gsap } = await import('gsap')
+    const section = this.sectionRef()?.nativeElement
+    const cards = Array.from(section?.querySelectorAll('.product-card') ?? []) as HTMLElement[]
+    if (!cards.length) return
+
+    return new Promise<void>(resolve =>
+      gsap.to(cards, {
+        y: -20,
+        opacity: 0,
+        scale: 0.97,
+        duration: 0.2,
+        stagger: 0.04,
+        ease: 'power2.in',
+        onComplete: resolve,
+      })
+    )
+  }
+
+  private async animateCardsIn(): Promise<void> {
+    if (!isPlatformBrowser(this.platformId)) return
+    const { gsap } = await import('gsap')
+    const section = this.sectionRef()?.nativeElement
+    const cards = Array.from(section?.querySelectorAll('.product-card') ?? []) as HTMLElement[]
+    if (!cards.length) return
+
+    return new Promise<void>(resolve =>
+      gsap.fromTo(
+        cards,
+        { y: 30, opacity: 0, scale: 0.97 },
+        {
+          y: 0,
+          opacity: 1,
+          scale: 1,
+          duration: 0.38,
+          stagger: 0.07,
+          ease: 'power3.out',
+          onComplete: resolve,
+        }
+      )
+    )
   }
 
   getSizes(product: Product): string[] {
@@ -115,9 +229,7 @@ export class SportCategoriesComponent {
 
   onAddClick(product: Product, event: Event) {
     event.stopPropagation()
-
     const sizes = this.getSizes(product)
-
     if (sizes.length > 0) {
       this.sizePickerProduct.set(
         this.sizePickerProduct()?.id === product.id ? null : product
@@ -137,7 +249,6 @@ export class SportCategoriesComponent {
       image: product.image,
       size,
     })
-
     this.sizePickerProduct.set(null)
   }
 
@@ -145,66 +256,55 @@ export class SportCategoriesComponent {
     this.sizePickerProduct.set(null)
   }
 
+  visibleProducts(): Product[] {
+    const idx = this.currentIndex()
+    return this.filteredProducts().slice(idx, idx + this.VISIBLE)
+  }
+
+  hasPrev(): boolean {
+    return this.currentIndex() > 0
+  }
+
+  hasNext(): boolean {
+    return this.currentIndex() < this.filteredProducts().length - this.VISIBLE
+  }
+
+  progressPercent(): number {
+    const total = this.filteredProducts().length
+    if (total <= this.VISIBLE) return 100
+    return Math.round(((this.currentIndex() + this.VISIBLE) / total) * 100)
+  }
+
   private async animateSection() {
     if (!isPlatformBrowser(this.platformId)) return
 
     const { gsap } = await import('gsap')
     const { ScrollTrigger } = await import('gsap/ScrollTrigger')
-
     gsap.registerPlugin(ScrollTrigger)
 
     const section = this.sectionRef()?.nativeElement
     if (!section) return
 
-    const h2 = section.querySelector('h2')
-    const btns = section.querySelectorAll('.sport-btn')
+    gsap.from(section.querySelector('h2'), {
+      scrollTrigger: { trigger: section, start: 'top 82%' },
+      y: 30,
+      autoAlpha: 0,
+      duration: 0.7,
+      ease: 'power3.out',
+      clearProps: 'all',
+    })
 
-    if (h2) {
-      gsap.from(h2, {
-        scrollTrigger: { trigger: section, start: 'top 82%' },
-        y: 30,
-        autoAlpha: 0,
-        duration: 0.7,
-        ease: 'power3.out',
-        clearProps: 'all'
-      })
-    }
-
-    if (btns.length) {
-      gsap.from(btns, {
-        scrollTrigger: { trigger: section, start: 'top 78%' },
-        y: 20,
-        autoAlpha: 0,
-        duration: 0.5,
-        stagger: 0.08,
-        ease: 'power3.out',
-        clearProps: 'all'
-      })
-    }
-
-    this.animateProductsIn()
-  }
-
-  private async animateProductsIn() {
-    if (!isPlatformBrowser(this.platformId)) return
+    gsap.from(section.querySelectorAll('.sport-btn'), {
+      scrollTrigger: { trigger: section, start: 'top 78%' },
+      y: 20,
+      autoAlpha: 0,
+      duration: 0.5,
+      stagger: 0.08,
+      ease: 'power3.out',
+      clearProps: 'all',
+    })
 
     await new Promise(r => setTimeout(r, 50))
-
-    const { gsap } = await import('gsap')
-    const section = this.sectionRef()?.nativeElement
-    if (!section) return
-
-    const cards = section.querySelectorAll('.product-card')
-
-    if (cards.length) {
-      gsap.from(cards, {
-        y: 40,
-        autoAlpha: 0,
-        duration: 0.5,
-        stagger: 0.08,
-        ease: 'power3.out',
-        clearProps: 'all'
-      })
-    }
+    await this.animateCardsIn()
   }
 }

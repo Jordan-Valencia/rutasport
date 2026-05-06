@@ -17,7 +17,7 @@
     <div class="grid grid-cols-3 lg:grid-cols-6 gap-4 lg:gap-8">
       @for (i of [1,2,3,4,5,6]; track i) {
         <div class="animate-pulse text-center">
-          <div class="aspect-square border border-gray-100 bg-gray-100 mb-3"></div>
+          <div class="aspect-[16/9] border border-gray-100 bg-gray-100 mb-3"></div>
           <div class="h-4 bg-gray-200 rounded w-3/4 mx-auto mb-1"></div>
           <div class="h-3 bg-gray-100 rounded w-1/2 mx-auto"></div>
         </div>
@@ -27,7 +27,7 @@
     <div class="grid grid-cols-3 lg:grid-cols-6 gap-4 lg:gap-8">
       @for (team of filteredTeams(); track team.name) {
         <div class="team-card group cursor-pointer text-center">
-          <div class="aspect-square border border-gray-200 flex items-center justify-center mb-3 group-hover:border-black group-hover:shadow-md transition-all duration-300 p-4">
+          <div class="aspect-[16/9] flex items-center justify-center mb-3">
             @if (team.logo) {
               <img [src]="team.logo" [alt]="team.name" class="w-16 h-16 lg:w-20 lg:h-20 object-contain" />
             } @else {

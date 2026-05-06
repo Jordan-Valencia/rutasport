@@ -3,6 +3,8 @@ import { CommonModule, isPlatformBrowser } from '@angular/common'
 import { RouterModule, Router } from '@angular/router'
 import { CartService } from '../../services/cart.service'
 
+const SECTIONS = ['mujer', 'hombre', 'novedades', 'deporte']
+
 const BANNER_PHRASES = [
   'FÚTBOL · RUNNING · GYM · BASKETBALL',
   'ROPA DEPORTIVA DE ALTO RENDIMIENTO',
@@ -25,8 +27,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   protected readonly bannerPhrase = signal(BANNER_PHRASES[0])
   protected readonly bannerVisible = signal(false)
+  protected readonly scrollProgress = signal(0)
+  protected readonly activeSection = signal<string>('')
+
   private phraseIndex = 0
   private intervalId: ReturnType<typeof setInterval> | null = null
+  private scrollFn: (() => void) | null = null
+  private sectionObserver: IntersectionObserver | null = null
 
   ngOnInit(): void {
     if (!isPlatformBrowser(this.platformId)) return
@@ -41,10 +48,29 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.bannerVisible.set(true)
       }, 400)
     }, 3500)
+
+    this.scrollFn = () => {
+      const max = document.documentElement.scrollHeight - window.innerHeight
+      this.scrollProgress.set(max > 0 ? (window.scrollY / max) * 100 : 0)
+    }
+    window.addEventListener('scroll', this.scrollFn, { passive: true })
+
+    this.sectionObserver = new IntersectionObserver(
+      entries => entries.forEach(e => { if (e.isIntersecting) this.activeSection.set(e.target.id) }),
+      { threshold: 0.35 }
+    )
+    setTimeout(() => {
+      SECTIONS.forEach(id => {
+        const el = document.getElementById(id)
+        if (el) this.sectionObserver!.observe(el)
+      })
+    }, 300)
   }
 
   ngOnDestroy(): void {
     if (this.intervalId) clearInterval(this.intervalId)
+    if (this.scrollFn) window.removeEventListener('scroll', this.scrollFn)
+    if (this.sectionObserver) this.sectionObserver.disconnect()
   }
 
   toggleMobileMenu(): void {

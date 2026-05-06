@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body {
+        margin: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: #0A0A0F;
+        font-family: "Inter", sans-serif;
+      }
+      .scene {
+        position: absolute;
+        top: 0; left: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+      }
+      #scene1 { z-index: 1; background: #0A0A0F; }
+      #scene2 { z-index: 2; background: #0A0A0F; opacity: 0; }
+      #scene3 { z-index: 3; background: #0A0A0F; opacity: 0; }
+      #scene4 { z-index: 4; background: #0A0A0F; opacity: 0; }
+
+      /* Scene 1: Logo */
+      .s1-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%; height: 100%;
+        padding: 120px 160px;
+        gap: 24px;
+        box-sizing: border-box;
+      }
+      .s1-logo {
+        font-family: "Inter", sans-serif;
+        font-weight: 900;
+        font-size: 160px;
+        letter-spacing: 10px;
+        color: #FFFFFF;
+        text-transform: uppercase;
+      }
+      .s1-logo .accent { color: #FF4D00; }
+      .s1-tagline {
+        font-size: 36px;
+        font-weight: 400;
+        letter-spacing: 8px;
+        text-transform: uppercase;
+        color: rgba(255,255,255,0.5);
+      }
+      .s1-line {
+        width: 200px;
+        height: 3px;
+        background: #FF4D00;
+        margin-top: 16px;
+      }
+      .s1-glow {
+        position: absolute;
+        width: 800px; height: 800px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(255,77,0,0.12) 0%, rgba(10,10,15,0) 70%);
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+      }
+      .s1-ghost {
+        position: absolute;
+        font-weight: 900;
+        font-size: 380px;
+        color: rgba(255,255,255,0.015);
+        top: -20px; left: 80px;
+        letter-spacing: 20px;
+        user-select: none;
+      }
+
+      /* Scene 2: Categories */
+      .s2-content {
+        display: flex;
+        align-items: center;
+        width: 100%; height: 100%;
+        padding: 100px 160px;
+        box-sizing: border-box;
+        gap: 80px;
+      }
+      .s2-left { flex: 1; display: flex; flex-direction: column; gap: 16px; }
+      .s2-right { flex: 1; display: flex; flex-direction: column; gap: 20px; align-items: flex-end; }
+      .s2-label {
+        font-size: 20px; font-weight: 700;
+        letter-spacing: 6px; text-transform: uppercase;
+        color: #FF4D00;
+      }
+      .s2-title {
+        font-weight: 900;
+        font-size: 130px;
+        line-height: 0.95;
+        text-transform: uppercase;
+        color: #FFFFFF;
+      }
+      .s2-divider {
+        width: 120px; height: 4px;
+        background: linear-gradient(90deg, #FF4D00, #00D4FF);
+        margin-top: 16px;
+      }
+      .s2-card {
+        width: 340px; height: 110px;
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 12px;
+        background: rgba(255,255,255,0.02);
+        display: flex; align-items: center; justify-content: center;
+        gap: 20px; padding: 0 30px;
+      }
+      .s2-card-icon { font-size: 48px; }
+      .s2-card-label {
+        font-size: 36px; font-weight: 700;
+        letter-spacing: 3px; text-transform: uppercase;
+      }
+      .s2-grid {
+        position: absolute; inset: 0;
+        background-image:
+          linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+        background-size: 80px 80px;
+      }
+
+      /* Scene 3: Features */
+      .s3-content {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: 100%; height: 100%;
+        padding: 140px 180px;
+        gap: 48px;
+        box-sizing: border-box;
+      }
+      .s3-bar {
+        position: absolute; top: 0; left: 0;
+        width: 6px; height: 100%;
+        background: linear-gradient(180deg, #FF4D00, #00D4FF, #FFD166);
+      }
+      .s3-circle {
+        position: absolute;
+        width: 550px; height: 550px;
+        border-radius: 50%;
+        border: 1px solid rgba(0,212,255,0.05);
+        right: -80px; top: 50%;
+        transform: translateY(-50%);
+      }
+      .s3-feat {
+        display: flex; align-items: center; gap: 40px;
+      }
+      .s3-icon {
+        width: 90px; height: 90px;
+        border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 44px; flex-shrink: 0;
+      }
+      .s3-feat-title {
+        font-weight: 900;
+        font-size: 58px;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+      }
+      .s3-feat-desc {
+        font-size: 26px;
+        color: rgba(255,255,255,0.5);
+        margin-top: 4px;
+      }
+
+      /* Scene 4: CTA */
+      .s4-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%; height: 100%;
+        padding: 120px 160px;
+        gap: 28px;
+        box-sizing: border-box;
+      }
+      .s4-title {
+        font-weight: 900;
+        font-size: 140px;
+        letter-spacing: 6px;
+        text-transform: uppercase;
+        text-align: center;
+        line-height: 1;
+      }
+      .s4-title .accent { color: #FF4D00; }
+      .s4-sub {
+        font-size: 34px;
+        letter-spacing: 6px;
+        text-transform: uppercase;
+        color: rgba(255,255,255,0.5);
+      }
+      .s4-btn {
+        margin-top: 28px;
+        padding: 22px 72px;
+        background: #FF4D00;
+        color: #0A0A0F;
+        font-weight: 900;
+        font-size: 42px;
+        letter-spacing: 5px;
+        text-transform: uppercase;
+        border: none; border-radius: 8px;
+      }
+      .s4-url {
+        font-size: 26px;
+        letter-spacing: 4px;
+        color: rgba(255,255,255,0.3);
+        margin-top: 8px;
+      }
+      .s4-glow {
+        position: absolute;
+        width: 1000px; height: 1000px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(255,77,0,0.1) 0%, rgba(10,10,15,0) 70%);
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+      }
+      .s4-corner-tl, .s4-corner-br {
+        position: absolute;
+        width: 70px; height: 70px;
+        border: 2px solid rgba(255,255,255,0.06);
+      }
+      .s4-corner-tl { top: 50px; left: 50px; border-right: none; border-bottom: none; }
+      .s4-corner-br { bottom: 50px; right: 50px; border-left: none; border-top: none; }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="10"
+      data-width="1920"
+      data-height="1080"
+    >
+      <!-- Scene 1: Logo (0-2.5s) -->
+      <div id="scene1" class="scene">
+        <div class="s1-ghost" id="s1Ghost" data-layout-allow-overflow>R</div>
+        <div class="s1-glow" id="s1Glow"></div>
+        <div class="s1-content">
+          <div class="s1-logo" id="s1Logo">RUTA<span class="accent">SPORT</span></div>
+          <div class="s1-tagline" id="s1Tagline">Tu estilo deportivo</div>
+          <div class="s1-line" id="s1Line"></div>
+        </div>
+      </div>
+
+      <!-- Scene 2: Categories (2.5-5s) -->
+      <div id="scene2" class="scene">
+        <div class="s2-grid" id="s2Grid"></div>
+        <div class="s2-content">
+          <div class="s2-left">
+            <div class="s2-label" id="s2Label">Categorias</div>
+            <div class="s2-title" id="s2Title">Todo para<br>tu deporte</div>
+            <div class="s2-divider" id="s2Divider"></div>
+          </div>
+          <div class="s2-right">
+            <div class="s2-card" id="s2Card1">
+              <span class="s2-card-icon">&#128083;</span>
+              <span class="s2-card-label" style="color:#FF4D00;">Calzado</span>
+            </div>
+            <div class="s2-card" id="s2Card2">
+              <span class="s2-card-icon">&#128087;</span>
+              <span class="s2-card-label" style="color:#00D4FF;">Ropa</span>
+            </div>
+            <div class="s2-card" id="s2Card3" style="width:360px;">
+              <span class="s2-card-icon">&#9889;</span>
+              <span class="s2-card-label" style="color:#FFD166;">Accesorios</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scene 3: Features (5-7.5s) -->
+      <div id="scene3" class="scene">
+        <div class="s3-bar" id="s3Bar"></div>
+        <div class="s3-circle" id="s3Circle" data-layout-allow-overflow></div>
+        <div class="s3-content">
+          <div class="s3-feat" id="s3Feat1">
+            <div class="s3-icon" style="border:2px solid #FF4D00; background:rgba(255,77,0,0.08);">&#128666;</div>
+            <div>
+              <div class="s3-feat-title" style="color:#FF4D00;">Envio rapido</div>
+              <div class="s3-feat-desc">Recibe en 24-48 horas</div>
+            </div>
+          </div>
+          <div class="s3-feat" id="s3Feat2">
+            <div class="s3-icon" style="border:2px solid #00D4FF; background:rgba(0,212,255,0.08);">&#11088;</div>
+            <div>
+              <div class="s3-feat-title" style="color:#00D4FF;">Mejores marcas</div>
+              <div class="s3-feat-desc">Nike, Adidas, Puma y mas</div>
+            </div>
+          </div>
+          <div class="s3-feat" id="s3Feat3">
+            <div class="s3-icon" style="border:2px solid #FFD166; background:rgba(255,209,102,0.08);">&#128142;</div>
+            <div>
+              <div class="s3-feat-title" style="color:#FFD166;">Tu estilo unico</div>
+              <div class="s3-feat-desc">Personaliza tu look deportivo</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scene 4: CTA (7.5-10s) -->
+      <div id="scene4" class="scene">
+        <div class="s4-glow" id="s4Glow"></div>
+        <div class="s4-corner-tl" id="s4CTL"></div>
+        <div class="s4-corner-br" id="s4CBR"></div>
+        <div class="s4-content">
+          <div class="s4-title" id="s4Title">DESCUBRE <span class="accent">MAS</span></div>
+          <div class="s4-sub" id="s4Sub">Rutasport.com</div>
+          <div class="s4-btn" id="s4Btn">Comprar ahora</div>
+          <div class="s4-url" id="s4Url">www.rutasport.com</div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      var tl = gsap.timeline({ paused: true });
+
+      // ===== Scene 1: Logo entrance =====
+      tl.from("#s1Glow", { scale: 0.4, opacity: 0, duration: 1.2, ease: "sine.out" }, 0.15);
+      tl.from("#s1Logo", { scale: 0.6, opacity: 0, duration: 0.7, ease: "back.out(1.7)" }, 0.25);
+      tl.from("#s1Tagline", { y: 30, opacity: 0, duration: 0.5, ease: "power3.out" }, 0.75);
+      tl.from("#s1Line", { scaleX: 0, opacity: 0, duration: 0.5, ease: "power2.out" }, 0.95);
+      tl.to("#s1Glow", { scale: 1.08, duration: 2, ease: "sine.inOut", overwrite: "auto" }, 0.5);
+
+      // ===== Transition 1->2: Blur through at 2.1s =====
+      tl.to("#scene1", { filter: "blur(15px)", scale: 1.05, opacity: 0, duration: 0.4, ease: "power2.in" }, 2.1);
+      tl.fromTo("#scene2",
+        { filter: "blur(15px)", scale: 0.95, opacity: 0 },
+        { filter: "blur(0px)", scale: 1, opacity: 1, duration: 0.45, ease: "power2.out" }, 2.25
+      );
+
+      // ===== Scene 2: Categories entrance =====
+      tl.from("#s2Grid", { opacity: 0, duration: 0.8, ease: "sine.out" }, 2.4);
+      tl.from("#s2Label", { x: -40, opacity: 0, duration: 0.4, ease: "power3.out" }, 2.5);
+      tl.from("#s2Title", { y: 50, opacity: 0, duration: 0.6, ease: "expo.out" }, 2.65);
+      tl.from("#s2Divider", { scaleX: 0, duration: 0.4, ease: "power2.out" }, 3.05);
+      tl.from("#s2Card1", { x: 60, opacity: 0, duration: 0.5, ease: "power3.out" }, 2.8);
+      tl.from("#s2Card2", { x: 60, opacity: 0, duration: 0.5, ease: "power3.out" }, 3.0);
+      tl.from("#s2Card3", { x: 60, opacity: 0, duration: 0.5, ease: "power3.out" }, 3.2);
+
+      // ===== Transition 2->3: Directional blur at 4.6s =====
+      tl.to("#scene2", { filter: "blur(12px)", skewX: -6, x: -180, opacity: 0, duration: 0.35, ease: "power3.in" }, 4.6);
+      tl.fromTo("#scene3",
+        { filter: "blur(12px)", skewX: 6, x: 180, opacity: 0 },
+        { filter: "blur(0px)", skewX: 0, x: 0, opacity: 1, duration: 0.45, ease: "power3.out" }, 4.75
+      );
+
+      // ===== Scene 3: Features entrance =====
+      tl.from("#s3Bar", { scaleY: 0, duration: 0.7, ease: "power3.out" }, 4.85);
+      tl.from("#s3Circle", { scale: 0.7, opacity: 0, duration: 1, ease: "sine.out" }, 5.0);
+      tl.from("#s3Feat1", { x: -50, opacity: 0, duration: 0.5, ease: "expo.out" }, 5.1);
+      tl.from("#s3Feat2", { x: -50, opacity: 0, duration: 0.5, ease: "expo.out" }, 5.35);
+      tl.from("#s3Feat3", { x: -50, opacity: 0, duration: 0.5, ease: "expo.out" }, 5.6);
+      tl.to("#s3Circle", { rotation: 12, duration: 2.5, ease: "sine.inOut" }, 5.0);
+
+      // ===== Transition 3->4: Blur crossfade at 7.1s =====
+      tl.to("#scene3", { filter: "blur(15px)", scale: 1.05, opacity: 0, duration: 0.4, ease: "power2.in" }, 7.1);
+      tl.fromTo("#scene4",
+        { filter: "blur(15px)", scale: 0.95, opacity: 0 },
+        { filter: "blur(0px)", scale: 1, opacity: 1, duration: 0.45, ease: "power2.out" }, 7.25
+      );
+
+      // ===== Scene 4: CTA entrance =====
+      tl.from("#s4Glow", { scale: 0.4, opacity: 0, duration: 1.2, ease: "sine.out" }, 7.35);
+      tl.from("#s4Title", { y: 60, opacity: 0, duration: 0.7, ease: "back.out(2)" }, 7.45);
+      tl.from("#s4Sub", { y: 20, opacity: 0, duration: 0.4, ease: "power3.out" }, 7.95);
+      tl.from("#s4Btn", { scale: 0.7, opacity: 0, duration: 0.5, ease: "elastic.out(1, 0.5)" }, 8.15);
+      tl.from("#s4Url", { opacity: 0, duration: 0.4, ease: "sine.out" }, 8.45);
+      tl.from("#s4CTL", { opacity: 0, duration: 0.3, ease: "sine.out" }, 7.8);
+      tl.from("#s4CBR", { opacity: 0, duration: 0.3, ease: "sine.out" }, 7.95);
+      // Hold ambient
+      tl.to("#s4Glow", { scale: 1.06, duration: 1.5, ease: "sine.inOut" }, 7.5);
+      // Final fade to black
+      tl.to("#scene4", { opacity: 0, duration: 0.6, ease: "power2.in" }, 9.4);
+      tl.set("#scene4", { visibility: "hidden" }, 10);
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
