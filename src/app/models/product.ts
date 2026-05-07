@@ -14,6 +14,7 @@ export interface Product {
   gender?:       string
   gender_id?:    number
   image:         string
+  video?:        string   // video URL
   gallery?:      string   // comma-separated URLs
   isBestSeller?: boolean | number
   isNew?:        boolean | number

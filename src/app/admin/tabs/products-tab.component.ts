@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, inject, PLATFORM_ID } from '@angular/core'
+import { Component, OnInit, signal, computed, inject, PLATFORM_ID } from '@angular/core'
 import { CommonModule, isPlatformBrowser } from '@angular/common'
 import { FormsModule } from '@angular/forms'
 import { AdminService } from '../admin.service'
@@ -20,6 +20,17 @@ export class ProductsTabComponent implements OnInit {
   saving = signal(false)
   imageUploading = signal(false)
   apiError = signal('')
+  searchQuery = signal('')
+
+  filteredItems = computed(() => {
+    const q = this.searchQuery().toLowerCase().trim()
+    if (!q) return this.items()
+    return this.items().filter(p =>
+      (p.name ?? '').toLowerCase().includes(q) ||
+      (p.brand ?? '').toLowerCase().includes(q) ||
+      (p.model ?? '').toLowerCase().includes(q)
+    )
+  })
 
   urlMainInput = ''
   urlExtraInput = ''
@@ -132,6 +143,7 @@ export class ProductsTabComponent implements OnInit {
       model: '',
       price: '',
       image: '',
+      video: '',
       brand_id: null,
       gender_id: null,
       isBestSeller: false,
@@ -386,6 +398,25 @@ export class ProductsTabComponent implements OnInit {
     }
 
     await this.load()
+  }
+
+  async downloadImage(url: string, filename = 'producto') {
+    try {
+      const res = await fetch(url)
+      const blob = await res.blob()
+      const ext = blob.type.split('/')[1]?.replace('jpeg', 'jpg') ?? 'jpg'
+      const name = `${filename.replace(/\s+/g, '-').toLowerCase()}.${ext}`
+      const blobUrl = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = blobUrl
+      a.download = name
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      URL.revokeObjectURL(blobUrl)
+    } catch {
+      window.open(url, '_blank')
+    }
   }
 
   trackById(_: number, item: any) {

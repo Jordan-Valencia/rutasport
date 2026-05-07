@@ -31,18 +31,14 @@ export const onRequestPost: PagesFunction<Env> = async ({ env, request }) => {
 export const onRequestGet: PagesFunction<Env> = async ({ env, request }) => {
   if (request.headers.get('x-admin-key') !== ADMIN_KEY) return unauthorized()
   try {
-    const items: { key: string; path: string; size: number; uploaded: Date }[] = []
-    let cursor: string | undefined
+    const url = new URL(request.url)
+    const limit = Math.min(Math.max(parseInt(url.searchParams.get('limit') ?? '24'), 1), 100)
+    const cursor = url.searchParams.get('cursor') ?? undefined
 
-    do {
-      const list = await env.IMAGES.list({ prefix: 'images/', cursor })
-      for (const o of list.objects) {
-        items.push({ key: o.key, path: `/${o.key}`, size: o.size, uploaded: o.uploaded })
-      }
-      cursor = list.truncated ? list.cursor : undefined
-    } while (cursor)
+    const list = await env.IMAGES.list({ prefix: 'images/', limit, cursor })
+    const items = list.objects.map(o => ({ key: o.key, path: `/${o.key}`, size: o.size, uploaded: o.uploaded }))
 
-    return json(items)
+    return json({ items, nextCursor: list.truncated ? list.cursor : null, hasMore: list.truncated })
   } catch (e: any) {
     return json({ error: e.message ?? 'Internal error' }, 500)
   }

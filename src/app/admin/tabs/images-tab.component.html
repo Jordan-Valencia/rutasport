@@ -11,7 +11,7 @@
       <span class="text-xl">📷</span>
       <div>
         <h2 class="font-semibold text-slate-800">Galería de imágenes</h2>
-        <p class="text-xs text-slate-400">{{ items().length }} archivos en R2</p>
+        <p class="text-xs text-slate-400">{{ items().length }} archivos cargados{{ hasMore() ? ' (hay más)' : '' }}</p>
       </div>
     </div>
     <label class="cursor-pointer flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-medium shadow hover:opacity-90 transition-all">
@@ -49,6 +49,12 @@
                 [class]="copiedKey() === img.key ? 'bg-green-500 text-white' : 'bg-white/20 text-white hover:bg-white/30'">
                 {{ copiedKey() === img.key ? '✓ Copiado' : 'Copiar URL' }}
               </button>
+              <button
+                (click)="downloadImage(img.path, img.key.split('/').pop())"
+                title="Descargar imagen"
+                class="cursor-pointer w-7 flex items-center justify-center rounded-lg bg-white/20 text-white hover:bg-blue-500 transition-colors">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+              </button>
               <button (click)="deleteImage(img.key)" class="cursor-pointer w-7 flex items-center justify-center rounded-lg bg-red-500/80 text-white hover:bg-red-600 text-xs transition-colors">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
               </button>
@@ -63,5 +69,20 @@
         </div>
       }
     </div>
+
+    @if (hasMore()) {
+      <div class="flex justify-center pb-6">
+        <button (click)="loadMore()" [disabled]="loadingMore()"
+          class="cursor-pointer flex items-center gap-2 px-6 py-2.5 rounded-xl border border-slate-200 text-sm font-medium text-slate-600 hover:bg-slate-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+          @if (loadingMore()) {
+            <div class="w-4 h-4 border-2 border-slate-400 border-t-transparent rounded-full animate-spin"></div>
+            Cargando...
+          } @else {
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            Cargar más imágenes
+          }
+        </button>
+      </div>
+    }
   }
 </div>

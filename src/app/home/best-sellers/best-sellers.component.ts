@@ -117,7 +117,7 @@ export class BestSellersComponent {
 
   getSizes(product: Product): string[] {
     return product.sizes
-      ? product.sizes.split(',').map(s => s.trim()).filter(Boolean)
+      ? product.sizes.split(',').map(s => 'US' + s.trim()).filter(Boolean)
       : []
   }
 

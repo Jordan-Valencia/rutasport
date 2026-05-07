@@ -13,12 +13,12 @@ export const onRequestPut: PagesFunction<Env> = async ({ env, request, params })
 
     const result = await env.DB.prepare(
       `UPDATE products SET name=?, model=?, price=?, brand_id=?, gender_id=?,
-                           image=?, isBestSeller=?, isNew=?, description=?, sizes=?
+                           image=?, video=?, isBestSeller=?, isNew=?, description=?, sizes=?
        WHERE id=?`
     ).bind(
       b.name.trim(), b.model?.trim() || null, b.price.trim(),
       b.brand_id || null, b.gender_id || null,
-      b.image || '',
+      b.image || '', b.video || '',
       b.isBestSeller ? 1 : 0, b.isNew ? 1 : 0,
       b.description || null, b.sizes || null,
       params.id

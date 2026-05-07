@@ -7,7 +7,7 @@ const unauthorized = () => json({ error: 'Unauthorized' }, 401)
 
 const PRODUCT_SELECT = `
   SELECT
-    p.id, p.name, p.model, p.price, p.image,
+    p.id, p.name, p.model, p.price, p.image, p.video,
     p.brand_id, p.gender_id,
     p.isBestSeller, p.isNew, p.description, p.sizes, p.createdAt,
     b.name AS brand,
@@ -48,12 +48,12 @@ export const onRequestPost: PagesFunction<Env> = async ({ env, request }) => {
 
     const ins = await env.DB.prepare(
       `INSERT INTO products (name, model, price, brand_id, gender_id,
-                             image, isBestSeller, isNew, description, sizes)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+                             image, video, isBestSeller, isNew, description, sizes)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
     ).bind(
       b.name.trim(), b.model?.trim() || null, b.price.trim(),
       b.brand_id || null, b.gender_id || null,
-      b.image || '',
+      b.image || '', b.video || '',
       b.isBestSeller ? 1 : 0, b.isNew ? 1 : 0,
       b.description || null, b.sizes || null
     ).run()
