@@ -1,22 +1,3 @@
-/* ── Gallery: hero cell ──────────────────────────────────────── */
-.gallery-hero {
-  height: 52vw;
-  background: #0e0e0e;
-}
-
-@media (min-width: 640px) {
-  .gallery-hero { height: 420px; }
-}
-
-@media (min-width: 1024px) {
-  .gallery-hero { height: 58vh; }
-}
-
-/* ── Gallery: secondary cells ────────────────────────────────── */
-.gallery-cell {
-  aspect-ratio: 1 / 1;
-}
-
 /* ── Image zoom-on-hover (JS cursor-following) ───────────────── */
 .gallery-img {
   /* La transición se controla por inline style según el estado de hover */

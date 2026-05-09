@@ -45,6 +45,8 @@ export class ProductsTabComponent implements OnInit {
   categoryIdsArray: number[] = []
   sportIdsArray: number[] = []
   imagesArray: string[] = []
+  videoUploading = signal(false)
+  videoUrlInput = ''
 
   async ngOnInit() {
     await this.load()
@@ -160,6 +162,7 @@ export class ProductsTabComponent implements OnInit {
     this.apiError.set('')
     this.urlMainInput = ''
     this.urlExtraInput = ''
+    this.videoUrlInput = ''
 
     this.showModal.set(true)
     this.animateModal()
@@ -195,6 +198,7 @@ export class ProductsTabComponent implements OnInit {
     this.apiError.set('')
     this.urlMainInput = ''
     this.urlExtraInput = ''
+    this.videoUrlInput = ''
 
     this.showModal.set(true)
     this.animateModal()
@@ -309,6 +313,50 @@ export class ProductsTabComponent implements OnInit {
 
   removeExtraImage(index: number) {
     this.imagesArray = this.imagesArray.filter((_, i) => i !== index)
+  }
+
+  async uploadVideo(event: Event) {
+    const input = event.target as HTMLInputElement
+    if (!input.files?.length) return
+
+    this.videoUploading.set(true)
+    this.apiError.set('')
+
+    const fd = new FormData()
+    fd.append('file', input.files[0])
+
+    try {
+      const res = await fetch('/api/admin/upload', {
+        method: 'POST',
+        headers: { 'x-admin-key': this.svc.adminKey() },
+        body: fd
+      })
+
+      if (res.ok) {
+        const { path } = await res.json()
+        this.formData = { ...this.formData, video: path }
+      } else {
+        const err = await res.json().catch(() => ({})) as any
+        this.apiError.set(err.error ?? `Error ${res.status}`)
+      }
+    } catch {
+      this.apiError.set('Error de red al subir video')
+    } finally {
+      this.videoUploading.set(false)
+      input.value = ''
+    }
+  }
+
+  async importVideoFromUrl() {
+    const url = this.videoUrlInput.trim()
+    if (!url) return
+
+    this.formData = { ...this.formData, video: url }
+    this.videoUrlInput = ''
+  }
+
+  removeVideo() {
+    this.formData = { ...this.formData, video: '' }
   }
 
   private validate(): boolean {

@@ -15,12 +15,14 @@ export const onRequestPost: PagesFunction<Env> = async ({ env, request }) => {
     if (!entry || typeof entry === 'string') return json({ error: 'No file provided' }, 400)
     const file: File = entry
 
-    const ext = file.name.split('.').pop()?.toLowerCase() ?? 'jpg'
+    const ext = file.name.split('.').pop()?.toLowerCase() ?? 'mp4'
     const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_')
-    const key = `images/${Date.now()}-${safeName}`
-    const contentType = file.type || `image/${ext === 'jpg' ? 'jpeg' : ext}`
 
-    await env.IMAGES.put(key, file, { httpMetadata: { contentType } })
+    const isVideo = file.type.startsWith('video/')
+    const folder = isVideo ? 'videos' : 'images'
+    const key = `${folder}/${Date.now()}-${safeName}`
+
+    await env.IMAGES.put(key, file, { httpMetadata: { contentType: file.type } })
 
     return json({ path: `/${key}`, key })
   } catch (e: any) {

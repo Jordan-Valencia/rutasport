@@ -6,7 +6,7 @@ const QUERY = `
   SELECT p.id, p.name, p.model, p.price,
          b.name AS brand, p.brand_id,
          g.name AS gender, p.gender_id,
-         p.image, p.isBestSeller, p.isNew, p.description, p.sizes, p.createdAt,
+         p.image, p.video, p.isBestSeller, p.isNew, p.description, p.sizes, p.createdAt,
          (SELECT GROUP_CONCAT(c.name, ',')
           FROM product_categories pc JOIN categories c ON c.id = pc.category_id
           WHERE pc.product_id = p.id) AS categories,
