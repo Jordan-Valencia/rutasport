@@ -70,11 +70,16 @@ export class ProductDetailComponent implements OnInit {
     return p.image ? [p.image, ...gallery] : gallery
   })
 
-  sizes = computed(() =>
-    this.product()?.sizes
-      ? this.product()!.sizes!.split(',').map(s => 'US' + s.trim()).filter(Boolean)
-      : []
-  )
+  sizes = computed(() => {
+    const p = this.product()
+    if (!p?.sizes) return []
+    const allSizes = p.sizes.split(',').map(s => s.trim()).filter(Boolean)
+    if (p.inventory_raw) {
+      const inv = this.inventoryMap()
+      return allSizes.filter(s => (inv[s] ?? 0) > 0).map(s => 'US' + s)
+    }
+    return allSizes.map(s => 'US' + s)
+  })
 
   inventoryMap = computed((): Record<string, number> => {
     const raw = this.product()?.inventory_raw

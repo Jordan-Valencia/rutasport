@@ -16,6 +16,8 @@ export const onRequestGet: PagesFunction<Env> = async ({ env, request }) => {
                u.email AS user_email,
                u.full_name AS user_name,
                u.phone AS user_phone,
+               u.region AS user_region,
+               u.city AS user_city,
                u.address AS user_address
         FROM orders o
         LEFT JOIN users u ON u.id = o.user_id

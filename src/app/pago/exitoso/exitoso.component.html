@@ -1,22 +1,56 @@
 <div class="min-h-screen bg-[#0d0d0d] flex items-center justify-center px-4 py-16">
   <div class="max-w-md w-full text-center space-y-8">
 
-    <!-- Icono éxito -->
-    <div class="flex justify-center">
-      <div class="w-24 h-24 rounded-full bg-green-500/15 flex items-center justify-center ring-1 ring-green-500/30">
-        <svg class="w-12 h-12 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M5 13l4 4L19 7"/>
-        </svg>
+    <!-- APROBADO -->
+    @if (isApproved()) {
+      <div class="flex justify-center">
+        <div class="w-24 h-24 rounded-full bg-green-500/15 flex items-center justify-center ring-1 ring-green-500/30">
+          <svg class="w-12 h-12 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M5 13l4 4L19 7"/>
+          </svg>
+        </div>
       </div>
-    </div>
+      <div class="space-y-3">
+        <h1 class="text-3xl font-black text-white tracking-tight">¡Pago recibido!</h1>
+        <p class="text-white/50 leading-relaxed">
+          Tu pedido está siendo procesado. En breve recibirás la confirmación.
+        </p>
+      </div>
+    }
 
-    <!-- Mensaje -->
-    <div class="space-y-3">
-      <h1 class="text-3xl font-black text-white tracking-tight">¡Pago recibido!</h1>
-      <p class="text-white/50 leading-relaxed">
-        Tu pedido está siendo procesado. En breve recibirás la confirmación.
-      </p>
-    </div>
+    <!-- PENDIENTE -->
+    @if (isPending()) {
+      <div class="flex justify-center">
+        <div class="w-24 h-24 rounded-full bg-yellow-500/15 flex items-center justify-center ring-1 ring-yellow-500/30">
+          <svg class="w-12 h-12 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+        </div>
+      </div>
+      <div class="space-y-3">
+        <h1 class="text-3xl font-black text-white tracking-tight">Pago pendiente</h1>
+        <p class="text-white/50 leading-relaxed">
+          Tu pago está siendo verificado. Te notificaremos cuando se confirme. No realices el pago de nuevo.
+        </p>
+      </div>
+    }
+
+    <!-- DECLINADO / ERROR / VOIDED -->
+    @if (isFailed()) {
+      <div class="flex justify-center">
+        <div class="w-24 h-24 rounded-full bg-red-500/15 flex items-center justify-center ring-1 ring-red-500/30">
+          <svg class="w-12 h-12 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </div>
+      </div>
+      <div class="space-y-3">
+        <h1 class="text-3xl font-black text-white tracking-tight">Pago no completado</h1>
+        <p class="text-white/50 leading-relaxed">
+          Tu pago fue declinado o no pudo procesarse. No se realizó ningún cobro. Puedes intentarlo de nuevo.
+        </p>
+      </div>
+    }
 
     <!-- ID de transacción -->
     @if (transactionId()) {
@@ -34,13 +68,21 @@
       <span class="font-bold text-white/30">Wompi · Bancolombia</span>
     </div>
 
-    <!-- CTA -->
+    <!-- CTAs -->
     <div class="flex flex-col gap-3 pt-2">
-      <a
-        routerLink="/"
-        class="w-full py-4 bg-[#E31C1C] hover:bg-[#C41515] text-white font-black tracking-widest text-sm transition-all active:scale-[0.98] rounded-2xl flex items-center justify-center">
-        SEGUIR COMPRANDO
-      </a>
+      @if (isFailed()) {
+        <a
+          routerLink="/"
+          class="w-full py-4 bg-[#E31C1C] hover:bg-[#C41515] text-white font-black tracking-widest text-sm transition-all active:scale-[0.98] rounded-2xl flex items-center justify-center">
+          VOLVER AL CARRITO
+        </a>
+      } @else {
+        <a
+          routerLink="/"
+          class="w-full py-4 bg-[#E31C1C] hover:bg-[#C41515] text-white font-black tracking-widest text-sm transition-all active:scale-[0.98] rounded-2xl flex items-center justify-center">
+          SEGUIR COMPRANDO
+        </a>
+      }
     </div>
 
   </div>
