@@ -1106,7 +1106,13 @@ var QUERY = `
   SELECT p.id, p.name, p.model, CAST(p.price AS INTEGER) AS price,
          b.name AS brand, p.brand_id,
          g.name AS gender, p.gender_id,
-         p.image, p.video, p.isBestSeller, p.isNew, p.description, p.sizes, p.createdAt,
+         p.image, p.video, p.isBestSeller, p.isNew, p.description, p.createdAt,
+         (SELECT GROUP_CONCAT(pi2.size, ',')
+          FROM (SELECT size FROM product_inventory WHERE product_id = p.id AND stock > 0) pi2
+         ) AS sizes,
+         (SELECT GROUP_CONCAT(pi3.size || ':' || pi3.stock, ',')
+          FROM product_inventory pi3 WHERE pi3.product_id = p.id AND pi3.stock > 0
+         ) AS inventory_raw,
          (SELECT GROUP_CONCAT(c.name, ',')
           FROM product_categories pc JOIN categories c ON c.id = pc.category_id
           WHERE pc.product_id = p.id) AS categories,

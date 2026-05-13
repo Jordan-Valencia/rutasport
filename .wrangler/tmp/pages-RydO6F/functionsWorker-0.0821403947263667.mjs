@@ -1,7 +1,7 @@
 var __defProp = Object.defineProperty;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
 
-// ../.wrangler/tmp/bundle-MoGa3J/checked-fetch.js
+// ../.wrangler/tmp/bundle-BlHGzz/checked-fetch.js
 var urls = /* @__PURE__ */ new Set();
 function checkURL(request, init) {
   const url = request instanceof URL ? request : new URL(
@@ -1132,7 +1132,13 @@ var QUERY = `
   SELECT p.id, p.name, p.model, CAST(p.price AS INTEGER) AS price,
          b.name AS brand, p.brand_id,
          g.name AS gender, p.gender_id,
-         p.image, p.video, p.isBestSeller, p.isNew, p.description, p.sizes, p.createdAt,
+         p.image, p.video, p.isBestSeller, p.isNew, p.description, p.createdAt,
+         (SELECT GROUP_CONCAT(pi2.size, ',')
+          FROM (SELECT size FROM product_inventory WHERE product_id = p.id AND stock > 0) pi2
+         ) AS sizes,
+         (SELECT GROUP_CONCAT(pi3.size || ':' || pi3.stock, ',')
+          FROM product_inventory pi3 WHERE pi3.product_id = p.id AND pi3.stock > 0
+         ) AS inventory_raw,
          (SELECT GROUP_CONCAT(c.name, ',')
           FROM product_categories pc JOIN categories c ON c.id = pc.category_id
           WHERE pc.product_id = p.id) AS categories,
@@ -2414,7 +2420,7 @@ var jsonError = /* @__PURE__ */ __name(async (request, env, _ctx, middlewareCtx)
 }, "jsonError");
 var middleware_miniflare3_json_error_default = jsonError;
 
-// ../.wrangler/tmp/bundle-MoGa3J/middleware-insertion-facade.js
+// ../.wrangler/tmp/bundle-BlHGzz/middleware-insertion-facade.js
 var __INTERNAL_WRANGLER_MIDDLEWARE__ = [
   middleware_ensure_req_body_drained_default,
   middleware_miniflare3_json_error_default
@@ -2446,7 +2452,7 @@ function __facade_invoke__(request, env, ctx, dispatch, finalMiddleware) {
 }
 __name(__facade_invoke__, "__facade_invoke__");
 
-// ../.wrangler/tmp/bundle-MoGa3J/middleware-loader.entry.ts
+// ../.wrangler/tmp/bundle-BlHGzz/middleware-loader.entry.ts
 var __Facade_ScheduledController__ = class ___Facade_ScheduledController__ {
   constructor(scheduledTime, cron, noRetry) {
     this.scheduledTime = scheduledTime;

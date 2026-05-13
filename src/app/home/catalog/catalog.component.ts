@@ -70,7 +70,7 @@ export class CatalogComponent {
   })
 
   filteredProducts = computed(() => {
-    let products = this.allProducts()
+    let products = this.allProducts().filter(p => !this.isOutOfStock(p))
     const cat = this.selectedCategory()
     const brand = this.selectedBrand()
     const sport = this.selectedSport()
