@@ -17,7 +17,7 @@ export const onRequestGet: PagesFunction<Env> = async ({ env, request }) => {
         p.id,
         p.name,
         p.model,
-        p.price,
+        CAST(p.price AS INTEGER) AS price,
         b.name AS brand,
         p.brand_id,
         g.name AS gender,
@@ -26,7 +26,18 @@ export const onRequestGet: PagesFunction<Env> = async ({ env, request }) => {
         p.isBestSeller,
         p.isNew,
         p.description,
-        p.sizes,
+        (
+          SELECT GROUP_CONCAT(pi2.size, ',')
+          FROM (
+            SELECT size FROM product_inventory
+            WHERE product_id = p.id AND stock > 0
+          ) pi2
+        ) AS sizes,
+        (
+          SELECT GROUP_CONCAT(pi3.size || ':' || pi3.stock, ',')
+          FROM product_inventory pi3
+          WHERE pi3.product_id = p.id AND pi3.stock > 0
+        ) AS inventory_raw,
         p.createdAt,
         (
           SELECT GROUP_CONCAT(c.name, ',')

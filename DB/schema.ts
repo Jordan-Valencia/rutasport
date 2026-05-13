@@ -36,7 +36,7 @@ export const gendersTable = sqliteTable('genders', {
 export const productsTable = sqliteTable('products', {
   id:           int().primaryKey({ autoIncrement: true }),
   name:         text().notNull(),
-  price:        text().notNull(),
+  price:        int().notNull(),
   brand_id:     int(),               // FK → brands.id
   gender_id:    int(),               // FK → genders.id
   image:        text().notNull().default(''),  // imagen principal / thumbnail
@@ -71,6 +71,60 @@ export const productImagesTable = sqliteTable('product_images', {
   url:        text().notNull(),
   alt:        text().default(''),
   sort_order: int().default(0),
+})
+
+// ─── Inventario por talla ─────────────────────────────────────────────────────
+
+export const productInventoryTable = sqliteTable('product_inventory', {
+  id:         int().primaryKey({ autoIncrement: true }),
+  product_id: int().notNull(),   // FK → products.id ON DELETE CASCADE
+  size:       text().notNull(),  // talla sin prefijo: "7", "7.5", "8"
+  stock:      int().notNull().default(1),
+})
+
+// ─── Pedidos (integración Wompi) ──────────────────────────────────────────────
+
+export const ordersTable = sqliteTable('orders', {
+  id:                   int().primaryKey({ autoIncrement: true }),
+  reference:            text().notNull().unique(),
+  status:               text().notNull().default('PENDING'), // PENDING | APPROVED | DECLINED | VOIDED | ERROR
+  total_in_cents:       int().notNull(),
+  wompi_transaction_id: text(),
+  createdAt:            text().default(new Date().toISOString()),
+})
+
+export const orderItemsTable = sqliteTable('order_items', {
+  id:         int().primaryKey({ autoIncrement: true }),
+  order_id:   int().notNull(),
+  product_id: int().notNull(),
+  name:       text().notNull(),
+  brand:      text(),
+  model:      text(),
+  size:       text(),
+  price:      int().notNull(),
+  quantity:   int().notNull(),
+})
+
+// ─── Usuarios y sesiones ──────────────────────────────────────────────────────
+
+export const usersTable = sqliteTable('users', {
+  id:            int().primaryKey({ autoIncrement: true }),
+  email:         text().notNull().unique(),
+  password_hash: text().notNull(),
+  full_name:     text(),
+  phone:         text(),
+  region:        text(),
+  city:          text(),
+  address:       text(),
+  createdAt:     text().default(new Date().toISOString()),
+})
+
+export const userSessionsTable = sqliteTable('user_sessions', {
+  id:         int().primaryKey({ autoIncrement: true }),
+  user_id:    int().notNull(),          // FK → users.id ON DELETE CASCADE
+  token:      text().notNull().unique(),
+  expires_at: text().notNull(),
+  createdAt:  text().default(new Date().toISOString()),
 })
 
 // ─── Resto del contenido ──────────────────────────────────────────────────────

@@ -1,0 +1,357 @@
+<div class="perfil-bg">
+
+  <!-- ── TOP NAV ───────────────────────────────────────────────────────────── -->
+  <nav class="anim-nav border-b border-white/[.06]">
+    <div class="max-w-5xl mx-auto px-5 lg:px-8 h-14 flex items-center justify-between">
+      <a routerLink="/" class="text-[20px] font-black tracking-tight select-none">
+        <span class="text-white italic">RUTA</span><span class="text-[#E31C1C] italic">SPORT</span>
+      </a>
+      <button (click)="logout()"
+        class="flex items-center gap-2 text-white/30 hover:text-white text-[11px] font-black tracking-[.18em] uppercase transition-colors cursor-pointer">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+        </svg>
+        Salir
+      </button>
+    </div>
+  </nav>
+
+  <!-- ── BODY ──────────────────────────────────────────────────────────────── -->
+  <div class="max-w-5xl mx-auto px-5 lg:px-8 py-10 lg:py-14">
+    <div class="flex flex-col lg:flex-row gap-10 lg:gap-16">
+
+      <!-- ── SIDEBAR ──────────────────────────────────────────────────────── -->
+      <aside class="anim-sidebar lg:w-52 shrink-0">
+
+        <!-- Avatar + info -->
+        <div class="flex lg:flex-col items-center lg:items-start gap-4 mb-8 lg:mb-10">
+          <div class="avatar-el w-14 h-14 lg:w-16 lg:h-16 rounded-full bg-[#E31C1C] flex items-center justify-center text-white text-xl font-black shrink-0">
+            {{ userInitials() }}
+          </div>
+          <div class="min-w-0 lg:mt-1">
+            <p class="text-white font-black text-base truncate leading-tight">
+              {{ auth.user()?.full_name || 'Atleta' }}
+            </p>
+            <p class="text-white/35 text-xs mt-0.5 truncate">{{ auth.user()?.email }}</p>
+            @if (memberSince()) {
+              <p class="text-white/20 text-[10px] mt-1 tracking-wide">Desde {{ memberSince() }}</p>
+            }
+          </div>
+        </div>
+
+        <div class="section-rule mb-5 hidden lg:block"></div>
+
+        <!-- Navigation -->
+        <nav class="flex lg:flex-col gap-1">
+          <button class="side-link" [class.active]="activeTab() === 'info'" (click)="setTab('info')">
+            <span class="side-dot"></span>
+            Información
+          </button>
+          <button class="side-link" [class.active]="activeTab() === 'pedidos'" (click)="setTab('pedidos')">
+            <span class="side-dot"></span>
+            Mis Pedidos
+          </button>
+          <button class="side-link" [class.active]="activeTab() === 'seguridad'" (click)="setTab('seguridad')">
+            <span class="side-dot"></span>
+            Seguridad
+          </button>
+        </nav>
+
+      </aside>
+
+      <!-- ── MAIN CONTENT ──────────────────────────────────────────────────── -->
+      <main class="anim-content flex-1 min-w-0">
+
+        <!-- ── INFO TAB ─────────────────────────────────────────────────── -->
+        @if (activeTab() === 'info') {
+          <div class="tab-content">
+
+            <div class="mb-8">
+              <p class="text-[10px] font-black tracking-[.28em] text-[#E31C1C]/50 uppercase mb-1">Perfil</p>
+              <h2 class="text-[2rem] font-black text-white tracking-tight leading-none">Información personal</h2>
+            </div>
+
+            <!-- Alerts -->
+            @if (infoSuccess()) {
+              <div class="success-msg flex items-center gap-2.5 text-emerald-400 text-sm mb-7">
+                <div class="w-1 h-5 bg-emerald-400 rounded-full shrink-0"></div>
+                Cambios guardados correctamente
+              </div>
+            }
+            @if (infoError()) {
+              <div [class.error-shake]="infoShaking()"
+                   class="flex items-center gap-2.5 text-[#ff5050] text-sm mb-7">
+                <div class="w-1 h-5 bg-[#E31C1C] rounded-full shrink-0"></div>
+                {{ infoError() }}
+              </div>
+            }
+
+            <form (ngSubmit)="saveInfo()" novalidate>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-10">
+
+                <!-- Nombre -->
+                <div class="fl-group mb-8 sm:col-span-2">
+                  <input class="fl-input" type="text" [(ngModel)]="full_name" name="full_name"
+                         placeholder=" " autocomplete="name"/>
+                  <label class="fl-label">Nombre completo</label>
+                  <div class="fl-bar"></div>
+                </div>
+
+                <!-- Email -->
+                <div class="fl-group mb-8">
+                  <input class="fl-input" type="email" [(ngModel)]="email" name="email"
+                         placeholder=" " autocomplete="email" required/>
+                  <label class="fl-label">Correo electrónico</label>
+                  <div class="fl-bar"></div>
+                </div>
+
+                <!-- Teléfono -->
+                <div class="fl-group mb-8">
+                  <input class="fl-input" type="tel" [(ngModel)]="phone" name="phone"
+                         placeholder=" " autocomplete="tel"/>
+                  <label class="fl-label">Teléfono</label>
+                  <div class="fl-bar"></div>
+                </div>
+
+                <!-- Departamento / Región -->
+                <div class="fl-group mb-8">
+                  <input class="fl-input" type="text" [(ngModel)]="region" name="region"
+                         placeholder=" " autocomplete="address-level1"/>
+                  <label class="fl-label">Departamento</label>
+                  <div class="fl-bar"></div>
+                </div>
+
+                <!-- Ciudad -->
+                <div class="fl-group mb-8">
+                  <input class="fl-input" type="text" [(ngModel)]="city" name="city"
+                         placeholder=" " autocomplete="address-level2"/>
+                  <label class="fl-label">Ciudad</label>
+                  <div class="fl-bar"></div>
+                </div>
+
+                <!-- Dirección -->
+                <div class="fl-group mb-10 sm:col-span-2">
+                  <input class="fl-input" type="text" [(ngModel)]="address" name="address"
+                         placeholder=" " autocomplete="street-address"/>
+                  <label class="fl-label">Dirección de residencia</label>
+                  <div class="fl-bar"></div>
+                </div>
+
+              </div>
+
+              <button type="submit" class="save-btn" [disabled]="savingInfo()">
+                @if (savingInfo()) {
+                  <span class="flex items-center gap-2">
+                    <svg class="animate-spin w-3.5 h-3.5" fill="none" viewBox="0 0 24 24">
+                      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+                    </svg>
+                    Guardando
+                  </span>
+                } @else {
+                  Guardar cambios
+                }
+              </button>
+            </form>
+
+          </div>
+        }
+
+        <!-- ── PEDIDOS TAB ──────────────────────────────────────────────── -->
+        @if (activeTab() === 'pedidos') {
+          <div class="tab-content">
+
+            <div class="mb-8">
+              <p class="text-[10px] font-black tracking-[.28em] text-[#E31C1C]/50 uppercase mb-1">Historial</p>
+              <h2 class="text-[2rem] font-black text-white tracking-tight leading-none">Mis Pedidos</h2>
+            </div>
+
+            @if (ordersLoading()) {
+              <div class="flex items-center gap-3 text-white/30 text-sm py-12 justify-center">
+                <svg class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+                </svg>
+                Cargando pedidos…
+              </div>
+            }
+
+            @if (ordersError()) {
+              <p class="text-[#ff5050] text-sm">{{ ordersError() }}</p>
+            }
+
+            @if (!ordersLoading() && !ordersError() && orders().length === 0) {
+              <div class="py-16 text-center">
+                <p class="text-white/20 text-4xl mb-4">📦</p>
+                <p class="text-white/30 text-sm">Aún no has realizado ningún pedido</p>
+                <a routerLink="/catalogo"
+                   class="inline-block mt-6 px-6 py-2.5 bg-[#E31C1C] text-white text-xs font-black tracking-widest uppercase rounded-full">
+                  Ver catálogo
+                </a>
+              </div>
+            }
+
+            @for (order of orders(); track order.id) {
+              <div class="mb-4 border border-white/[.08] rounded-2xl overflow-hidden">
+
+                <!-- Header -->
+                <button (click)="toggleOrder(order)"
+                  class="w-full flex items-center justify-between px-5 py-4 bg-white/[.03] hover:bg-white/[.05] transition-colors cursor-pointer text-left">
+                  <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-6 min-w-0">
+                    <span class="text-white font-black text-sm font-mono">{{ order.reference }}</span>
+                    <span class="text-white/30 text-xs">{{ order.createdAt | date:'dd/MM/yyyy' }}</span>
+                    <span class="text-white font-bold text-sm">{{ formatCOP(order.total_in_cents) }}</span>
+                  </div>
+                  <div class="flex items-center gap-3 shrink-0 ml-4">
+                    <!-- Payment badge -->
+                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-widest"
+                      [ngClass]="{
+                        'bg-emerald-500/15 text-emerald-400': order.status === 'APPROVED',
+                        'bg-yellow-500/15 text-yellow-400':  order.status === 'PENDING',
+                        'bg-red-500/15 text-red-400':        order.status === 'DECLINED' || order.status === 'ERROR',
+                        'bg-white/10 text-white/40':         order.status === 'VOIDED'
+                      }">
+                      {{ paymentLabel[order.status] || order.status }}
+                    </span>
+                    <!-- Shipping badge -->
+                    <span class="hidden sm:inline px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-widest"
+                      [ngClass]="{
+                        'bg-blue-500/15 text-blue-400':    order.shipping_status === 'SHIPPED',
+                        'bg-emerald-500/15 text-emerald-400': order.shipping_status === 'DELIVERED',
+                        'bg-white/10 text-white/30':       order.shipping_status === 'PROCESSING'
+                      }">
+                      {{ shippingLabel[order.shipping_status] || order.shipping_status }}
+                    </span>
+                    <svg class="w-4 h-4 text-white/30 transition-transform duration-200"
+                         [class.rotate-180]="order.expanded"
+                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                  </div>
+                </button>
+
+                <!-- Detail -->
+                @if (order.expanded) {
+                  <div class="px-5 pb-5 pt-3 border-t border-white/[.06] space-y-3">
+
+                    @if (order.tracking_number) {
+                      <div class="flex items-center gap-2 text-sm">
+                        <span class="text-white/30 text-xs uppercase tracking-widest">Guía:</span>
+                        <span class="text-white font-mono font-bold">{{ order.tracking_number }}</span>
+                      </div>
+                    }
+                    @if (order.shipping_notes) {
+                      <p class="text-white/40 text-xs">{{ order.shipping_notes }}</p>
+                    }
+
+                    <div class="space-y-2 pt-1">
+                      @for (item of order.items; track item.id) {
+                        <div class="flex items-center justify-between py-2 border-b border-white/[.04] last:border-0">
+                          <div class="min-w-0">
+                            <p class="text-white text-sm font-semibold truncate">{{ item.name }}</p>
+                            <p class="text-white/30 text-xs mt-0.5">
+                              @if (item.brand) { {{ item.brand }} · }
+                              @if (item.size) { Talla {{ item.size }} · }
+                              Cant. {{ item.quantity }}
+                            </p>
+                          </div>
+                          <span class="text-white/60 text-sm font-bold shrink-0 ml-4">{{ item.price | cop }}</span>
+                        </div>
+                      }
+                    </div>
+                  </div>
+                }
+
+              </div>
+            }
+
+          </div>
+        }
+
+        <!-- ── SEGURIDAD TAB ─────────────────────────────────────────────── -->
+        @if (activeTab() === 'seguridad') {
+          <div class="tab-content">
+
+            <div class="mb-8">
+              <p class="text-[10px] font-black tracking-[.28em] text-[#E31C1C]/50 uppercase mb-1">Cuenta</p>
+              <h2 class="text-[2rem] font-black text-white tracking-tight leading-none">Seguridad</h2>
+            </div>
+
+            <!-- Error -->
+            @if (passwordError()) {
+              <div [class.error-shake]="passwordShaking()"
+                   class="flex items-center gap-2.5 text-[#ff5050] text-sm mb-7">
+                <div class="w-1 h-5 bg-[#E31C1C] rounded-full shrink-0"></div>
+                {{ passwordError() }}
+              </div>
+            }
+
+            <!-- Password form -->
+            <p class="text-white/30 text-sm mb-8 leading-relaxed max-w-sm">
+              Al cambiar tu contraseña cerrarás sesión en todos los dispositivos.
+            </p>
+
+            <form (ngSubmit)="savePassword()" novalidate class="max-w-sm">
+
+              <div class="fl-group mb-8">
+                <input class="fl-input" [type]="showCurrent() ? 'text' : 'password'"
+                       [(ngModel)]="current_password" name="current_password"
+                       placeholder=" " autocomplete="current-password"/>
+                <label class="fl-label">Contraseña actual</label>
+                <div class="fl-bar"></div>
+                <button type="button" class="eye-btn" (click)="showCurrent.set(!showCurrent())">
+                  <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                  </svg>
+                </button>
+              </div>
+
+              <div class="fl-group mb-8">
+                <input class="fl-input" [type]="showNew() ? 'text' : 'password'"
+                       [(ngModel)]="new_password" name="new_password"
+                       placeholder=" " autocomplete="new-password"/>
+                <label class="fl-label">Nueva contraseña</label>
+                <div class="fl-bar"></div>
+                <button type="button" class="eye-btn" (click)="showNew.set(!showNew())">
+                  <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                  </svg>
+                </button>
+              </div>
+
+              <div class="fl-group mb-10">
+                <input class="fl-input" type="password"
+                       [(ngModel)]="confirm_password" name="confirm_password"
+                       placeholder=" " autocomplete="new-password"/>
+                <label class="fl-label">Confirmar nueva contraseña</label>
+                <div class="fl-bar"></div>
+              </div>
+
+              <button type="submit" class="save-btn" [disabled]="savingPassword()">
+                @if (savingPassword()) {
+                  <span class="flex items-center gap-2">
+                    <svg class="animate-spin w-3.5 h-3.5" fill="none" viewBox="0 0 24 24">
+                      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+                    </svg>
+                    Cambiando
+                  </span>
+                } @else {
+                  Cambiar contraseña
+                }
+              </button>
+
+            </form>
+
+          </div>
+        }
+
+      </main>
+    </div>
+  </div>
+</div>

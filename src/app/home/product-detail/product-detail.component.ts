@@ -6,11 +6,12 @@ import { CartService } from '../../services/cart.service'
 import { Product } from '../../models/product'
 import { HeaderComponent } from '../header/header.component'
 import { CartDrawerComponent } from '../cart-drawer/cart-drawer.component'
+import { CopPipe } from '../../shared/cop.pipe'
 
 @Component({
   selector: 'app-product-detail',
   standalone: true,
-  imports: [CommonModule, RouterModule, HeaderComponent, CartDrawerComponent],
+  imports: [CommonModule, RouterModule, HeaderComponent, CartDrawerComponent, CopPipe],
   templateUrl: './product-detail.component.html',
   styleUrl: './product-detail.component.css',
 })
@@ -74,6 +75,29 @@ export class ProductDetailComponent implements OnInit {
       ? this.product()!.sizes!.split(',').map(s => 'US' + s.trim()).filter(Boolean)
       : []
   )
+
+  inventoryMap = computed((): Record<string, number> => {
+    const raw = this.product()?.inventory_raw
+    if (!raw) return {}
+    return Object.fromEntries(
+      raw.split(',').map(e => {
+        const [s, c] = e.split(':')
+        return [s.trim(), parseInt(c) || 0]
+      })
+    )
+  })
+
+  stockForSelectedSize = computed(() => {
+    const sel = this.selectedSize()
+    if (!sel) return 0
+    const raw = sel.replace(/^US/i, '')
+    return this.inventoryMap()[raw] ?? 1
+  })
+
+  stockForSize(displaySize: string): number {
+    const raw = displaySize.replace(/^US/i, '')
+    return this.inventoryMap()[raw] ?? 1
+  }
 
   sportColor = computed(() => {
     const firstSport = this.product()?.sports?.split(',')[0]?.trim() ?? ''
@@ -215,6 +239,7 @@ export class ProductDetailComponent implements OnInit {
     const p = this.product()
     if (!p) return
     if (this.sizes().length > 0 && !this.selectedSize()) return
+    const size = this.selectedSize() || undefined
     this.cart.add({
       productId: p.id!,
       name: p.name,
@@ -222,7 +247,8 @@ export class ProductDetailComponent implements OnInit {
       model: p.model,
       price: p.price,
       image: p.image,
-      size: this.selectedSize() || undefined,
+      size,
+      maxStock: size ? this.stockForSelectedSize() : undefined,
     })
     this.justAdded.set(true)
     setTimeout(() => this.justAdded.set(false), 2000)

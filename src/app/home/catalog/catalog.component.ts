@@ -6,12 +6,14 @@ import { DataService } from '../../services/data.service'
 import { CartService } from '../../services/cart.service'
 import { HeaderComponent } from '../header/header.component'
 import { CartDrawerComponent } from '../cart-drawer/cart-drawer.component'
+import { FooterComponent } from '../footer/footer.component'
 import { Product } from '../../models/product'
+import { CopPipe } from '../../shared/cop.pipe'
 
 @Component({
   selector: 'app-catalog',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, HeaderComponent, CartDrawerComponent],
+  imports: [CommonModule, FormsModule, RouterModule, HeaderComponent, CartDrawerComponent, FooterComponent, CopPipe],
   templateUrl: './catalog.component.html',
 })
 export class CatalogComponent {
@@ -116,11 +118,11 @@ export class CatalogComponent {
     }
 
     if (sort === 'price-asc') {
-      return [...products].sort((a, b) => this.parsePrice(a.price) - this.parsePrice(b.price))
+      return [...products].sort((a, b) => a.price - b.price)
     }
 
     if (sort === 'price-desc') {
-      return [...products].sort((a, b) => this.parsePrice(b.price) - this.parsePrice(a.price))
+      return [...products].sort((a, b) => b.price - a.price)
     }
 
     if (sort === 'new') {
@@ -175,14 +177,30 @@ export class CatalogComponent {
     return product.sports?.split(',')[0]?.trim() ?? ''
   }
 
-  parsePrice(p: string): number {
-    return parseInt(p.replace(/[^\d]/g, '')) || 0
-  }
-
-  getSizes(product: Product): string[] {
+getSizes(product: Product): string[] {
     return product.sizes
       ? product.sizes.split(',').map(s => 'US' + s.trim()).filter(Boolean)
       : []
+  }
+
+  getInventoryMap(product: Product): Record<string, number> {
+    const raw = product.inventory_raw
+    if (!raw) return {}
+    return Object.fromEntries(
+      raw.split(',').map(e => {
+        const [s, c] = e.split(':')
+        return [s.trim(), parseInt(c) || 0]
+      })
+    )
+  }
+
+  isOutOfStock(product: Product): boolean {
+    return !product.sizes || product.sizes.trim() === ''
+  }
+
+  stockForSize(product: Product, displaySize: string): number {
+    const raw = displaySize.replace(/^US/i, '')
+    return this.getInventoryMap(product)[raw] ?? 1
   }
 
   openProduct(product: Product, event: Event) {
@@ -211,6 +229,7 @@ export class CatalogComponent {
   }
 
   addToCart(product: Product, size?: string) {
+    const maxStock = size ? this.stockForSize(product, size) : undefined
     this.cart.add({
       productId: product.id!,
       name: product.name,
@@ -219,6 +238,7 @@ export class CatalogComponent {
       price: product.price,
       image: product.image,
       size,
+      maxStock,
     })
 
     this.sizePickerProduct.set(null)

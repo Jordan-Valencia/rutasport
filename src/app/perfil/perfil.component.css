@@ -1,0 +1,167 @@
+.perfil-bg {
+  background: #050505;
+  min-height: 100vh;
+}
+
+/* ─── Entry ─────────────────────────────────────────────────────────────────── */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes tab-slide {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  20%,60% { transform: translateX(-6px); }
+  40%,80% { transform: translateX( 6px); }
+}
+@keyframes success-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes avatar-pulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(227,28,28,0); }
+  50%      { box-shadow: 0 0 0 6px rgba(227,28,28,.15); }
+}
+
+.anim-nav      { animation: fade-in  .5s .0s  cubic-bezier(.22,1,.36,1) both; }
+.anim-sidebar  { animation: fade-up  .6s .1s  cubic-bezier(.22,1,.36,1) both; }
+.anim-content  { animation: fade-up  .6s .2s  cubic-bezier(.22,1,.36,1) both; }
+.tab-content   { animation: tab-slide .3s cubic-bezier(.22,1,.36,1) both; }
+.success-msg   { animation: success-in .35s cubic-bezier(.22,1,.36,1) both; }
+.error-shake   { animation: shake .4s cubic-bezier(.36,.07,.19,.97) both; }
+
+/* ─── Avatar ─────────────────────────────────────────────────────────────────── */
+.avatar-el {
+  animation: avatar-pulse 2.8s ease-in-out infinite;
+}
+
+/* ─── Side nav links ─────────────────────────────────────────────────────────── */
+.side-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  color: rgba(255,255,255,.32);
+  cursor: pointer;
+  transition: color .18s, background .18s;
+  text-decoration: none;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+}
+.side-link:hover {
+  color: rgba(255,255,255,.75);
+  background: rgba(255,255,255,.04);
+}
+.side-link.active {
+  color: #fff;
+  background: rgba(255,255,255,.06);
+}
+.side-link.active .side-dot { background: #E31C1C; }
+
+.side-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.2);
+  transition: background .18s;
+  flex-shrink: 0;
+}
+
+/* ─── Floating label inputs ──────────────────────────────────────────────────── */
+.fl-group {
+  position: relative;
+  padding-top: 20px;
+}
+.fl-input {
+  display: block;
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255,255,255,.1);
+  padding: 8px 0;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  outline: none;
+  transition: border-color .2s;
+  caret-color: #E31C1C;
+}
+.fl-input:-webkit-autofill,
+.fl-input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 200px #050505 inset !important;
+  -webkit-text-fill-color: #fff !important;
+}
+.fl-label {
+  position: absolute;
+  left: 0; top: 20px;
+  font-size: 14px;
+  color: rgba(255,255,255,.28);
+  font-weight: 700;
+  pointer-events: none;
+  transition: top .22s cubic-bezier(.22,1,.36,1),
+              font-size .22s, color .22s, letter-spacing .22s;
+}
+.fl-input:focus ~ .fl-label,
+.fl-input:not(:placeholder-shown) ~ .fl-label {
+  top: 0; font-size: 10px;
+  letter-spacing: .16em;
+  color: rgba(255,255,255,.28);
+  text-transform: uppercase;
+}
+.fl-input:focus ~ .fl-label { color: #E31C1C; }
+
+.fl-bar {
+  position: absolute;
+  bottom: 0; left: 0;
+  height: 2px; width: 0;
+  background: #E31C1C;
+  transition: width .28s cubic-bezier(.22,1,.36,1);
+}
+.fl-input:focus ~ .fl-bar { width: 100%; }
+
+.eye-btn {
+  position: absolute; right: 0; top: 50%;
+  transform: translateY(-50%); margin-top: 10px;
+  background: none; border: none; padding: 4px;
+  color: rgba(255,255,255,.22); cursor: pointer;
+  transition: color .2s;
+}
+.eye-btn:hover { color: rgba(255,255,255,.6); }
+
+/* ─── Save button ────────────────────────────────────────────────────────────── */
+.save-btn {
+  height: 42px;
+  padding: 0 28px;
+  background: #E31C1C;
+  color: #fff;
+  font-weight: 900; font-size: 11px;
+  letter-spacing: .2em; text-transform: uppercase;
+  border: none; border-radius: 3px;
+  cursor: pointer;
+  transition: background .2s, transform .15s, box-shadow .2s;
+}
+.save-btn:not(:disabled):hover {
+  background: #c41515;
+  box-shadow: 0 8px 28px rgba(227,28,28,.32);
+  transform: translateY(-1px);
+}
+.save-btn:not(:disabled):active { transform: translateY(0); }
+.save-btn:disabled { opacity: .4; cursor: not-allowed; }
+
+/* ─── Section divider ────────────────────────────────────────────────────────── */
+.section-rule {
+  height: 1px;
+  background: rgba(255,255,255,.06);
+}

@@ -12,155 +12,333 @@
 
     <div>
       <h1 class="text-3xl font-black mb-2">Términos y Condiciones</h1>
-      <p class="text-gray-500 text-sm">Última actualización: abril de 2026</p>
+      <p class="text-gray-500 text-sm">Última actualización: mayo de 2026</p>
+      <p class="text-gray-500 text-xs mt-1">Estos términos regulan el uso de la plataforma de comercio electrónico de RutaSport y las relaciones comerciales derivadas de ella, conforme a la legislación colombiana vigente.</p>
     </div>
 
     <!-- Índice -->
     <nav class="bg-gray-50 rounded-2xl p-6">
       <p class="font-semibold mb-3 text-sm">Contenido</p>
       <ol class="space-y-1 text-sm text-gray-600 list-decimal list-inside">
-        <li><a class="hover:text-black transition-colors">Información general</a></li>
-        <li><a class="hover:text-black transition-colors">Proceso de compra</a></li>
-        <li><a class="hover:text-black transition-colors">Precios y formas de pago</a></li>
-        <li><a class="hover:text-black transition-colors">Garantía y devoluciones</a></li>
-        <li><a class="hover:text-black transition-colors">Política de privacidad y datos personales</a></li>
-        <li><a class="hover:text-black transition-colors">Propiedad intelectual</a></li>
-        <li><a class="hover:text-black transition-colors">Contacto</a></li>
+        <li><a (click)="scrollTo('general')" class="hover:text-black transition-colors cursor-pointer">Identificación del proveedor</a></li>
+        <li><a (click)="scrollTo('acceso')" class="hover:text-black transition-colors cursor-pointer">Condiciones de acceso y uso</a></li>
+        <li><a (click)="scrollTo('compra')" class="hover:text-black transition-colors cursor-pointer">Proceso de compra</a></li>
+        <li><a (click)="scrollTo('precios')" class="hover:text-black transition-colors cursor-pointer">Precios e impuestos</a></li>
+        <li><a (click)="scrollTo('pasarela')" class="hover:text-black transition-colors cursor-pointer">Pasarela de pago — Wompi (Bancolombia)</a></li>
+        <li><a (click)="scrollTo('retracto')" class="hover:text-black transition-colors cursor-pointer">Derecho de retracto</a></li>
+        <li><a (click)="scrollTo('garantia')" class="hover:text-black transition-colors cursor-pointer">Garantía y devoluciones</a></li>
+        <li><a (click)="scrollTo('envio')" class="hover:text-black transition-colors cursor-pointer">Despacho y entrega</a></li>
+        <li><a (click)="scrollTo('privacidad')" class="hover:text-black transition-colors cursor-pointer">Política de privacidad y datos personales</a></li>
+        <li><a (click)="scrollTo('propiedad')" class="hover:text-black transition-colors cursor-pointer">Propiedad intelectual</a></li>
+        <li><a (click)="scrollTo('responsabilidad')" class="hover:text-black transition-colors cursor-pointer">Limitación de responsabilidad</a></li>
+        <li><a (click)="scrollTo('ley')" class="hover:text-black transition-colors cursor-pointer">Ley aplicable y solución de controversias</a></li>
+        <li><a (click)="scrollTo('contacto')" class="hover:text-black transition-colors cursor-pointer">Contacto y PQR</a></li>
       </ol>
     </nav>
 
-    <!-- 1. Información general -->
+    <!-- 1. Identificación del proveedor -->
     <section id="general" class="space-y-3">
-      <h2 class="text-xl font-bold border-b border-gray-200 pb-2">1. Información general</h2>
+      <h2 class="text-xl font-bold border-b border-gray-200 pb-2">1. Identificación del proveedor</h2>
       <p class="text-sm text-gray-700 leading-relaxed">
-        RutaSport es una tienda en línea dedicada a la venta de calzado deportivo (tenis). Al acceder y realizar una compra
-        en nuestro sitio web, el usuario acepta en su totalidad los presentes Términos y Condiciones, los cuales se rigen
-        por la legislación colombiana, en particular la <strong>Ley 1480 de 2011</strong> (Estatuto del Consumidor),
-        la <strong>Ley 1581 de 2012</strong> (Habeas Data), el <strong>Decreto 1377 de 2013</strong> y demás normas aplicables.
-      </p>
-      <p class="text-sm text-gray-700 leading-relaxed">
-        Nos reservamos el derecho de actualizar estos términos en cualquier momento. Los cambios serán publicados en esta
-        página con indicación de la fecha de modificación. El uso continuado del sitio implica la aceptación de los
-        términos actualizados.
-      </p>
-    </section>
-
-    <!-- 2. Proceso de compra -->
-    <section id="compra" class="space-y-3">
-      <h2 class="text-xl font-bold border-b border-gray-200 pb-2">2. Proceso de compra</h2>
-      <p class="text-sm text-gray-700 leading-relaxed">
-        Para realizar una compra el usuario debe seleccionar el producto, elegir la talla deseada y proceder al la negociación del envío.
-      </p>
-      <p class="text-sm text-gray-700 leading-relaxed">
-        En cumplimiento del artículo 50 de la Ley 1480 de 2011, el consumidor dispone de <strong>5 días hábiles</strong>
-        contados desde la entrega del bien para ejercer el <strong>derecho de retracto</strong>, siempre que el producto
-        se encuentre en las mismas condiciones en que fue recibido, sin uso y en su empaque original. Si el producto presenta defectos de fabricación o no corresponde con lo solicitado, el consumidor podrá solicitar la devolución o cambio dentro de los términos establecidos en la garantía.
-        Si el consumidor ejerce su derecho de retracto, <strong>deberá pagar los costos de envío asociados a la devolución</strong>, salvo que el producto presente defectos o errores atribuibles a RutaSport.
-      </p>
-      <p class="text-sm text-gray-700 leading-relaxed">
-        RutaSport se compromete a entregar los productos en los plazos indicados al momento de la compra. En caso de
-        presentarse demoras, se notificará al usuario a través del medio de contacto registrado.
-      </p>
-    </section>
-
-    <!-- 3. Precios y formas de pago -->
-    <section id="precios" class="space-y-3">
-      <h2 class="text-xl font-bold border-b border-gray-200 pb-2">3. Precios y formas de pago</h2>
-      <p class="text-sm text-gray-700 leading-relaxed">
-        Todos los precios publicados en RutaSport están expresados en <strong>pesos colombianos (COP)</strong> e incluyen
-        el IVA correspondiente según la normativa tributaria vigente. RutaSport se reserva el derecho de modificar los
-        precios en cualquier momento sin previo aviso, pero el precio aplicable será el vigente al momento en que el
-        usuario confirme su pedido.
-      </p>
-      <p class="text-sm text-gray-700 leading-relaxed">
-        Para cualquier duda sobre precios o métodos de pago disponibles, comuníquese con nosotros al
-        <strong> 3226953551</strong>.
-      </p>
-    </section>
-
-    <!-- 4. Garantía y devoluciones -->
-    <section id="garantia" class="space-y-3">
-      <h2 class="text-xl font-bold border-b border-gray-200 pb-2">4. Garantía y devoluciones</h2>
-      <p class="text-sm text-gray-700 leading-relaxed">
-        De conformidad con el artículo 7 de la Ley 1480 de 2011, todos los productos comercializados por RutaSport
-        cuentan con una <strong>garantía mínima legal de un (1) año</strong> a partir de la fecha de entrega, que cubre
-        defectos de fabricación o fallas en los materiales del calzado.
-      </p>
-      <p class="text-sm text-gray-700 leading-relaxed">
-        La garantía no cubre el desgaste natural por uso, daños causados por mal uso, accidentes, modificaciones no
-        autorizadas ni deterioro por almacenamiento inadecuado.
-      </p>
-      <p class="text-sm text-gray-700 leading-relaxed">
-        Para hacer efectiva la garantía o solicitar una devolución, el consumidor deberá contactarnos al
-        <strong> 3226953551</strong> dentro del plazo establecido, adjuntando evidencia del defecto y la prueba de compra.
-        RutaSport procederá con la reparación, cambio del producto o devolución del dinero según corresponda y de
-        acuerdo con el artículo 11 de la Ley 1480 de 2011.
-      </p>
-    </section>
-
-    <!-- 5. Política de privacidad -->
-    <section id="privacidad" class="space-y-3">
-      <h2 class="text-xl font-bold border-b border-gray-200 pb-2">5. Política de privacidad y datos personales</h2>
-      <p class="text-sm text-gray-700 leading-relaxed">
-        En cumplimiento de la <strong>Ley 1581 de 2012</strong> y el <strong>Decreto 1377 de 2013</strong>, RutaSport
-        informa que los datos personales suministrados por los usuarios (nombre, correo electrónico, dirección, teléfono)
-        serán tratados con las siguientes finalidades:
+        <strong>RutaSport</strong> es una tienda de comercio electrónico dedicada a la venta de calzado deportivo de marcas reconocidas. Al acceder, navegar o realizar cualquier transacción en este sitio web, el usuario acepta en su totalidad los presentes Términos y Condiciones, los cuales se rigen por la legislación colombiana, en particular:
       </p>
       <ul class="list-disc list-inside text-sm text-gray-700 space-y-1 pl-2">
-        <li>Procesar y gestionar los pedidos realizados en la plataforma.</li>
-        <li>Enviar confirmaciones de compra e información sobre el estado de los envíos.</li>
-        <li>Atender solicitudes, quejas, reclamos y garantías.</li>
-        <li>Enviar comunicaciones comerciales sobre nuevos productos y promociones (solo con consentimiento expreso).</li>
+        <li><strong>Ley 1480 de 2011</strong> — Estatuto del Consumidor.</li>
+        <li><strong>Ley 1581 de 2012</strong> — Protección de Datos Personales (Habeas Data).</li>
+        <li><strong>Decreto 1377 de 2013</strong> — Reglamentación de la Ley 1581.</li>
+        <li><strong>Ley 527 de 1999</strong> — Comercio electrónico y firmas digitales.</li>
+        <li><strong>Decreto 2364 de 2012</strong> — Firma electrónica.</li>
+        <li><strong>Circular Externa 029 de 2014 (SFC)</strong> — Seguridad de la información en canales y transacciones electrónicas.</li>
       </ul>
       <p class="text-sm text-gray-700 leading-relaxed">
-        RutaSport no venderá, alquilará ni cederá los datos personales de sus usuarios a terceros sin autorización previa.
-        Los datos serán conservados durante el tiempo necesario para cumplir con las finalidades descritas y las
-        obligaciones legales aplicables.
-      </p>
-      <p class="text-sm text-gray-700 leading-relaxed">
-        El titular de los datos tiene derecho a <strong>conocer, actualizar, rectificar y suprimir</strong> su información
-        personal, así como a revocar la autorización otorgada para su tratamiento, mediante solicitud enviada al
-        <strong> 3226953551</strong> o al correo registrado de la empresa.
+        RutaSport se reserva el derecho de modificar estos términos en cualquier momento. Los cambios serán publicados en esta página con la fecha de actualización. El uso continuado del sitio después de una actualización implica la aceptación de los nuevos términos.
       </p>
     </section>
 
-    <!-- 6. Propiedad intelectual -->
+    <!-- 2. Condiciones de acceso y uso -->
+    <section id="acceso" class="space-y-3">
+      <h2 class="text-xl font-bold border-b border-gray-200 pb-2">2. Condiciones de acceso y uso</h2>
+      <p class="text-sm text-gray-700 leading-relaxed">
+        El uso de este sitio web está permitido únicamente a personas mayores de 18 años o menores que cuenten con la autorización de su representante legal. Al registrarse o realizar una compra, el usuario declara ser mayor de edad o actuar con la debida autorización.
+      </p>
+      <p class="text-sm text-gray-700 leading-relaxed">
+        El usuario se compromete a proporcionar información veraz, completa y actualizada durante el registro y en cada transacción. RutaSport no será responsable por errores derivados de información incorrecta suministrada por el usuario.
+      </p>
+      <p class="text-sm text-gray-700 leading-relaxed">
+        Queda prohibido el uso de este sitio para fines ilícitos, fraudulentos o contrarios a las buenas costumbres. RutaSport se reserva el derecho de suspender o cancelar cuentas de usuarios que infrinjan estas condiciones.
+      </p>
+    </section>
+
+    <!-- 3. Proceso de compra -->
+    <section id="compra" class="space-y-3">
+      <h2 class="text-xl font-bold border-b border-gray-200 pb-2">3. Proceso de compra</h2>
+      <p class="text-sm text-gray-700 leading-relaxed">
+        El proceso de compra en RutaSport se desarrolla de la siguiente manera:
+      </p>
+      <ol class="list-decimal list-inside text-sm text-gray-700 space-y-2 pl-2">
+        <li><strong>Selección del producto:</strong> el usuario elige el artículo, la talla y la cantidad deseada y lo agrega al carrito de compras.</li>
+        <li><strong>Revisión del carrito:</strong> el usuario verifica los productos seleccionados, sus precios y el subtotal antes de continuar.</li>
+        <li><strong>Datos de envío:</strong> se ingresan o confirman los datos de entrega (nombre, dirección, ciudad, departamento y teléfono).</li>
+        <li><strong>Pago:</strong> el usuario elige el método de pago disponible y es redirigido de forma segura a la pasarela Wompi para completar la transacción.</li>
+        <li><strong>Confirmación:</strong> una vez aprobado el pago, RutaSport enviará al correo registrado la confirmación del pedido con el número de referencia.</li>
+      </ol>
+      <p class="text-sm text-gray-700 leading-relaxed">
+        De conformidad con el artículo 46 de la Ley 1480 de 2011, el contrato de compraventa se perfecciona en el momento en que RutaSport envía al consumidor la confirmación de la transacción aprobada. El usuario podrá conservar dicha confirmación como prueba de la operación.
+      </p>
+      <p class="text-sm text-gray-700 leading-relaxed">
+        RutaSport se reserva el derecho de cancelar un pedido si se detectan indicios de fraude, datos incorrectos o falta de disponibilidad de inventario, notificando al usuario e iniciando la devolución del pago en los términos aplicables.
+      </p>
+    </section>
+
+    <!-- 4. Precios e impuestos -->
+    <section id="precios" class="space-y-3">
+      <h2 class="text-xl font-bold border-b border-gray-200 pb-2">4. Precios e impuestos</h2>
+      <p class="text-sm text-gray-700 leading-relaxed">
+        Todos los precios publicados en RutaSport están expresados en <strong>pesos colombianos (COP)</strong> e incluyen el Impuesto al Valor Agregado (IVA) según la normativa tributaria vigente en Colombia. Los costos de envío, cuando apliquen, se informarán por separado antes de confirmar el pedido.
+      </p>
+      <p class="text-sm text-gray-700 leading-relaxed">
+        RutaSport se reserva el derecho de modificar los precios en cualquier momento sin previo aviso. Sin embargo, el precio aplicable a una transacción será siempre el vigente en el momento en que el usuario confirme y pague el pedido.
+      </p>
+      <p class="text-sm text-gray-700 leading-relaxed">
+        En caso de error tipográfico en el precio de un producto, RutaSport informará al usuario antes de procesar el pedido y le dará la opción de confirmar la compra al precio correcto o cancelarla sin ningún costo.
+      </p>
+    </section>
+
+    <!-- 5. Pasarela de pago — Wompi -->
+    <section id="pasarela" class="space-y-4">
+      <h2 class="text-xl font-bold border-b border-gray-200 pb-2">5. Pasarela de pago — Wompi (Bancolombia)</h2>
+
+      <div class="bg-gray-50 rounded-xl p-4 text-sm text-gray-700 space-y-1">
+        <p class="font-semibold text-gray-800">Importante</p>
+        <p>Los pagos realizados en RutaSport son procesados de manera exclusiva por <strong>Wompi S.A.S.</strong>, plataforma tecnológica de pagos en línea propiedad de <strong>Bancolombia S.A.</strong>, entidad vigilada por la Superintendencia Financiera de Colombia (SFC). RutaSport no almacena, procesa ni tiene acceso a los datos financieros del usuario.</p>
+      </div>
+
+      <h3 class="font-semibold text-sm text-gray-800 mt-2">5.1 Métodos de pago aceptados</h3>
+      <ul class="list-disc list-inside text-sm text-gray-700 space-y-1 pl-2">
+        <li><strong>Tarjetas de crédito y débito:</strong> Visa, Mastercard, American Express y Diners Club, nacionales e internacionales.</li>
+        <li><strong>PSE (Pago Seguro en Línea):</strong> transferencia bancaria directa desde más de 40 entidades financieras colombianas, regulado bajo la Circular Externa 029 de 2014 de la SFC.</li>
+        <li><strong>Nequi:</strong> billetera digital vinculada a número celular.</li>
+        <li><strong>Bancolombia QR / A la Mano:</strong> pago mediante código QR desde la app Bancolombia.</li>
+        <li><strong>Efectivo (Efecty / corresponsales):</strong> generación de cupón de pago con vigencia determinada.</li>
+      </ul>
+
+      <h3 class="font-semibold text-sm text-gray-800">5.2 Procesamiento y seguridad</h3>
+      <p class="text-sm text-gray-700 leading-relaxed">
+        Todas las transacciones realizadas a través de Wompi están protegidas con cifrado <strong>TLS/SSL de 256 bits</strong>. Wompi cumple con el estándar internacional <strong>PCI DSS (Payment Card Industry Data Security Standard)</strong>, lo que garantiza que los datos de tarjetas de crédito y débito se traten con los más altos estándares de seguridad.
+      </p>
+      <p class="text-sm text-gray-700 leading-relaxed">
+        Las transacciones con tarjeta pueden estar sujetas a verificación adicional mediante el protocolo <strong>3-D Secure (3DS)</strong>, conforme a los requisitos de las redes de pago internacionales. El usuario podrá ser redirigido a la página de autenticación de su banco emisor para validar la operación.
+      </p>
+
+      <h3 class="font-semibold text-sm text-gray-800">5.3 Aprobación y rechazo de transacciones</h3>
+      <p class="text-sm text-gray-700 leading-relaxed">
+        La aprobación de una transacción depende exclusivamente de la entidad financiera emisora del medio de pago. RutaSport no interviene ni puede modificar las decisiones de aprobación o rechazo. Si una transacción es rechazada, el usuario deberá contactar directamente a su entidad financiera o intentar con otro método de pago.
+      </p>
+      <p class="text-sm text-gray-700 leading-relaxed">
+        En caso de que un pago quede en estado <em>pendiente</em> (frecuente en PSE y pagos en efectivo), el pedido quedará en espera hasta que Wompi reporte la confirmación. Si el pago no se confirma dentro del plazo establecido, el pedido será cancelado automáticamente.
+      </p>
+
+      <h3 class="font-semibold text-sm text-gray-800">5.4 Contracargos y disputas</h3>
+      <p class="text-sm text-gray-700 leading-relaxed">
+        Si un usuario realiza un contracargo (chargeback) ante su entidad bancaria por una transacción legítima, RutaSport se reserva el derecho de suspender la cuenta del usuario, retener el despacho de pedidos pendientes e iniciar las acciones legales correspondientes conforme a la Ley 1480 de 2011 y demás normas aplicables.
+      </p>
+      <p class="text-sm text-gray-700 leading-relaxed">
+        Para disputas genuinas sobre cobros no reconocidos, el usuario debe contactar primero a RutaSport al
+        <strong>3226953551</strong> para resolver el inconveniente de forma directa antes de iniciar un proceso de contracargo.
+      </p>
+
+      <h3 class="font-semibold text-sm text-gray-800">5.5 Términos propios de Wompi</h3>
+      <p class="text-sm text-gray-700 leading-relaxed">
+        Al utilizar la pasarela Wompi, el usuario acepta también los términos y condiciones de dicha plataforma, disponibles en
+        <a href="https://wompi.com/es/co/terminos-y-condiciones" target="_blank" rel="noopener noreferrer"
+           class="underline hover:text-black transition-colors font-medium">wompi.com</a>.
+        RutaSport no es responsable por interrupciones, errores técnicos o cambios en la disponibilidad del servicio de Wompi.
+      </p>
+
+      <h3 class="font-semibold text-sm text-gray-800">5.6 Datos tratados por Wompi</h3>
+      <p class="text-sm text-gray-700 leading-relaxed">
+        Para procesar el pago, Wompi recopila y trata datos como el número de tarjeta (tokenizado), nombre del titular, correo electrónico y monto de la transacción. Este tratamiento es realizado directamente por Wompi bajo su propia política de privacidad y conforme a la Ley 1581 de 2012. RutaSport únicamente recibe la confirmación del estado de la transacción (aprobada, rechazada o pendiente) y el número de referencia, sin acceso a los datos financieros sensibles del usuario.
+      </p>
+    </section>
+
+    <!-- 6. Derecho de retracto -->
+    <section id="retracto" class="space-y-3">
+      <h2 class="text-xl font-bold border-b border-gray-200 pb-2">6. Derecho de retracto</h2>
+      <p class="text-sm text-gray-700 leading-relaxed">
+        En cumplimiento del <strong>artículo 47 de la Ley 1480 de 2011</strong>, el consumidor que haya adquirido un producto a través de canales no tradicionales o a distancia (como este sitio web) tiene derecho a retractarse dentro de los <strong>cinco (5) días hábiles</strong> siguientes a la fecha de entrega del bien.
+      </p>
+      <p class="text-sm text-gray-700 leading-relaxed">
+        Para ejercer el derecho de retracto, el producto debe:
+      </p>
+      <ul class="list-disc list-inside text-sm text-gray-700 space-y-1 pl-2">
+        <li>Encontrarse en las mismas condiciones en que fue entregado.</li>
+        <li>No haber sido usado ni lavado.</li>
+        <li>Conservar su empaque y etiquetas originales intactos.</li>
+        <li>Adjuntar la prueba de compra (factura o confirmación de pedido).</li>
+      </ul>
+      <p class="text-sm text-gray-700 leading-relaxed">
+        Cuando el consumidor ejerza el derecho de retracto, <strong>asumirá los costos de envío de la devolución</strong>, salvo que el motivo sea un defecto de fabricación, error en el producto despachado o incumplimiento por parte de RutaSport, caso en el cual los gastos de devolución correrán por cuenta de RutaSport.
+      </p>
+      <p class="text-sm text-gray-700 leading-relaxed">
+        Una vez recibido el producto y verificado su estado, RutaSport procederá con la devolución del valor pagado dentro de los <strong>treinta (30) días calendario</strong> siguientes, mediante el mismo método de pago utilizado o a través de transferencia bancaria, conforme al artículo 47 de la Ley 1480 de 2011.
+      </p>
+      <p class="text-sm text-gray-700 leading-relaxed">
+        El derecho de retracto no aplica sobre productos que hayan sido especialmente personalizados para el consumidor.
+      </p>
+    </section>
+
+    <!-- 7. Garantía y devoluciones -->
+    <section id="garantia" class="space-y-3">
+      <h2 class="text-xl font-bold border-b border-gray-200 pb-2">7. Garantía y devoluciones</h2>
+      <p class="text-sm text-gray-700 leading-relaxed">
+        De conformidad con el <strong>artículo 7 de la Ley 1480 de 2011</strong>, todos los productos comercializados por RutaSport cuentan con una <strong>garantía mínima legal de un (1) año</strong> a partir de la fecha de entrega, que cubre defectos de fabricación o fallas en los materiales del calzado.
+      </p>
+      <p class="text-sm text-gray-700 leading-relaxed">
+        La garantía no cubre:
+      </p>
+      <ul class="list-disc list-inside text-sm text-gray-700 space-y-1 pl-2">
+        <li>Desgaste natural por uso normal del producto.</li>
+        <li>Daños causados por mal uso, accidentes, modificaciones no autorizadas o mantenimiento inadecuado.</li>
+        <li>Deterioro derivado de almacenamiento en condiciones inapropiadas.</li>
+        <li>Daños estéticos menores que no afecten la funcionalidad del producto.</li>
+      </ul>
+      <p class="text-sm text-gray-700 leading-relaxed">
+        Para hacer efectiva la garantía, el consumidor debe contactarnos al <strong>3226953551</strong> dentro del plazo establecido, describiendo el defecto y adjuntando evidencia fotográfica o en video, junto con la prueba de compra. Conforme al <strong>artículo 11 de la Ley 1480 de 2011</strong>, RutaSport procederá, según corresponda, con la reparación del producto, su cambio por uno equivalente o la devolución del dinero pagado.
+      </p>
+    </section>
+
+    <!-- 8. Despacho y entrega -->
+    <section id="envio" class="space-y-3">
+      <h2 class="text-xl font-bold border-b border-gray-200 pb-2">8. Despacho y entrega</h2>
+      <p class="text-sm text-gray-700 leading-relaxed">
+        Los tiempos de entrega serán informados al usuario al momento de realizar el pedido y dependerán de la ciudad de destino y la disponibilidad del operador logístico. RutaSport realizará el despacho una vez se confirme el pago de la transacción.
+      </p>
+      <p class="text-sm text-gray-700 leading-relaxed">
+        En caso de demoras imputables al operador logístico o a causas de fuerza mayor, RutaSport informará al usuario a través del correo electrónico o número de teléfono registrado. El riesgo de pérdida o daño del producto durante el transporte se transfiere al usuario en el momento de la entrega por parte del transportador.
+      </p>
+      <p class="text-sm text-gray-700 leading-relaxed">
+        Si el producto llega en condiciones visiblemente dañadas, el usuario deberá rechazar el paquete y comunicarse de inmediato con RutaSport para gestionar el reenvío o la devolución.
+      </p>
+    </section>
+
+    <!-- 9. Política de privacidad -->
+    <section id="privacidad" class="space-y-3">
+      <h2 class="text-xl font-bold border-b border-gray-200 pb-2">9. Política de privacidad y datos personales</h2>
+      <p class="text-sm text-gray-700 leading-relaxed">
+        En cumplimiento de la <strong>Ley 1581 de 2012</strong> y el <strong>Decreto 1377 de 2013</strong>, RutaSport informa que actúa como <strong>Responsable del Tratamiento</strong> de los datos personales suministrados por los usuarios al registrarse o realizar compras en la plataforma.
+      </p>
+
+      <h3 class="font-semibold text-sm text-gray-800">9.1 Datos recopilados</h3>
+      <ul class="list-disc list-inside text-sm text-gray-700 space-y-1 pl-2">
+        <li>Nombre completo, correo electrónico, número de teléfono.</li>
+        <li>Dirección de residencia, departamento y ciudad.</li>
+        <li>Historial de pedidos y preferencias de compra.</li>
+        <li>Dirección IP y datos de navegación (mediante cookies técnicas).</li>
+      </ul>
+
+      <h3 class="font-semibold text-sm text-gray-800">9.2 Finalidades del tratamiento</h3>
+      <ul class="list-disc list-inside text-sm text-gray-700 space-y-1 pl-2">
+        <li>Procesar, gestionar y entregar los pedidos realizados en la plataforma.</li>
+        <li>Enviar confirmaciones de compra, actualizaciones de envío y soporte posventa.</li>
+        <li>Atender solicitudes, quejas, reclamos y peticiones (PQRS).</li>
+        <li>Cumplir con obligaciones legales y contables.</li>
+        <li>Enviar comunicaciones comerciales y promocionales (solo con consentimiento previo y expreso del titular).</li>
+        <li>Mejorar la experiencia de usuario y personalizar el contenido de la plataforma.</li>
+      </ul>
+
+      <h3 class="font-semibold text-sm text-gray-800">9.3 Transferencia y transmisión de datos</h3>
+      <p class="text-sm text-gray-700 leading-relaxed">
+        RutaSport podrá compartir datos personales con terceros únicamente en los siguientes casos: (i) operadores logísticos para el despacho de pedidos; (ii) Wompi para el procesamiento de pagos; (iii) proveedores de servicios tecnológicos que actúen como encargados del tratamiento bajo instrucciones de RutaSport; y (iv) autoridades competentes cuando así lo exija la ley. En ningún caso se venderán o cederán datos personales a terceros con fines comerciales propios sin la autorización del titular.
+      </p>
+
+      <h3 class="font-semibold text-sm text-gray-800">9.4 Derechos del titular</h3>
+      <p class="text-sm text-gray-700 leading-relaxed">
+        Conforme al artículo 8 de la Ley 1581 de 2012, el titular de los datos tiene derecho a:
+      </p>
+      <ul class="list-disc list-inside text-sm text-gray-700 space-y-1 pl-2">
+        <li><strong>Conocer</strong> los datos personales que RutaSport trata sobre él.</li>
+        <li><strong>Actualizar y rectificar</strong> la información cuando sea inexacta o incompleta.</li>
+        <li><strong>Suprimir</strong> sus datos cuando no sean necesarios para las finalidades declaradas o cuando haya vencido el plazo legal de conservación.</li>
+        <li><strong>Revocar</strong> la autorización otorgada para el tratamiento de sus datos.</li>
+        <li><strong>Presentar quejas</strong> ante la Superintendencia de Industria y Comercio (SIC) por posibles infracciones.</li>
+      </ul>
+      <p class="text-sm text-gray-700 leading-relaxed">
+        Estas solicitudes podrán realizarse al <strong>3226953551</strong> o al correo de atención al cliente registrado. RutaSport dará respuesta dentro de los plazos establecidos en la ley (10 días hábiles para consultas; 15 días hábiles para reclamos).
+      </p>
+
+      <h3 class="font-semibold text-sm text-gray-800">9.5 Conservación de datos</h3>
+      <p class="text-sm text-gray-700 leading-relaxed">
+        Los datos personales serán conservados durante el tiempo necesario para cumplir con las finalidades descritas y las obligaciones legales y contables aplicables. Una vez cumplidas dichas finalidades, los datos serán eliminados o anonimizados de forma segura.
+      </p>
+    </section>
+
+    <!-- 10. Propiedad intelectual -->
     <section id="propiedad" class="space-y-3">
-      <h2 class="text-xl font-bold border-b border-gray-200 pb-2">6. Propiedad intelectual</h2>
+      <h2 class="text-xl font-bold border-b border-gray-200 pb-2">10. Propiedad intelectual</h2>
       <p class="text-sm text-gray-700 leading-relaxed">
-        Todo el contenido de este sitio web (nombre, logotipo, imágenes, textos, diseños y demás elementos) es propiedad
-        de RutaSport y está protegido por la legislación colombiana sobre derechos de autor y propiedad industrial.
-        Queda prohibida su reproducción, distribución o uso comercial sin autorización escrita previa.
+        Todo el contenido de este sitio web — nombre comercial, logotipo, imágenes, textos, diseños, código fuente y demás elementos — es propiedad de RutaSport y está protegido por la legislación colombiana sobre derechos de autor (<strong>Ley 23 de 1982</strong> y sus modificaciones) y propiedad industrial (<strong>Decisión 486 de la CAN</strong>). Queda prohibida su reproducción, distribución, modificación o uso comercial sin autorización escrita previa de RutaSport.
       </p>
       <p class="text-sm text-gray-700 leading-relaxed">
-        Las marcas de los productos comercializados son propiedad de sus respectivos fabricantes y se utilizan únicamente
-        con fines de identificación comercial.
+        Las marcas comerciales de los productos ofrecidos (Adidas, Oakley y otras) son propiedad exclusiva de sus respectivos titulares y se utilizan únicamente con fines de identificación comercial. RutaSport no reclama ningún derecho de propiedad sobre dichas marcas.
       </p>
     </section>
 
-    <!-- 7. Contacto -->
-    <section id="contacto" class="space-y-3">
-      <h2 class="text-xl font-bold border-b border-gray-200 pb-2">7. Contacto</h2>
+    <!-- 11. Limitación de responsabilidad -->
+    <section id="responsabilidad" class="space-y-3">
+      <h2 class="text-xl font-bold border-b border-gray-200 pb-2">11. Limitación de responsabilidad</h2>
       <p class="text-sm text-gray-700 leading-relaxed">
-        Para cualquier inquietud relacionada con estos Términos y Condiciones, sus compras, garantías o el tratamiento
-        de sus datos personales, comuníquese con nosotros:
+        RutaSport no será responsable por:
+      </p>
+      <ul class="list-disc list-inside text-sm text-gray-700 space-y-1 pl-2">
+        <li>Interrupciones, errores o fallas técnicas del sitio web o de la pasarela de pago Wompi, causadas por circunstancias fuera de su control.</li>
+        <li>Daños derivados del uso indebido de la plataforma por parte del usuario.</li>
+        <li>Pérdida de datos por ataques de terceros o causas de fuerza mayor.</li>
+        <li>Demoras en la entrega imputables al operador logístico o a situaciones de fuerza mayor (emergencias, desastres naturales, cierres viales, huelgas, etc.).</li>
+        <li>Decisiones de aprobación o rechazo de pagos por parte de entidades financieras.</li>
+      </ul>
+      <p class="text-sm text-gray-700 leading-relaxed">
+        En todo caso, la responsabilidad máxima de RutaSport frente al usuario se limitará al valor del pedido efectivamente pagado y no entregado o entregado con defectos, sin perjuicio de los derechos irrenunciables reconocidos por la Ley 1480 de 2011.
+      </p>
+    </section>
+
+    <!-- 12. Ley aplicable -->
+    <section id="ley" class="space-y-3">
+      <h2 class="text-xl font-bold border-b border-gray-200 pb-2">12. Ley aplicable y solución de controversias</h2>
+      <p class="text-sm text-gray-700 leading-relaxed">
+        Los presentes Términos y Condiciones se rigen por las leyes de la República de Colombia. Ante cualquier controversia derivada de la interpretación o ejecución de estos términos, las partes acuerdan intentar resolverla de forma amigable en primera instancia.
+      </p>
+      <p class="text-sm text-gray-700 leading-relaxed">
+        Si no es posible una solución amigable, el consumidor podrá acudir a los mecanismos de protección al consumidor previstos en la Ley 1480 de 2011, incluyendo la presentación de reclamaciones ante la <strong>Superintendencia de Industria y Comercio (SIC)</strong> a través de
+        <a href="https://www.sic.gov.co" target="_blank" rel="noopener noreferrer"
+           class="underline hover:text-black transition-colors">www.sic.gov.co</a>.
+      </p>
+      <p class="text-sm text-gray-700 leading-relaxed">
+        Para asuntos que requieran proceso judicial, las partes se someten a la jurisdicción de los jueces competentes de la República de Colombia.
+      </p>
+    </section>
+
+    <!-- 13. Contacto y PQR -->
+    <section id="contacto" class="space-y-3">
+      <h2 class="text-xl font-bold border-b border-gray-200 pb-2">13. Contacto y PQR</h2>
+      <p class="text-sm text-gray-700 leading-relaxed">
+        Para cualquier petición, queja, reclamo o consulta relacionada con sus compras, garantías, tratamiento de datos o estos Términos y Condiciones, comuníquese con nosotros:
       </p>
       <div class="bg-gray-50 rounded-xl p-4 text-sm text-gray-700 space-y-1">
         <p><strong>RutaSport</strong></p>
-        <p>Teléfono / WhatsApp: <strong> 3226953551</strong></p>
-        <p>Horario de atención: Lunes a Sábado, 8:00 a.m. – 6:00 p.m.</p>
+        <p>WhatsApp / Teléfono: <strong>3226953551</strong></p>
+        <p>Horario de atención: Lunes a Sábado, 8:00 a.m. – 6:00 p.m. (hora Colombia)</p>
       </div>
-      <p class="text-xs text-gray-500">
-        De acuerdo con el artículo 54 de la Ley 1480 de 2011, el consumidor también puede presentar reclamaciones ante
-        la Superintendencia de Industria y Comercio (SIC) a través de
-        <a href="https://www.sic.gov.co" target="_blank" class="underline hover:text-black transition-colors">www.sic.gov.co</a>.
+      <p class="text-xs text-gray-500 mt-2">
+        Conforme al artículo 54 de la Ley 1480 de 2011, el consumidor también puede presentar reclamaciones directamente ante la
+        <strong>Superintendencia de Industria y Comercio (SIC)</strong> en
+        <a href="https://www.sic.gov.co" target="_blank" rel="noopener noreferrer"
+           class="underline hover:text-black transition-colors">www.sic.gov.co</a>.
       </p>
     </section>
 
   </main>
 
-  <!-- Footer simple -->
   <footer class="border-t border-gray-200 mt-12 py-6 text-center text-xs text-gray-400">
-    © 2026 RutaSport. Todos los derechos reservados.
+    © 2026 RutaSport. Todos los derechos reservados. — Última actualización: mayo 2026
   </footer>
 </div>

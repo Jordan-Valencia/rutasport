@@ -147,7 +147,7 @@
               <p class="text-[9px] font-black uppercase tracking-[0.2em] mb-1 text-[#E31C1C]">{{ product.brand }}</p>
             }
             <h3 class="font-bold text-sm mb-1.5 line-clamp-2 leading-snug text-white">{{ product.name }}</h3>
-            <p class="font-black text-sm text-white/60">{{ product.price }}</p>
+            <p class="font-black text-sm text-white/60">{{ product.price | cop }}</p>
           </div>
         }
       </div>

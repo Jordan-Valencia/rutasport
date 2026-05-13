@@ -3,7 +3,7 @@ interface Env { DB: D1Database }
 const cors = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
 
 const QUERY = `
-  SELECT p.id, p.name, p.model, p.price,
+  SELECT p.id, p.name, p.model, CAST(p.price AS INTEGER) AS price,
          b.name AS brand, p.brand_id,
          g.name AS gender, p.gender_id,
          p.image, p.video, p.isBestSeller, p.isNew, p.description, p.sizes, p.createdAt,

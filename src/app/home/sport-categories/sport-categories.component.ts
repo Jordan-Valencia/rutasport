@@ -7,6 +7,7 @@ import { RouterModule } from '@angular/router'
 import { DataService, Sport } from '../../services/data.service'
 import { Product } from '../../models/product'
 import { CartService } from '../../services/cart.service'
+import { CopPipe } from '../../shared/cop.pipe'
 
 interface SportMeta {
   color: string
@@ -42,7 +43,7 @@ const DEFAULT_META: SportMeta = {
 
 @Component({
   selector: 'app-sport-categories',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, CopPipe],
   templateUrl: './sport-categories.component.html',
   styleUrls: ['./sport-categories.component.css'],
 })
@@ -95,7 +96,7 @@ export class SportCategoriesComponent {
     })
 
     this.dataService.getProducts().subscribe(data => {
-      this.allProducts.set(data)
+      this.allProducts.set(data.filter(p => p.sizes && p.sizes.trim() !== ''))
       this.loading.set(false)
       productsLoaded = true
       tryAnimate()

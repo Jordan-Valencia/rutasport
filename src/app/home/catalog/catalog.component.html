@@ -1,6 +1,7 @@
 ﻿<app-header />
 <app-cart-drawer />
 
+
 <!-- ── Filter Panel ──────────────────────────────────────────────── -->
 @if (filterPanelOpen()) {
 
@@ -492,13 +493,20 @@
             [style.backgroundColor]="SPORT_COLORS[firstSport(product)]"></div>
           }
 
-          <!-- Add to cart CTA -->
-          <button (click)="onAddClick(product, $event)" class="cursor-pointer absolute bottom-0 left-0 right-0 py-3 bg-[#E31C1C] text-white
-                       text-[10px] font-black tracking-[0.14em] uppercase
-                       translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out
-                       hover:bg-[#C41515] active:scale-y-95">
-            Agregar al carrito
-          </button>
+          <!-- Add to cart CTA / Agotado -->
+          @if (isOutOfStock(product)) {
+            <div class="absolute bottom-0 left-0 right-0 py-3 bg-white/10 text-white/40
+                         text-[10px] font-black tracking-[0.14em] uppercase text-center select-none">
+              AGOTADO
+            </div>
+          } @else {
+            <button (click)="onAddClick(product, $event)" class="cursor-pointer absolute bottom-0 left-0 right-0 py-3 bg-[#E31C1C] text-white
+                         text-[10px] font-black tracking-[0.14em] uppercase
+                         translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out
+                         hover:bg-[#C41515] active:scale-y-95">
+              Agregar al carrito
+            </button>
+          }
 
           <!-- Size picker overlay -->
           @if (sizePickerProduct()?.id === product.id) {
@@ -507,9 +515,10 @@
             <p class="text-[9px] font-black tracking-[0.2em] text-white">ELIGE TU TALLA</p>
             <div class="flex flex-wrap gap-1.5 justify-center">
               @for (size of getSizes(product); track size) {
-              <button (click)="addToCart(product, size)" class="cursor-pointer px-3 py-1.5 border-2 border-[#E31C1C] text-[#E31C1C] text-xs font-black
+              <button (click)="addToCart(product, size)" class="cursor-pointer relative px-3 py-1.5 border-2 border-[#E31C1C] text-[#E31C1C] text-xs font-black
                                hover:bg-[#E31C1C] hover:text-white transition-colors duration-150 active:scale-[0.95]">
                 {{ size }}
+                
               </button>
               }
             </div>
@@ -528,7 +537,7 @@
           }
           <h3 class="font-bold text-sm text-white truncate leading-snug mb-1">{{ product.name }}</h3>
           <div class="flex items-center justify-between">
-            <p class="font-black text-sm text-white/80">{{ product.price }}</p>
+            <p class="font-black text-sm text-white/80">{{ product.price | cop }}</p>
             @if (firstSport(product) && SPORT_COLORS[firstSport(product)]) {
             <span class="w-2 h-2 rounded-full shrink-0"
               [style.backgroundColor]="SPORT_COLORS[firstSport(product)]"></span>
@@ -542,3 +551,5 @@
     }
   </div>
 </div>
+
+<app-footer />

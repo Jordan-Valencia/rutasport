@@ -1,0 +1,47 @@
+import { Injectable, inject, PLATFORM_ID, signal } from '@angular/core'
+import { isPlatformBrowser } from '@angular/common'
+import { HttpClient, HttpHeaders } from '@angular/common/http'
+import { Router } from '@angular/router'
+import { firstValueFrom } from 'rxjs'
+import { CartService } from './cart.service'
+import { AuthService } from './auth.service'
+
+@Injectable({ providedIn: 'root' })
+export class CheckoutService {
+  private platformId = inject(PLATFORM_ID)
+  private http = inject(HttpClient)
+  private router = inject(Router)
+  private cart = inject(CartService)
+  private auth = inject(AuthService)
+
+  isLoading = signal(false)
+  error = signal<string | null>(null)
+
+  async checkout() {
+    if (!isPlatformBrowser(this.platformId)) return
+    if (this.cart.items().length === 0) return
+
+    if (!this.auth.isAuthenticated()) {
+      this.router.navigate(['/login'])
+      return
+    }
+
+    this.isLoading.set(true)
+    this.error.set(null)
+
+    try {
+      const headers = this.auth.token
+        ? new HttpHeaders({ Authorization: `Bearer ${this.auth.token}` })
+        : undefined
+      const res = await firstValueFrom(
+        this.http.post<{ wompiUrl: string }>('/api/orders', { items: this.cart.items() }, { headers })
+      )
+      if (res?.wompiUrl) {
+        window.location.href = res.wompiUrl
+      }
+    } catch {
+      this.error.set('Error al procesar el pago. Intenta de nuevo.')
+      this.isLoading.set(false)
+    }
+  }
+}

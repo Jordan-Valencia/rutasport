@@ -9,8 +9,11 @@ import { SportsTabComponent }     from './tabs/sports-tab.component'
 import { BrandsTabComponent }     from './tabs/brands-tab.component'
 import { CategoriesTabComponent } from './tabs/categories-tab.component'
 import { ImagesTabComponent }     from './tabs/images-tab.component'
+import { OrdersTabComponent }     from './tabs/orders-tab.component'
+import { UsersTabComponent }      from './tabs/users-tab.component'
+import { AnalyticsTabComponent }  from './tabs/analytics-tab.component'
 
-type AdminTab = 'products' | 'banners' | 'heroes' | 'sports' | 'brands' | 'categories' | 'images'
+type AdminTab = 'products' | 'banners' | 'heroes' | 'sports' | 'brands' | 'categories' | 'images' | 'orders' | 'users' | 'analytics'
 
 @Component({
   selector: 'app-admin',
@@ -19,7 +22,7 @@ type AdminTab = 'products' | 'banners' | 'heroes' | 'sports' | 'brands' | 'categ
     CommonModule, FormsModule,
     ProductsTabComponent, BannersTabComponent, HeroesTabComponent,
     SportsTabComponent, BrandsTabComponent, CategoriesTabComponent,
-    ImagesTabComponent,
+    ImagesTabComponent, OrdersTabComponent, UsersTabComponent, AnalyticsTabComponent,
   ],
   templateUrl: './admin.component.html',
 })
@@ -32,14 +35,17 @@ export class AdminComponent implements OnInit {
   activeTab = signal<AdminTab>('products')
   sidebarOpen = signal(false)
 
-  readonly tabs: { id: AdminTab; label: string; icon: string }[] = [
-    { id: 'products',   label: 'Productos',   icon: '📦' },
-    { id: 'banners',    label: 'Banners',      icon: '🖼️' },
-    { id: 'heroes',     label: 'Portada',      icon: '🎯' },
-    { id: 'sports',     label: 'Deportes',     icon: '⚽' },
-    { id: 'brands',     label: 'Marcas',       icon: '🏷️' },
-    { id: 'categories', label: 'Categorías',   icon: '🗂️' },
-    { id: 'images',     label: 'Imágenes',     icon: '📷' },
+  readonly tabs: { id: AdminTab; label: string; icon: string; section: string }[] = [
+    { id: 'products',   label: 'Productos',   icon: '📦', section: 'Contenido' },
+    { id: 'banners',    label: 'Banners',      icon: '🖼️', section: 'Contenido' },
+    { id: 'heroes',     label: 'Portada',      icon: '🎯', section: 'Contenido' },
+    { id: 'sports',     label: 'Deportes',     icon: '⚽', section: 'Contenido' },
+    { id: 'brands',     label: 'Marcas',       icon: '🏷️', section: 'Contenido' },
+    { id: 'categories', label: 'Categorías',   icon: '🗂️', section: 'Contenido' },
+    { id: 'images',     label: 'Imágenes',     icon: '📷', section: 'Contenido' },
+    { id: 'orders',     label: 'Ventas',       icon: '💳', section: 'Gestión' },
+    { id: 'users',      label: 'Usuarios',     icon: '👥', section: 'Gestión' },
+    { id: 'analytics',  label: 'Tráfico',      icon: '📊', section: 'Gestión' },
   ]
 
   async ngOnInit() {

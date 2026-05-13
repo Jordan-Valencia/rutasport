@@ -1,15 +1,18 @@
 import { Component, inject, signal } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { CartService } from '../../services/cart.service'
+import { CheckoutService } from '../../services/checkout.service'
+import { CopPipe } from '../../shared/cop.pipe'
 
 @Component({
   selector: 'app-cart-drawer',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, CopPipe],
   templateUrl: './cart-drawer.component.html',
 })
 export class CartDrawerComponent {
   protected cart = inject(CartService)
+  protected checkout = inject(CheckoutService)
   protected isClosing = signal(false)
 
   closeWithAnimation() {

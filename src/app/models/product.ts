@@ -2,7 +2,7 @@ export interface Product {
   id?:           number
   name:          string
   model?:        string
-  price:         string
+  price:         number
   brand?:        string
   brand_id?:     number
   // Many-to-many — comma-separated names returned by API
@@ -20,5 +20,7 @@ export interface Product {
   isNew?:        boolean | number
   description?:  string
   sizes?:        string
+  inventory_raw?: string  // "7.5:1,8:2" — stock disponible por talla
+  total_stock?:  number   // suma total de stock (usada en admin)
   createdAt?:    string
 }

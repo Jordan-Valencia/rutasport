@@ -1,0 +1,218 @@
+<div class="auth-bg min-h-screen flex flex-col items-center justify-center px-5 py-14">
+
+  <!-- Logo -->
+  <a routerLink="/" class="anim-logo mb-14 flex flex-col items-center gap-1 select-none">
+    <div class="text-[28px] font-black tracking-tight leading-none">
+      <span class="text-white italic">RUTA</span><span class="text-[#E31C1C] italic">SPORT</span>
+    </div>
+    <div class="text-[8px] font-black tracking-[.45em] text-white/25 uppercase">Performance</div>
+  </a>
+
+  <div class="w-full max-w-[480px]">
+
+    <!-- Eyebrow + title -->
+    <div class="anim-label mb-1">
+      <span class="text-[10px] font-black tracking-[.3em] text-[#E31C1C]/60 uppercase">02 — Registro</span>
+    </div>
+    <h1 class="anim-title text-[3.2rem] font-black text-white tracking-tight leading-[.95] mb-10">
+      Crear<br>cuenta
+    </h1>
+
+    <!-- Error -->
+    @if (error()) {
+      <div [class.error-shake]="shaking()"
+           class="mb-7 flex items-center gap-2.5 text-[#ff5050] text-sm">
+        <div class="w-1 h-5 bg-[#E31C1C] rounded-full shrink-0"></div>
+        {{ error() }}
+      </div>
+    }
+
+    <form (ngSubmit)="submit()" novalidate>
+
+      <!-- Nombre completo -->
+      <div class="anim-f1 fl-group mb-7">
+        <input class="fl-input" type="text" [(ngModel)]="full_name" name="full_name"
+               placeholder=" " autocomplete="name"/>
+        <label class="fl-label">Nombre completo</label>
+        <div class="fl-bar"></div>
+      </div>
+
+      <!-- Email + Teléfono -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
+        <div class="anim-f2 fl-group mb-7">
+          <input class="fl-input" type="email" [(ngModel)]="email" name="email"
+                 placeholder=" " autocomplete="email"/>
+          <label class="fl-label">Correo electrónico</label>
+          <div class="fl-bar"></div>
+        </div>
+        <div class="anim-f3 fl-group mb-7">
+          <input class="fl-input" type="tel" [(ngModel)]="phone" name="phone"
+                 placeholder=" " autocomplete="tel"/>
+          <label class="fl-label">Teléfono</label>
+          <div class="fl-bar"></div>
+        </div>
+      </div>
+
+      <!-- Departamento + Ciudad -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
+
+        <div class="anim-f4 fl-group mb-7">
+          <select class="fl-select" [(ngModel)]="region" name="region"
+                  (ngModelChange)="onRegionChange()" [class.has-value]="region">
+            <option value="" disabled selected></option>
+            @for (dep of departments; track dep) {
+              <option [value]="dep">{{ dep }}</option>
+            }
+          </select>
+          <label class="fl-label">Departamento</label>
+          <div class="fl-bar"></div>
+          <span class="fl-caret">
+            <svg width="11" height="11" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </span>
+        </div>
+
+        <div class="anim-f5 fl-group mb-7">
+          <select class="fl-select" [(ngModel)]="city" name="city"
+                  [disabled]="!region" [class.has-value]="city">
+            <option value="" disabled selected></option>
+            @for (c of cities; track c) {
+              <option [value]="c">{{ c }}</option>
+            }
+          </select>
+          <label class="fl-label">Ciudad</label>
+          <div class="fl-bar"></div>
+          <span class="fl-caret">
+            <svg width="11" height="11" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </span>
+        </div>
+
+      </div>
+
+      <!-- Dirección -->
+      <div class="anim-f6 fl-group mb-7">
+        <input class="fl-input" type="text" [(ngModel)]="address" name="address"
+               placeholder=" " autocomplete="street-address"/>
+        <label class="fl-label">Dirección de residencia</label>
+        <div class="fl-bar"></div>
+      </div>
+
+      <!-- Contraseña + Confirmar -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
+        <div class="anim-f7 fl-group mb-7">
+          <input class="fl-input" [type]="showPassword() ? 'text' : 'password'"
+                 [(ngModel)]="password" name="password"
+                 placeholder=" " autocomplete="new-password"/>
+          <label class="fl-label">Contraseña</label>
+          <div class="fl-bar"></div>
+          <button type="button" class="eye-btn" (click)="showPassword.set(!showPassword())">
+            @if (showPassword()) {
+              <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18"/>
+              </svg>
+            } @else {
+              <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+              </svg>
+            }
+          </button>
+        </div>
+        <div class="anim-f8 fl-group mb-7">
+          <input class="fl-input" [type]="showConfirm() ? 'text' : 'password'"
+                 [(ngModel)]="confirm_password" name="confirm_password"
+                 placeholder=" " autocomplete="new-password"/>
+          <label class="fl-label">Confirmar contraseña</label>
+          <div class="fl-bar"></div>
+          <button type="button" class="eye-btn" (click)="showConfirm.set(!showConfirm())">
+            @if (showConfirm()) {
+              <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18"/>
+              </svg>
+            } @else {
+              <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+              </svg>
+            }
+          </button>
+        </div>
+      </div>
+
+      <!-- Términos y condiciones -->
+      <div class="anim-f9 mb-7">
+        <label class="flex items-start gap-3 cursor-pointer group">
+          <div class="relative mt-0.5 shrink-0">
+            <input type="checkbox" [(ngModel)]="acceptedTerms" name="acceptedTerms"
+                   class="sr-only peer"/>
+            <div class="w-4.5 h-4.5 border-2 border-white/20 rounded-sm transition-all duration-150
+                        peer-checked:border-[#E31C1C] peer-checked:bg-[#E31C1C]
+                        group-hover:border-white/40 flex items-center justify-center">
+              @if (acceptedTerms) {
+                <svg class="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/>
+                </svg>
+              }
+            </div>
+          </div>
+          <span class="text-xs text-white/45 leading-relaxed">
+            He leído y acepto los
+            <a routerLink="/terminos" target="_blank"
+               class="text-white/80 underline underline-offset-2 hover:text-[#E31C1C] transition-colors font-semibold"
+               (click)="$event.stopPropagation()">
+              Términos y Condiciones
+            </a>
+            y la
+            <a routerLink="/terminos" fragment="privacidad" target="_blank"
+               class="text-white/80 underline underline-offset-2 hover:text-[#E31C1C] transition-colors font-semibold"
+               (click)="$event.stopPropagation()">
+              Política de Privacidad
+            </a>
+            de RutaSport, incluyendo el tratamiento de mis datos personales conforme a la Ley 1581 de 2012.
+          </span>
+        </label>
+      </div>
+
+      <!-- CTA -->
+      <div class="anim-cta mt-2">
+        <button type="submit" class="cta-btn" [disabled]="loading()">
+          @if (loading()) {
+            <span class="flex items-center justify-center gap-3">
+              <svg class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+              </svg>
+              Creando cuenta
+            </span>
+          } @else {
+            Crear cuenta
+          }
+        </button>
+      </div>
+
+    </form>
+
+    <!-- Footer links -->
+    <div class="anim-footer mt-9 flex flex-col items-center gap-4">
+      <div class="auth-divider w-full"></div>
+      <p class="text-white/30 text-sm">
+        ¿Ya tienes cuenta?
+        <a routerLink="/login"
+           class="text-white font-black hover:text-[#E31C1C] transition-colors ml-1.5">
+          Iniciar sesión →
+        </a>
+      </p>
+      <a routerLink="/" class="text-white/18 hover:text-white/45 text-xs transition-colors tracking-wider">
+        ← Volver a la tienda
+      </a>
+    </div>
+
+  </div>
+</div>

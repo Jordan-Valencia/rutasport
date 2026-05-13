@@ -97,6 +97,9 @@
         <p class="px-3 mb-2.5 text-[10px] font-bold text-slate-600 uppercase tracking-[0.12em]">Contenido</p>
 
         @for (tab of tabs; track tab.id) {
+          @if (tab.id === 'orders') {
+            <p class="px-3 mt-4 mb-2.5 text-[10px] font-bold text-slate-600 uppercase tracking-[0.12em]">Gestión</p>
+          }
           <button
             (click)="setTab(tab.id)"
             class="rs-nav-item cursor-pointer w-full flex items-center gap-2.5 px-3 py-[9px] rounded-xl text-[13px] font-medium transition-all duration-200 group"
@@ -167,6 +170,9 @@
           @case ('brands')     { <app-brands-tab />     }
           @case ('categories') { <app-categories-tab /> }
           @case ('images')     { <app-images-tab />     }
+          @case ('orders')     { <app-orders-tab />     }
+          @case ('users')      { <app-users-tab />      }
+          @case ('analytics')  { <app-analytics-tab />  }
         }
       </main>
     </div>

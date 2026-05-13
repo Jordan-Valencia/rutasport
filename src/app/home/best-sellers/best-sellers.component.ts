@@ -4,10 +4,11 @@ import { RouterModule, Router } from '@angular/router'
 import { DataService } from '../../services/data.service'
 import { CartService } from '../../services/cart.service'
 import { Product } from '../../models/product'
+import { CopPipe } from '../../shared/cop.pipe'
 
 @Component({
   selector: 'app-best-sellers',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, CopPipe],
   templateUrl: './best-sellers.component.html',
   styleUrls: ['./best-sellers.component.css'],
 })
@@ -28,7 +29,7 @@ export class BestSellersComponent {
 
   constructor() {
     this.dataService.getProducts({ bestSeller: true }).subscribe(data => {
-      this.products.set(data)
+      this.products.set(data.filter(p => p.sizes && p.sizes.trim() !== ''))
       this.loading.set(false)
     })
 

@@ -4,10 +4,11 @@ import { RouterModule, Router } from '@angular/router'
 import { DataService } from '../../services/data.service'
 import { CartService } from '../../services/cart.service'
 import { Product } from '../../models/product'
+import { CopPipe } from '../../shared/cop.pipe'
 
 @Component({
   selector: 'app-new-releases',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, CopPipe],
   templateUrl: './new-releases.component.html',
   styleUrls: ['./new-releases.component.css'],
 })
@@ -28,7 +29,7 @@ export class NewReleasesComponent {
 
   constructor() {
     this.dataService.getProducts({ isNew: true }).subscribe(data => {
-      this.products.set(data.filter(p => p.isNew))
+      this.products.set(data.filter(p => p.isNew && p.sizes && p.sizes.trim() !== ''))
       this.loading.set(false)
     })
 

@@ -24,7 +24,9 @@ const PRODUCT_SELECT = `
      FROM product_sports ps2 WHERE ps2.product_id = p.id) AS sport_ids,
     (SELECT GROUP_CONCAT(url, ',')
      FROM (SELECT url FROM product_images WHERE product_id = p.id ORDER BY sort_order ASC)
-    ) AS gallery
+    ) AS gallery,
+    (SELECT COALESCE(SUM(pi.stock), 0) FROM product_inventory pi WHERE pi.product_id = p.id) AS total_stock,
+    (SELECT GROUP_CONCAT(pi2.size || ':' || pi2.stock, ',') FROM product_inventory pi2 WHERE pi2.product_id = p.id) AS inventory_raw
   FROM products p
   LEFT JOIN brands  b ON b.id = p.brand_id
   LEFT JOIN genders g ON g.id = p.gender_id
@@ -44,14 +46,17 @@ export const onRequestPost: PagesFunction<Env> = async ({ env, request }) => {
   if (request.headers.get('x-admin-key') !== ADMIN_KEY) return unauthorized()
   try {
     const b = await request.json() as any
-    if (!b.name?.trim() || !b.price?.trim()) return json({ error: 'name y price son requeridos' }, 400)
+    const price = Number(b.price)
+    if (!b.name?.trim() || !Number.isFinite(price) || price <= 0) {
+      return json({ error: 'name y price (número entero positivo) son requeridos' }, 400)
+    }
 
     const ins = await env.DB.prepare(
       `INSERT INTO products (name, model, price, brand_id, gender_id,
                              image, video, isBestSeller, isNew, description, sizes)
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
     ).bind(
-      b.name.trim(), b.model?.trim() || null, b.price.trim(),
+      b.name.trim(), b.model?.trim() || null, Math.round(price),
       b.brand_id || null, b.gender_id || null,
       b.image || '', b.video || '',
       b.isBestSeller ? 1 : 0, b.isNew ? 1 : 0,
@@ -84,6 +89,14 @@ export const onRequestPost: PagesFunction<Env> = async ({ env, request }) => {
           'INSERT INTO product_images (product_id, url, sort_order) VALUES (?, ?, ?)'
         ).bind(productId, gallery[i], i).run()
       }
+    }
+
+    // Sync inventory: insert 1 unit per size (default)
+    const sizes: string[] = (b.sizes || '').split(',').map((s: string) => s.trim()).filter(Boolean)
+    for (const size of sizes) {
+      await env.DB.prepare(
+        'INSERT OR IGNORE INTO product_inventory (product_id, size, stock) VALUES (?, ?, 1)'
+      ).bind(productId, size).run()
     }
 
     return json({ id: productId }, 201)

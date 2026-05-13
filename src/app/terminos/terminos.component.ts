@@ -19,4 +19,8 @@ export class TerminosComponent implements OnInit {
       }
     })
   }
+
+  scrollTo(id: string) {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+  }
 }

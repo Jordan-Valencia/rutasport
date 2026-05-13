@@ -127,7 +127,7 @@
         <!-- Price + badges -->
         <div class="flex items-center flex-wrap gap-3 mb-7">
           <span class="text-[26px] font-black text-white tracking-tight leading-none">
-            {{ product()!.price }}
+            {{ product()!.price | cop }}
           </span>
 
           @if (product()!.isBestSeller) {
@@ -162,7 +162,7 @@
               @for (size of sizes(); track size) {
                 <button
                   (click)="selectedSize.set(size === selectedSize() ? '' : size)"
-                  class="h-10 px-3.5 min-w-[48px] text-[13px] font-bold border transition-all duration-150 active:scale-[0.97]"
+                  class="relative h-10 px-3.5 min-w-[48px] text-[13px] font-bold border transition-all duration-150 active:scale-[0.97] cursor-pointer"
                   [class.border-[#E31C1C]]="selectedSize() === size"
                   [class.bg-[#E31C1C]]="selectedSize() === size"
                   [class.text-white]="selectedSize() === size"
@@ -170,6 +170,7 @@
                   [class.text-white/55]="selectedSize() !== size"
                 >
                   {{ size }}
+                  
                 </button>
               }
             </div>
@@ -180,7 +181,7 @@
         <div class="mb-7">
           <button
             (click)="addToCart()"
-            class="w-full h-[52px] flex items-center justify-center gap-2.5 text-[11px] font-black tracking-[0.18em] uppercase transition-all duration-200 active:scale-[0.99]"
+            class="w-full h-[52px] flex items-center justify-center gap-2.5 text-[11px] font-black tracking-[0.18em] uppercase transition-all duration-200 active:scale-[0.99] cursor-pointer"
             [class.bg-emerald-700]="justAdded()"
             [class.bg-white/[0.07]]="sizes().length > 0 && !selectedSize() && !justAdded()"
             [class.text-white/20]="sizes().length > 0 && !selectedSize() && !justAdded()"
@@ -315,7 +316,7 @@
   >
     <!-- Close -->
     <button
-      class="lightbox-close absolute top-4 right-4 z-20 w-10 h-10 flex items-center justify-center text-white/40 hover:text-white bg-white/5 hover:bg-white/12 rounded-full transition-all duration-200"
+      class="lightbox-close absolute top-4 right-4 z-20 w-10 h-10 flex items-center justify-center text-white/40 hover:text-white bg-white/5 hover:bg-white/12 rounded-full transition-all duration-200 cursor-pointer"
       (click)="closeLightbox()"
     >
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -349,7 +350,7 @@
     <!-- Arrows -->
     @if (images().length > 1) {
       <button
-        class="lightbox-arrow absolute left-4 top-1/2 -translate-y-1/2 z-20 w-11 h-11 flex items-center justify-center text-white/35 hover:text-white bg-black/40 hover:bg-black/65 rounded-full transition-all duration-200"
+        class="lightbox-arrow absolute left-4 top-1/2 -translate-y-1/2 z-20 w-11 h-11 flex items-center justify-center text-white/35 hover:text-white bg-black/40 hover:bg-black/65 rounded-full transition-all duration-200 cursor-pointer"
         (click)="prevImage($event)"
       >
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -378,7 +379,7 @@
       <div class="absolute bottom-5 left-1/2 -translate-x-1/2 z-20 flex gap-1.5">
         @for (img of images(); track $index) {
           <button
-            class="w-10 h-9 overflow-hidden border transition-all duration-200 bg-white/5"
+            class="w-10 h-9 overflow-hidden border transition-all duration-200 bg-white/5 cursor-pointer"
             [class.border-white/65]="activeIndex() === $index"
             [class.border-white/12]="activeIndex() !== $index"
             [class.opacity-100]="activeIndex() === $index"

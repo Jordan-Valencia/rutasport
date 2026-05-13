@@ -2,6 +2,7 @@ import { Component, signal, inject, PLATFORM_ID, OnInit, OnDestroy } from '@angu
 import { CommonModule, isPlatformBrowser } from '@angular/common'
 import { RouterModule, Router } from '@angular/router'
 import { CartService } from '../../services/cart.service'
+import { AuthService } from '../../services/auth.service'
 
 const SECTIONS = ['mujer', 'hombre', 'novedades', 'deporte']
 
@@ -22,6 +23,7 @@ const BANNER_PHRASES = [
 export class HeaderComponent implements OnInit, OnDestroy {
   protected readonly mobileMenuOpen = signal(false)
   protected readonly cart = inject(CartService)
+  protected readonly auth = inject(AuthService)
   private readonly router = inject(Router)
   private readonly platformId = inject(PLATFORM_ID)
 

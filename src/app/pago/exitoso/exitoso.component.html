@@ -1,0 +1,47 @@
+<div class="min-h-screen bg-[#0d0d0d] flex items-center justify-center px-4 py-16">
+  <div class="max-w-md w-full text-center space-y-8">
+
+    <!-- Icono éxito -->
+    <div class="flex justify-center">
+      <div class="w-24 h-24 rounded-full bg-green-500/15 flex items-center justify-center ring-1 ring-green-500/30">
+        <svg class="w-12 h-12 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M5 13l4 4L19 7"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Mensaje -->
+    <div class="space-y-3">
+      <h1 class="text-3xl font-black text-white tracking-tight">¡Pago recibido!</h1>
+      <p class="text-white/50 leading-relaxed">
+        Tu pedido está siendo procesado. En breve recibirás la confirmación.
+      </p>
+    </div>
+
+    <!-- ID de transacción -->
+    @if (transactionId()) {
+      <div class="bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-left">
+        <p class="text-[11px] text-white/30 font-semibold uppercase tracking-widest mb-1">
+          ID de transacción
+        </p>
+        <p class="font-mono text-sm text-white/60 break-all">{{ transactionId() }}</p>
+      </div>
+    }
+
+    <!-- Wompi badge -->
+    <div class="flex items-center justify-center gap-2 text-white/20 text-xs">
+      <span>Pago procesado por</span>
+      <span class="font-bold text-white/30">Wompi · Bancolombia</span>
+    </div>
+
+    <!-- CTA -->
+    <div class="flex flex-col gap-3 pt-2">
+      <a
+        routerLink="/"
+        class="w-full py-4 bg-[#E31C1C] hover:bg-[#C41515] text-white font-black tracking-widest text-sm transition-all active:scale-[0.98] rounded-2xl flex items-center justify-center">
+        SEGUIR COMPRANDO
+      </a>
+    </div>
+
+  </div>
+</div>

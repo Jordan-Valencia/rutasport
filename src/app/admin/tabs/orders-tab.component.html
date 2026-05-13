@@ -1,0 +1,184 @@
+<div class="space-y-5">
+
+  <!-- Stats -->
+  <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+    <div class="bg-white rounded-2xl border border-slate-100 p-4">
+      <p class="text-xs text-slate-400 mb-1">Total órdenes</p>
+      <p class="text-2xl font-bold text-slate-800">{{ items().length }}</p>
+    </div>
+    <div class="bg-white rounded-2xl border border-slate-100 p-4">
+      <p class="text-xs text-slate-400 mb-1">Aprobadas</p>
+      <p class="text-2xl font-bold text-emerald-600">{{ approvedCount() }}</p>
+    </div>
+    <div class="bg-white rounded-2xl border border-slate-100 p-4">
+      <p class="text-xs text-slate-400 mb-1">Pendientes</p>
+      <p class="text-2xl font-bold text-yellow-500">{{ pendingCount() }}</p>
+    </div>
+    <div class="bg-white rounded-2xl border border-slate-100 p-4">
+      <p class="text-xs text-slate-400 mb-1">Ingresos</p>
+      <p class="text-xl font-bold text-slate-800">{{ formatCOP(totalRevenue()) }}</p>
+    </div>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="flex flex-col sm:flex-row gap-3">
+    <input [ngModel]="searchQuery()" (ngModelChange)="searchQuery.set($event)"
+      placeholder="Buscar por referencia, email o nombre…"
+      class="flex-1 px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/30"/>
+    <div class="flex gap-2">
+      @for (s of ['ALL','PENDING','APPROVED','DECLINED']; track s) {
+        <button (click)="filterStatus.set(s)"
+          class="px-3 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer"
+          [class]="filterStatus() === s
+            ? 'bg-blue-600 text-white shadow-md'
+            : 'bg-white border border-slate-200 text-slate-500 hover:border-blue-300'">
+          {{ s === 'ALL' ? 'Todas' : s === 'PENDING' ? 'Pendiente' : s === 'APPROVED' ? 'Aprobada' : 'Rechazada' }}
+        </button>
+      }
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="flex items-center justify-center py-20 text-slate-400 text-sm gap-2">
+      <div class="w-4 h-4 border-2 border-slate-200 border-t-blue-500 rounded-full animate-spin"></div>
+      Cargando órdenes…
+    </div>
+  }
+
+  @if (apiError()) {
+    <p class="text-red-500 text-sm bg-red-50 px-4 py-3 rounded-xl">{{ apiError() }}</p>
+  }
+
+  <!-- Orders list -->
+  @if (!loading()) {
+    <div class="space-y-2">
+      @for (order of filtered(); track order.id) {
+        <div class="bg-white rounded-2xl border border-slate-100 overflow-hidden">
+
+          <!-- Row header -->
+          <button (click)="toggleRow(order)"
+            class="w-full flex flex-wrap items-center gap-x-6 gap-y-1 px-5 py-3.5 hover:bg-slate-50 transition-colors cursor-pointer text-left">
+
+            <span class="font-mono text-xs font-bold text-slate-700 shrink-0">{{ order.reference }}</span>
+            <span class="text-xs text-slate-400 shrink-0">{{ order.createdAt | date:'dd/MM/yyyy HH:mm' }}</span>
+
+            <span class="text-sm font-semibold text-slate-800">{{ formatCOP(order.total_in_cents) }}</span>
+
+            @if (order.user_email) {
+              <span class="text-xs text-slate-500 truncate max-w-[180px]">{{ order.user_name || order.user_email }}</span>
+            } @else {
+              <span class="text-xs text-slate-300 italic">Sin cuenta</span>
+            }
+
+            <div class="ml-auto flex items-center gap-2 shrink-0">
+              <!-- Payment status -->
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider"
+                [class]="order.status === 'APPROVED'  ? 'bg-emerald-100 text-emerald-700' :
+                         order.status === 'PENDING'   ? 'bg-yellow-100 text-yellow-700'  :
+                         order.status === 'DECLINED'  ? 'bg-red-100 text-red-600'        :
+                                                        'bg-slate-100 text-slate-500'">
+                {{ paymentLabel[order.status] || order.status }}
+              </span>
+              <!-- Shipping status -->
+              <span class="hidden sm:inline px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider"
+                [class]="order.shipping_status === 'DELIVERED'  ? 'bg-emerald-100 text-emerald-700' :
+                         order.shipping_status === 'SHIPPED'    ? 'bg-blue-100 text-blue-700'       :
+                                                                  'bg-slate-100 text-slate-400'">
+                {{ shippingLabel[order.shipping_status] || order.shipping_status }}
+              </span>
+              <svg class="w-4 h-4 text-slate-300 transition-transform duration-200"
+                   [class.rotate-180]="order.expanded"
+                   fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+              </svg>
+            </div>
+          </button>
+
+          <!-- Expanded detail -->
+          @if (order.expanded) {
+            <div class="border-t border-slate-100 px-5 pb-5 pt-4 space-y-5">
+
+              <div class="grid sm:grid-cols-2 gap-5">
+
+                <!-- Customer info -->
+                @if (order.user_email) {
+                  <div class="space-y-1">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Cliente</p>
+                    <p class="text-sm text-slate-700">{{ order.user_name || '—' }}</p>
+                    <p class="text-sm text-slate-500">{{ order.user_email }}</p>
+                    @if (order.user_phone)   { <p class="text-sm text-slate-500">{{ order.user_phone }}</p> }
+                    @if (order.user_address) { <p class="text-xs text-slate-400">{{ order.user_address }}</p> }
+                  </div>
+                }
+
+                <!-- Shipping edit -->
+                <div>
+                  <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Envío</p>
+                  @if (editingId() === order.id) {
+                    <div class="space-y-2">
+                      <select [(ngModel)]="editShipping"
+                        class="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/30">
+                        @for (opt of shippingOpts; track opt) {
+                          <option [value]="opt">{{ shippingLabel[opt] }}</option>
+                        }
+                      </select>
+                      <input [(ngModel)]="editTracking" placeholder="Número de guía (opcional)"
+                        class="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/30"/>
+                      <textarea [(ngModel)]="editNotes" placeholder="Notas de envío (opcional)" rows="2"
+                        class="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-500/30"></textarea>
+                      <div class="flex gap-2">
+                        <button (click)="saveEdit(order)" [disabled]="saving()"
+                          class="cursor-pointer px-4 py-2 bg-blue-600 text-white text-xs font-semibold rounded-xl hover:bg-blue-700 disabled:opacity-50 transition-colors">
+                          {{ saving() ? 'Guardando…' : 'Guardar' }}
+                        </button>
+                        <button (click)="cancelEdit()"
+                          class="cursor-pointer px-4 py-2 bg-slate-100 text-slate-600 text-xs font-semibold rounded-xl hover:bg-slate-200 transition-colors">
+                          Cancelar
+                        </button>
+                      </div>
+                    </div>
+                  } @else {
+                    <div class="space-y-1 text-sm text-slate-600">
+                      <p>{{ shippingLabel[order.shipping_status] || order.shipping_status }}</p>
+                      @if (order.tracking_number) { <p class="font-mono text-xs">Guía: {{ order.tracking_number }}</p> }
+                      @if (order.shipping_notes)  { <p class="text-xs text-slate-400">{{ order.shipping_notes }}</p> }
+                    </div>
+                    <button (click)="startEdit(order)"
+                      class="cursor-pointer mt-2 px-3 py-1.5 text-xs font-semibold bg-slate-100 text-slate-600 rounded-xl hover:bg-slate-200 transition-colors">
+                      Editar envío
+                    </button>
+                  }
+                </div>
+              </div>
+
+              <!-- Items -->
+              <div>
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Productos</p>
+                <div class="divide-y divide-slate-100">
+                  @for (item of order.items; track item.id) {
+                    <div class="flex items-center justify-between py-2">
+                      <div>
+                        <p class="text-sm font-medium text-slate-700">{{ item.name }}</p>
+                        <p class="text-xs text-slate-400">
+                          @if (item.brand) { {{ item.brand }} · }
+                          @if (item.size)  { T. {{ item.size }} · }
+                          Cant. {{ item.quantity }}
+                        </p>
+                      </div>
+                      <span class="text-sm font-semibold text-slate-600">{{ item.price | cop }}</span>
+                    </div>
+                  }
+                </div>
+              </div>
+
+            </div>
+          }
+        </div>
+      }
+
+      @if (!loading() && filtered().length === 0) {
+        <div class="text-center py-16 text-slate-400 text-sm">No hay órdenes que coincidan</div>
+      }
+    </div>
+  }
+</div>

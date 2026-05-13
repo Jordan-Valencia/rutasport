@@ -70,12 +70,27 @@
 
       <!-- Actions -->
       <div class="flex items-center gap-4">
-<!-- Search -->
+        <!-- Search -->
         <a id="search-link" [routerLink]="['/catalogo']" class="hidden lg:flex text-white/60 hover:text-white transition-colors cursor-pointer" title="Buscar">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
           </svg>
         </a>
+
+        <!-- User: authenticated -->
+        @if (auth.isAuthenticated()) {
+          <a [routerLink]="['/perfil']" class="hidden lg:flex items-center gap-2 text-white/70 hover:text-white transition-colors cursor-pointer" title="Mi perfil">
+            <div class="w-7 h-7 rounded-full bg-[#E31C1C] flex items-center justify-center text-white text-xs font-black">
+              {{ auth.user()?.full_name ? auth.user()!.full_name![0].toUpperCase() : auth.user()!.email[0].toUpperCase() }}
+            </div>
+          </a>
+        } @else {
+          <a [routerLink]="['/login']" class="hidden lg:flex items-center gap-1.5 text-white/60 hover:text-white transition-colors cursor-pointer text-sm font-bold tracking-wide" title="Iniciar sesión">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+            </svg>
+          </a>
+        }
 
         <!-- Cart -->
         <button (click)="cart.toggle()" class="relative cursor-pointer text-white/80 hover:text-white transition-colors" title="Carrito">
@@ -111,6 +126,16 @@
           <a href="#" (click)="scrollTo('deporte', $event)"   class="text-lg font-bold text-white/80 hover:text-white transition-colors">DEPORTE</a>
           <a href="#" (click)="scrollTo('novedades', $event)" class="text-lg font-bold text-white/80 hover:text-white transition-colors">NOVEDADES</a>
           <a [routerLink]="['/catalogo']" (click)="toggleMobileMenu()" class="text-lg font-bold text-[#E31C1C]">CATÁLOGO</a>
+          @if (auth.isAuthenticated()) {
+            <a [routerLink]="['/perfil']" (click)="toggleMobileMenu()" class="flex items-center gap-2 text-lg font-bold text-white/80 hover:text-white transition-colors">
+              <div class="w-6 h-6 rounded-full bg-[#E31C1C] flex items-center justify-center text-white text-xs font-black">
+                {{ auth.user()?.full_name ? auth.user()!.full_name![0].toUpperCase() : auth.user()!.email[0].toUpperCase() }}
+              </div>
+              MI PERFIL
+            </a>
+          } @else {
+            <a [routerLink]="['/login']" (click)="toggleMobileMenu()" class="text-lg font-bold text-white/80 hover:text-white transition-colors">INICIAR SESIÓN</a>
+          }
         </div>
       </nav>
     }

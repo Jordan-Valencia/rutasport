@@ -9,14 +9,17 @@ export const onRequestPut: PagesFunction<Env> = async ({ env, request, params })
   if (request.headers.get('x-admin-key') !== ADMIN_KEY) return unauthorized()
   try {
     const b = await request.json() as any
-    if (!b.name?.trim() || !b.price?.trim()) return json({ error: 'name y price son requeridos' }, 400)
+    const price = Number(b.price)
+    if (!b.name?.trim() || !Number.isFinite(price) || price <= 0) {
+      return json({ error: 'name y price (número entero positivo) son requeridos' }, 400)
+    }
 
     const result = await env.DB.prepare(
       `UPDATE products SET name=?, model=?, price=?, brand_id=?, gender_id=?,
                            image=?, video=?, isBestSeller=?, isNew=?, description=?, sizes=?
        WHERE id=?`
     ).bind(
-      b.name.trim(), b.model?.trim() || null, b.price.trim(),
+      b.name.trim(), b.model?.trim() || null, Math.round(price),
       b.brand_id || null, b.gender_id || null,
       b.image || '', b.video || '',
       b.isBestSeller ? 1 : 0, b.isNew ? 1 : 0,
@@ -52,6 +55,29 @@ export const onRequestPut: PagesFunction<Env> = async ({ env, request, params })
         await env.DB.prepare(
           'INSERT INTO product_images (product_id, url, sort_order) VALUES (?, ?, ?)'
         ).bind(params.id, gallery[i], i).run()
+      }
+    }
+
+    // Sync inventory: add new sizes (stock=1), remove sizes no longer in product
+    const newSizes: string[] = (b.sizes || '').split(',').map((s: string) => s.trim()).filter(Boolean)
+    const existingInv = await env.DB
+      .prepare('SELECT size FROM product_inventory WHERE product_id = ?')
+      .bind(params.id)
+      .all<{ size: string }>()
+    const existingSizes = existingInv.results.map(r => r.size)
+
+    for (const size of newSizes) {
+      if (!existingSizes.includes(size)) {
+        await env.DB.prepare(
+          'INSERT OR IGNORE INTO product_inventory (product_id, size, stock) VALUES (?, ?, 1)'
+        ).bind(params.id, size).run()
+      }
+    }
+    for (const size of existingSizes) {
+      if (!newSizes.includes(size)) {
+        await env.DB.prepare(
+          'DELETE FROM product_inventory WHERE product_id = ? AND size = ?'
+        ).bind(params.id, size).run()
       }
     }
 

@@ -2,11 +2,12 @@ import { Component, OnInit, signal, computed, inject, PLATFORM_ID } from '@angul
 import { CommonModule, isPlatformBrowser } from '@angular/common'
 import { FormsModule } from '@angular/forms'
 import { AdminService } from '../admin.service'
+import { CopPipe } from '../../shared/cop.pipe'
 
 @Component({
   selector: 'app-products-tab',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, CopPipe],
   templateUrl: './products-tab.component.html',
 })
 export class ProductsTabComponent implements OnInit {
@@ -34,6 +35,7 @@ export class ProductsTabComponent implements OnInit {
 
   urlMainInput = ''
   urlExtraInput = ''
+  priceDisplay = ''
 
   showModal = signal(false)
   modalMode = signal<'add' | 'edit'>('add')
@@ -47,6 +49,8 @@ export class ProductsTabComponent implements OnInit {
   imagesArray: string[] = []
   videoUploading = signal(false)
   videoUrlInput = ''
+  inventoryMap: Partial<Record<string, number>> = {}  // size → stock
+  inventorySaving = signal(false)
 
   async ngOnInit() {
     await this.load()
@@ -143,7 +147,7 @@ export class ProductsTabComponent implements OnInit {
     this.formData = {
       name: '',
       model: '',
-      price: '',
+      price: null,
       image: '',
       video: '',
       brand_id: null,
@@ -157,12 +161,14 @@ export class ProductsTabComponent implements OnInit {
     this.categoryIdsArray = []
     this.sportIdsArray = []
     this.imagesArray = []
+    this.inventoryMap = {}
 
     this.formErrors = {}
     this.apiError.set('')
     this.urlMainInput = ''
     this.urlExtraInput = ''
     this.videoUrlInput = ''
+    this.priceDisplay = ''
 
     this.showModal.set(true)
     this.animateModal()
@@ -194,14 +200,36 @@ export class ProductsTabComponent implements OnInit {
       ? item.gallery.split(',').map((url: string) => url.trim()).filter(Boolean)
       : []
 
+    // Parse inventory_raw from admin API (includes all sizes, not just in-stock)
+    this.inventoryMap = {}
+    if (item.inventory_raw) {
+      for (const entry of item.inventory_raw.split(',')) {
+        const [s, c] = entry.split(':')
+        if (s) this.inventoryMap[s.trim()] = parseInt(c) || 0
+      }
+    }
+
     this.formErrors = {}
     this.apiError.set('')
     this.urlMainInput = ''
     this.urlExtraInput = ''
     this.videoUrlInput = ''
+    this.priceDisplay = item.price > 0 ? this.formatPriceDisplay(item.price) : ''
 
     this.showModal.set(true)
     this.animateModal()
+  }
+
+  onPriceInput(event: Event) {
+    const raw = (event.target as HTMLInputElement).value.replace(/\D/g, '')
+    const num = raw ? parseInt(raw, 10) : 0
+    this.formData = { ...this.formData, price: num || null }
+    this.priceDisplay = raw ? this.formatPriceDisplay(num) : ''
+    ;(event.target as HTMLInputElement).value = this.priceDisplay
+  }
+
+  private formatPriceDisplay(n: number): string {
+    return Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
   }
 
   private async animateModal() {
@@ -226,9 +254,16 @@ export class ProductsTabComponent implements OnInit {
   toggleSize(s: string) {
     if (this.sizesArray.includes(s)) {
       this.sizesArray = this.sizesArray.filter(x => x !== s)
+      delete this.inventoryMap[s]
     } else {
       this.sizesArray = [...this.sizesArray, s].sort((a, b) => parseFloat(a) - parseFloat(b))
+      if (!(s in this.inventoryMap)) this.inventoryMap[s] = 1
     }
+  }
+
+  setStock(size: string, value: string) {
+    const n = parseInt(value)
+    this.inventoryMap = { ...this.inventoryMap, [size]: isNaN(n) || n < 0 ? 0 : n }
   }
 
   toggleCategory(id: number) {
@@ -364,7 +399,8 @@ export class ProductsTabComponent implements OnInit {
     const d = this.formData
 
     if (!d.name?.trim()) e['name'] = 'El nombre es requerido'
-    if (!d.price?.trim()) e['price'] = 'El precio es requerido'
+    const p = Number(d.price)
+    if (!Number.isFinite(p) || p <= 0) e['price'] = 'El precio debe ser un número mayor a 0'
 
     this.formErrors = e
     return Object.keys(e).length === 0
@@ -388,6 +424,8 @@ export class ProductsTabComponent implements OnInit {
       category_ids,
       sport_ids,
       gallery,
+      inventory_raw,
+      total_stock,
       ...data
     } = this.formData
 
@@ -414,6 +452,16 @@ export class ProductsTabComponent implements OnInit {
         const err = await res.json().catch(() => ({})) as any
         this.apiError.set(err.error ?? `Error ${res.status}`)
         return
+      }
+
+      const productId = mode === 'add' ? (await res.json()).id : id
+
+      // Guardar stock por talla vía admin inventory API
+      for (const [size, stock] of Object.entries(this.inventoryMap)) {
+        await this.svc.apiFetch(`/api/admin/inventory/${productId}`, {
+          method: 'PUT',
+          body: JSON.stringify({ size, stock }),
+        })
       }
 
       this.showModal.set(false)
