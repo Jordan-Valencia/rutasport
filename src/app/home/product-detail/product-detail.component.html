@@ -63,12 +63,13 @@
         @if (slot.kind === 'video') {
           <!-- ── Video cell (same size/look as image cells) ── -->
           <div
-            class="relative bg-[#0e0e0e]"
+            class="relative bg-[#0e0e0e] cursor-pointer"
             [class.aspect-video]="!(last && gridSlots().length % 2 !== 0)"
             [class.overflow-hidden]="!(last && gridSlots().length % 2 !== 0)"
             [class.col-span-2]="last && gridSlots().length % 2 !== 0"
             [class.flex]="last && gridSlots().length % 2 !== 0"
             [class.justify-center]="last && gridSlots().length % 2 !== 0"
+            (click)="openLightboxAtVideo()"
           >
             <div [class]="(last && gridSlots().length % 2 !== 0) ? 'w-1/2 aspect-video overflow-hidden relative' : 'w-full h-full relative'">
               <video
@@ -76,12 +77,16 @@
                 [src]="slot.src"
                 autoplay
                 loop
-                [muted]="true"
+                muted
                 playsinline
                 (canplay)="$any($event.target).muted = true; $any($event.target).volume = 0"
                 (play)="videoPaused.set(false)"
                 (pause)="videoPaused.set(true)"
               ></video>
+              <!-- cubre watermark Veo 3 esquina inferior derecha -->
+              <span class="absolute bottom-2 right-2 z-[5] text-[8px] font-black tracking-[0.22em] uppercase text-[#E31C1C] border border-[#E31C1C]/35 px-2 py-0.5 bg-black/70 backdrop-blur-sm pointer-events-none select-none">
+                RUTASPORT
+              </span>
               <button
                 class="absolute top-2 right-2 w-7 h-7 flex items-center justify-center bg-black/55 hover:bg-black/80 text-white/70 hover:text-white rounded-full transition-all duration-200 cursor-pointer z-10"
                 (click)="toggleVideo()"
@@ -528,30 +533,56 @@
     </button>
 
     <!-- Counter -->
-    @if (images().length > 1) {
+    @if (gridSlots().length > 1) {
       <div class="absolute top-5 left-1/2 -translate-x-1/2 z-20 text-white/25 text-[11px] font-semibold tracking-widest pointer-events-none">
-        {{ activeIndex() + 1 }} / {{ images().length }}
+        {{ activeIndex() + 1 }} / {{ gridSlots().length }}
       </div>
     }
 
-    <!-- Image -->
-    <img
-      [src]="images()[activeIndex()]"
-      [alt]="product()?.name"
-      class="lightbox-img max-w-[88vw] max-h-[84vh] object-contain block"
-      [class.cursor-zoom-in]="!lightboxZoomed()"
-      [class.cursor-grab]="lightboxZoomed() && !dragging()"
-      [class.cursor-grabbing]="dragging()"
-      [style.transform]="lightboxImgTransform()"
-      [style.transform-origin]="lightboxImgOrigin()"
-      [style.transition]="dragging() ? 'none' : 'transform 0.35s cubic-bezier(0.22, 1, 0.36, 1)'"
-      (click)="onLightboxImageClick($event)"
-      (mousedown)="onLightboxMouseDown($event)"
-      onerror="this.style.opacity='0'"
-    />
+    <!-- Image or Video -->
+    @if (gridSlots()[activeIndex()]?.kind === 'video') {
+      <div class="relative flex items-center justify-center" (click)="$event.stopPropagation()">
+        <video
+          class="lightbox-video max-w-[88vw] max-h-[84vh] object-contain"
+          [src]="gridSlots()[activeIndex()].src"
+          autoplay loop muted playsinline
+          (canplay)="$any($event.target).muted = true; $any($event.target).volume = 0"
+          (play)="lightboxVideoPaused.set(false)"
+          (pause)="lightboxVideoPaused.set(true)"
+        ></video>
+        <span class="absolute bottom-3 right-3 z-[5] text-[13px] font-black tracking-[0.22em] uppercase text-[#E31C1C] border border-[#E31C1C]/35 px-3.5 py-1.5 bg-black/80 backdrop-blur-sm pointer-events-none select-none">
+          RUTASPORT
+        </span>
+        <button
+          class="absolute top-2 right-2 w-8 h-8 flex items-center justify-center bg-black/55 hover:bg-black/80 text-white/70 hover:text-white rounded-full transition-all duration-200 cursor-pointer z-10"
+          (click)="toggleLightboxVideo(); $event.stopPropagation()"
+        >
+          @if (lightboxVideoPaused()) {
+            <svg class="w-4 h-4 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          } @else {
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+          }
+        </button>
+      </div>
+    } @else {
+      <img
+        [src]="gridSlots()[activeIndex()]?.src"
+        [alt]="product()?.name"
+        class="lightbox-img max-w-[88vw] max-h-[84vh] object-contain block"
+        [class.cursor-zoom-in]="!lightboxZoomed()"
+        [class.cursor-grab]="lightboxZoomed() && !dragging()"
+        [class.cursor-grabbing]="dragging()"
+        [style.transform]="lightboxImgTransform()"
+        [style.transform-origin]="lightboxImgOrigin()"
+        [style.transition]="dragging() ? 'none' : 'transform 0.35s cubic-bezier(0.22, 1, 0.36, 1)'"
+        (click)="onLightboxImageClick($event)"
+        (mousedown)="onLightboxMouseDown($event)"
+        onerror="this.style.opacity='0'"
+      />
+    }
 
     <!-- Arrows -->
-    @if (images().length > 1) {
+    @if (gridSlots().length > 1) {
       <button
         class="lightbox-arrow absolute left-4 top-1/2 -translate-y-1/2 z-20 w-11 h-11 flex items-center justify-center text-white/35 hover:text-white bg-black/40 hover:bg-black/65 rounded-full transition-all duration-200 cursor-pointer"
         (click)="prevImage($event)"
@@ -571,16 +602,21 @@
     }
 
     <!-- Hint -->
-    @if (!lightboxZoomed()) {
+    @if (!lightboxZoomed() && gridSlots()[activeIndex()]?.kind !== 'video') {
       <div class="absolute bottom-20 left-1/2 -translate-x-1/2 z-20 text-white/18 text-[11px] tracking-wider pointer-events-none hidden sm:block">
         Click para ampliar · Esc para cerrar
       </div>
     }
+    @if (gridSlots()[activeIndex()]?.kind === 'video') {
+      <div class="absolute bottom-20 left-1/2 -translate-x-1/2 z-20 text-white/18 text-[11px] tracking-wider pointer-events-none hidden sm:block">
+        Esc para cerrar
+      </div>
+    }
 
     <!-- Thumbnails -->
-    @if (images().length > 1) {
+    @if (gridSlots().length > 1) {
       <div class="absolute bottom-5 left-1/2 -translate-x-1/2 z-20 flex gap-1.5">
-        @for (img of images(); track $index) {
+        @for (slot of gridSlots(); track $index) {
           <button
             class="w-10 h-9 overflow-hidden border transition-all duration-200 bg-white/5 cursor-pointer"
             [class.border-white/65]="activeIndex() === $index"
@@ -589,7 +625,15 @@
             [class.opacity-40]="activeIndex() !== $index"
             (click)="setImage($index); $event.stopPropagation()"
           >
-            <img [src]="img" class="w-full h-full object-cover" onerror="this.style.opacity='0'" />
+            @if (slot.kind === 'image') {
+              <img [src]="slot.src" class="w-full h-full object-cover" onerror="this.style.opacity='0'" />
+            } @else {
+              <div class="w-full h-full flex items-center justify-center bg-[#111]">
+                <svg class="w-3.5 h-3.5 text-white/70" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M8 5v14l11-7z"/>
+                </svg>
+              </div>
+            }
           </button>
         }
       </div>

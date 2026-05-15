@@ -136,6 +136,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
   // ── Lightbox ──────────────────────────────────────────────────
   lightboxOpen = signal(false)
   lightboxZoomed = signal(false)
+  lightboxVideoPaused = signal(false)
   lightboxZoomOriginX = signal(50)
   lightboxZoomOriginY = signal(50)
   lightboxPanX = signal(0)
@@ -160,20 +161,38 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
   )
 
   // ── Gallery ───────────────────────────────────────────────────
-  openLightboxAt(index: number) {
-    this.activeIndex.set(index)
+  openLightboxAt(imgIdx: number) {
+    const slotIdx = this.gridSlots().findIndex(s => s.kind === 'image' && s.imgIdx === imgIdx)
+    this.activeIndex.set(slotIdx >= 0 ? slotIdx : 0)
+    this.lightboxOpen.set(true)
+    this._resetZoom()
+  }
+
+  openLightboxAtVideo() {
+    const slotIdx = this.gridSlots().findIndex(s => s.kind === 'video')
+    if (slotIdx < 0) return
+    this.activeIndex.set(slotIdx)
     this.lightboxOpen.set(true)
     this._resetZoom()
   }
 
   setImage(index: number) {
     this.activeIndex.set(index)
+    this._resetZoom()
+  }
+
+  toggleLightboxVideo() {
+    const el = document.querySelector('video.lightbox-video') as HTMLVideoElement | null
+    if (!el) return
+    if (el.paused) { el.play(); this.lightboxVideoPaused.set(false) }
+    else { el.pause(); this.lightboxVideoPaused.set(true) }
   }
 
   // ── Lightbox handlers ─────────────────────────────────────────
   closeLightbox() {
     this.lightboxOpen.set(false)
     this._resetZoom()
+    this.lightboxVideoPaused.set(false)
   }
 
   onLightboxContainerClick(event: MouseEvent) {
@@ -184,21 +203,24 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
 
   prevImage(event?: Event) {
     event?.stopPropagation()
-    if (this.images().length <= 1) return
-    this.activeIndex.set((this.activeIndex() - 1 + this.images().length) % this.images().length)
+    const len = this.gridSlots().length
+    if (len <= 1) return
+    this.activeIndex.set((this.activeIndex() - 1 + len) % len)
     this._resetZoom()
   }
 
   nextImage(event?: Event) {
     event?.stopPropagation()
-    if (this.images().length <= 1) return
-    this.activeIndex.set((this.activeIndex() + 1) % this.images().length)
+    const len = this.gridSlots().length
+    if (len <= 1) return
+    this.activeIndex.set((this.activeIndex() + 1) % len)
     this._resetZoom()
   }
 
   onLightboxImageClick(event: MouseEvent) {
     event.stopPropagation()
     if (this._hasDragged) return
+    if (this.gridSlots()[this.activeIndex()]?.kind === 'video') return
     if (!this.lightboxZoomed()) {
       const el = event.currentTarget as HTMLElement
       const rect = el.getBoundingClientRect()

@@ -46,6 +46,7 @@
               muted
               loop
               class="w-full h-full object-cover"
+              (canplay)="$any($event.target).muted = true; $any($event.target).volume = 0"
               (loadedmetadata)="$any($event.target).currentTime = 0.001"
               (mouseenter)="$any($event.target).play()"
               (mouseleave)="$any($event.target).pause(); $any($event.target).currentTime = 0.001">

@@ -2,8 +2,7 @@
 
   <!-- Scroll progress bar -->
   <div class="h-[2px] bg-black w-full">
-    <div class="h-full bg-[#E31C1C] transition-[width] duration-75 ease-linear"
-         [style.width.%]="scrollProgress()">
+    <div class="h-full bg-[#E31C1C] transition-[width] duration-75 ease-linear" [style.width.%]="scrollProgress()">
     </div>
   </div>
 
@@ -12,19 +11,22 @@
     <div class="flex items-center justify-between px-8">
       <div class="flex items-center gap-2">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8l1 12a2 2 0 002 2h8a2 2 0 002-2l1-12M10 14v-4m4 4v-4"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8l1 12a2 2 0 002 2h8a2 2 0 002-2l1-12M10 14v-4m4 4v-4" />
         </svg>
         <span class="tracking-wide text-white/80">Envíos a todo Colombia</span>
       </div>
       <div class="flex items-center gap-2">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
         </svg>
         <span class="tracking-wide text-white/80">Paga contra entrega</span>
       </div>
       <div class="flex items-center gap-2">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
         </svg>
         <span class="tracking-wide text-white/80">Cambios y devoluciones fáciles</span>
       </div>
@@ -54,64 +56,78 @@
       <!-- Nav desktop -->
       <nav class="hidden lg:flex items-center gap-7">
         <a href="#" (click)="scrollTo('mujer', $event)"
-           class="relative text-sm font-bold tracking-wide text-white/80 hover:text-white transition-colors pb-1"
-           [class.nav-active]="activeSection() === 'mujer'">MUJER</a>
+          class="relative text-sm font-bold tracking-wide text-white/80 hover:text-white transition-colors pb-1"
+          [class.nav-active]="activeSection() === 'mujer'">MUJER</a>
         <a href="#" (click)="scrollTo('hombre', $event)"
-           class="relative text-sm font-bold tracking-wide text-white/80 hover:text-white transition-colors pb-1"
-           [class.nav-active]="activeSection() === 'hombre'">HOMBRE</a>
-        <a href="#" (click)="scrollTo('deporte', $event)"
-           class="relative text-sm font-bold tracking-wide text-white/80 hover:text-white transition-colors pb-1"
-           [class.nav-active]="activeSection() === 'deporte'">DEPORTE</a>
+          class="relative text-sm font-bold tracking-wide text-white/80 hover:text-white transition-colors pb-1"
+          [class.nav-active]="activeSection() === 'hombre'">HOMBRE</a>
+
         <a href="#" (click)="scrollTo('novedades', $event)"
-           class="relative text-sm font-bold tracking-wide text-white/80 hover:text-white transition-colors pb-1"
-           [class.nav-active]="activeSection() === 'novedades'">NOVEDADES</a>
-        <a [routerLink]="['/catalogo']"                     class="text-sm font-bold tracking-wide text-[#E31C1C] hover:text-[#ff3333] transition-colors">CATÁLOGO</a>
+          class="relative text-sm font-bold tracking-wide text-white/80 hover:text-white transition-colors pb-1"
+          [class.nav-active]="activeSection() === 'novedades'">NOVEDADES</a>
+        <a href="#" (click)="scrollTo('deporte', $event)"
+          class="relative text-sm font-bold tracking-wide text-white/80 hover:text-white transition-colors pb-1"
+          [class.nav-active]="activeSection() === 'deporte'">DEPORTE</a>
+        <a [routerLink]="['/catalogo']"
+          class="text-sm font-bold tracking-wide text-[#E31C1C] hover:text-[#ff3333] transition-colors">CATÁLOGO</a>
       </nav>
 
       <!-- Actions -->
       <div class="flex items-center gap-4">
         <!-- Search -->
-        <a id="search-link" [routerLink]="['/catalogo']" class="hidden lg:flex text-white/60 hover:text-white transition-colors cursor-pointer" title="Buscar">
+        <a id="search-link" [routerLink]="['/catalogo']"
+          class="hidden lg:flex text-white/60 hover:text-white transition-colors cursor-pointer" title="Buscar">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
         </a>
 
         <!-- User: authenticated -->
         @if (auth.isAuthenticated()) {
-          <a [routerLink]="['/perfil']" class="hidden lg:flex items-center gap-2 text-white/70 hover:text-white transition-colors cursor-pointer" title="Mi perfil">
-            <div class="w-7 h-7 rounded-full bg-[#E31C1C] flex items-center justify-center text-white text-xs font-black">
-              {{ auth.user()?.full_name ? auth.user()!.full_name![0].toUpperCase() : auth.user()!.email[0].toUpperCase() }}
-            </div>
-          </a>
+        <a [routerLink]="['/perfil']"
+          class="hidden lg:flex items-center gap-2 text-white/70 hover:text-white transition-colors cursor-pointer"
+          title="Mi perfil">
+          <div class="w-7 h-7 rounded-full bg-[#E31C1C] flex items-center justify-center text-white text-xs font-black">
+            {{ auth.user()?.full_name ? auth.user()!.full_name![0].toUpperCase() : auth.user()!.email[0].toUpperCase()
+            }}
+          </div>
+        </a>
         } @else {
-          <a [routerLink]="['/login']" class="hidden lg:flex items-center gap-1.5 text-white/60 hover:text-white transition-colors cursor-pointer text-sm font-bold tracking-wide" title="Iniciar sesión">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-            </svg>
-          </a>
+        <a [routerLink]="['/login']"
+          class="hidden lg:flex items-center gap-1.5 text-white/60 hover:text-white transition-colors cursor-pointer text-sm font-bold tracking-wide"
+          title="Iniciar sesión">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+          </svg>
+        </a>
         }
 
         <!-- Cart -->
-        <button (click)="cart.toggle()" class="relative cursor-pointer text-white/80 hover:text-white transition-colors" title="Carrito">
+        <button (click)="cart.toggle()" class="relative cursor-pointer text-white/80 hover:text-white transition-colors"
+          title="Carrito">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
           </svg>
           @if (cart.count() > 0) {
-            <span class="absolute -top-1.5 -right-1.5 w-4 h-4 bg-[#E31C1C] text-white text-[9px] flex items-center justify-center rounded-full font-black">{{ cart.count() }}</span>
+          <span
+            class="absolute -top-1.5 -right-1.5 w-4 h-4 bg-[#E31C1C] text-white text-[9px] flex items-center justify-center rounded-full font-black">{{
+            cart.count() }}</span>
           }
         </button>
 
         <!-- Mobile menu toggle -->
         <button class="lg:hidden cursor-pointer text-white" (click)="toggleMobileMenu()" title="Menú">
           @if (mobileMenuOpen()) {
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-            </svg>
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
           } @else {
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-            </svg>
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
           }
         </button>
       </div>
@@ -119,25 +135,33 @@
 
     <!-- Mobile menu -->
     @if (mobileMenuOpen()) {
-      <nav class="lg:hidden bg-[#111111] border-t border-white/10 py-6">
-        <div class="flex flex-col px-4 gap-4">
-          <a href="#" (click)="scrollTo('mujer', $event)"     class="text-lg font-bold text-white/80 hover:text-white transition-colors">MUJER</a>
-          <a href="#" (click)="scrollTo('hombre', $event)"    class="text-lg font-bold text-white/80 hover:text-white transition-colors">HOMBRE</a>
-          <a href="#" (click)="scrollTo('deporte', $event)"   class="text-lg font-bold text-white/80 hover:text-white transition-colors">DEPORTE</a>
-          <a href="#" (click)="scrollTo('novedades', $event)" class="text-lg font-bold text-white/80 hover:text-white transition-colors">NOVEDADES</a>
-          <a [routerLink]="['/catalogo']" (click)="toggleMobileMenu()" class="text-lg font-bold text-[#E31C1C]">CATÁLOGO</a>
-          @if (auth.isAuthenticated()) {
-            <a [routerLink]="['/perfil']" (click)="toggleMobileMenu()" class="flex items-center gap-2 text-lg font-bold text-white/80 hover:text-white transition-colors">
-              <div class="w-6 h-6 rounded-full bg-[#E31C1C] flex items-center justify-center text-white text-xs font-black">
-                {{ auth.user()?.full_name ? auth.user()!.full_name![0].toUpperCase() : auth.user()!.email[0].toUpperCase() }}
-              </div>
-              MI PERFIL
-            </a>
-          } @else {
-            <a [routerLink]="['/login']" (click)="toggleMobileMenu()" class="text-lg font-bold text-white/80 hover:text-white transition-colors">INICIAR SESIÓN</a>
-          }
-        </div>
-      </nav>
+    <nav class="lg:hidden bg-[#111111] border-t border-white/10 py-6">
+      <div class="flex flex-col px-4 gap-4">
+        <a href="#" (click)="scrollTo('mujer', $event)"
+          class="text-lg font-bold text-white/80 hover:text-white transition-colors">MUJER</a>
+        <a href="#" (click)="scrollTo('hombre', $event)"
+          class="text-lg font-bold text-white/80 hover:text-white transition-colors">HOMBRE</a>
+        <a href="#" (click)="scrollTo('deporte', $event)"
+          class="text-lg font-bold text-white/80 hover:text-white transition-colors">DEPORTE</a>
+        <a href="#" (click)="scrollTo('novedades', $event)"
+          class="text-lg font-bold text-white/80 hover:text-white transition-colors">NOVEDADES</a>
+        <a [routerLink]="['/catalogo']" (click)="toggleMobileMenu()"
+          class="text-lg font-bold text-[#E31C1C]">CATÁLOGO</a>
+        @if (auth.isAuthenticated()) {
+        <a [routerLink]="['/perfil']" (click)="toggleMobileMenu()"
+          class="flex items-center gap-2 text-lg font-bold text-white/80 hover:text-white transition-colors">
+          <div class="w-6 h-6 rounded-full bg-[#E31C1C] flex items-center justify-center text-white text-xs font-black">
+            {{ auth.user()?.full_name ? auth.user()!.full_name![0].toUpperCase() : auth.user()!.email[0].toUpperCase()
+            }}
+          </div>
+          MI PERFIL
+        </a>
+        } @else {
+        <a [routerLink]="['/login']" (click)="toggleMobileMenu()"
+          class="text-lg font-bold text-white/80 hover:text-white transition-colors">INICIAR SESIÓN</a>
+        }
+      </div>
+    </nav>
     }
   </header>
 </div>
