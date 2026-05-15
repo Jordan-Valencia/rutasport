@@ -1,7 +1,7 @@
 var __defProp = Object.defineProperty;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
 
-// ../.wrangler/tmp/bundle-FrV9gn/checked-fetch.js
+// .wrangler/tmp/bundle-Lpe83j/checked-fetch.js
 var urls = /* @__PURE__ */ new Set();
 function checkURL(request, init) {
   const url = request instanceof URL ? request : new URL(
@@ -27,11 +27,38 @@ globalThis.fetch = new Proxy(globalThis.fetch, {
   }
 });
 
-// api/admin/banners/[id].ts
+// .wrangler/tmp/pages-IQ6imA/functionsWorker-0.11226448078115414.mjs
+var __defProp2 = Object.defineProperty;
+var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
+var urls2 = /* @__PURE__ */ new Set();
+function checkURL2(request, init) {
+  const url = request instanceof URL ? request : new URL(
+    (typeof request === "string" ? new Request(request, init) : request).url
+  );
+  if (url.port && url.port !== "443" && url.protocol === "https:") {
+    if (!urls2.has(url.toString())) {
+      urls2.add(url.toString());
+      console.warn(
+        `WARNING: known issue with \`fetch()\` requests to custom HTTPS ports in published Workers:
+ - ${url.toString()} - the custom port will be ignored when the Worker is published using the \`wrangler deploy\` command.
+`
+      );
+    }
+  }
+}
+__name(checkURL2, "checkURL");
+__name2(checkURL2, "checkURL");
+globalThis.fetch = new Proxy(globalThis.fetch, {
+  apply(target, thisArg, argArray) {
+    const [request, init] = argArray;
+    checkURL2(request, init);
+    return Reflect.apply(target, thisArg, argArray);
+  }
+});
 var ADMIN_KEY = "1663017721@";
-var json = /* @__PURE__ */ __name((data, status = 200) => new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json" } }), "json");
-var unauthorized = /* @__PURE__ */ __name(() => json({ error: "Unauthorized" }, 401), "unauthorized");
-var onRequestPut = /* @__PURE__ */ __name(async ({ env, request, params }) => {
+var json = /* @__PURE__ */ __name2((data, status = 200) => new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json" } }), "json");
+var unauthorized = /* @__PURE__ */ __name2(() => json({ error: "Unauthorized" }, 401), "unauthorized");
+var onRequestPut = /* @__PURE__ */ __name2(async ({ env, request, params }) => {
   if (request.headers.get("x-admin-key") !== ADMIN_KEY) return unauthorized();
   try {
     const existing = await env.DB.prepare("SELECT * FROM feature_banners WHERE id = ?").bind(params.id).first();
@@ -46,7 +73,7 @@ var onRequestPut = /* @__PURE__ */ __name(async ({ env, request, params }) => {
     return json({ error: e.message ?? "Internal error" }, 500);
   }
 }, "onRequestPut");
-var onRequestDelete = /* @__PURE__ */ __name(async ({ env, request, params }) => {
+var onRequestDelete = /* @__PURE__ */ __name2(async ({ env, request, params }) => {
   if (request.headers.get("x-admin-key") !== ADMIN_KEY) return unauthorized();
   try {
     const result = await env.DB.prepare("DELETE FROM feature_banners WHERE id = ?").bind(params.id).run();
@@ -56,12 +83,10 @@ var onRequestDelete = /* @__PURE__ */ __name(async ({ env, request, params }) =>
     return json({ error: e.message ?? "Internal error" }, 500);
   }
 }, "onRequestDelete");
-
-// api/admin/brands/[id].ts
 var ADMIN_KEY2 = "1663017721@";
-var json2 = /* @__PURE__ */ __name((data, status = 200) => new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json" } }), "json");
-var unauthorized2 = /* @__PURE__ */ __name(() => json2({ error: "Unauthorized" }, 401), "unauthorized");
-var onRequestPut2 = /* @__PURE__ */ __name(async ({ env, request, params }) => {
+var json2 = /* @__PURE__ */ __name2((data, status = 200) => new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json" } }), "json");
+var unauthorized2 = /* @__PURE__ */ __name2(() => json2({ error: "Unauthorized" }, 401), "unauthorized");
+var onRequestPut2 = /* @__PURE__ */ __name2(async ({ env, request, params }) => {
   if (request.headers.get("x-admin-key") !== ADMIN_KEY2) return unauthorized2();
   try {
     const b = await request.json();
@@ -75,7 +100,7 @@ var onRequestPut2 = /* @__PURE__ */ __name(async ({ env, request, params }) => {
     return json2({ error: e.message ?? "Internal error" }, 500);
   }
 }, "onRequestPut");
-var onRequestDelete2 = /* @__PURE__ */ __name(async ({ env, request, params }) => {
+var onRequestDelete2 = /* @__PURE__ */ __name2(async ({ env, request, params }) => {
   if (request.headers.get("x-admin-key") !== ADMIN_KEY2) return unauthorized2();
   try {
     const result = await env.DB.prepare("DELETE FROM brands WHERE id = ?").bind(params.id).run();
@@ -85,12 +110,10 @@ var onRequestDelete2 = /* @__PURE__ */ __name(async ({ env, request, params }) =
     return json2({ error: e.message ?? "Internal error" }, 500);
   }
 }, "onRequestDelete");
-
-// api/admin/categories/[id].ts
 var ADMIN_KEY3 = "1663017721@";
-var json3 = /* @__PURE__ */ __name((data, status = 200) => new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json" } }), "json");
-var unauthorized3 = /* @__PURE__ */ __name(() => json3({ error: "Unauthorized" }, 401), "unauthorized");
-var onRequestPut3 = /* @__PURE__ */ __name(async ({ env, request, params }) => {
+var json3 = /* @__PURE__ */ __name2((data, status = 200) => new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json" } }), "json");
+var unauthorized3 = /* @__PURE__ */ __name2(() => json3({ error: "Unauthorized" }, 401), "unauthorized");
+var onRequestPut3 = /* @__PURE__ */ __name2(async ({ env, request, params }) => {
   if (request.headers.get("x-admin-key") !== ADMIN_KEY3) return unauthorized3();
   try {
     const b = await request.json();
@@ -104,7 +127,7 @@ var onRequestPut3 = /* @__PURE__ */ __name(async ({ env, request, params }) => {
     return json3({ error: e.message ?? "Internal error" }, 500);
   }
 }, "onRequestPut");
-var onRequestDelete3 = /* @__PURE__ */ __name(async ({ env, request, params }) => {
+var onRequestDelete3 = /* @__PURE__ */ __name2(async ({ env, request, params }) => {
   if (request.headers.get("x-admin-key") !== ADMIN_KEY3) return unauthorized3();
   try {
     await env.DB.prepare("DELETE FROM product_categories WHERE category_id = ?").bind(params.id).run();
@@ -115,12 +138,10 @@ var onRequestDelete3 = /* @__PURE__ */ __name(async ({ env, request, params }) =
     return json3({ error: e.message ?? "Internal error" }, 500);
   }
 }, "onRequestDelete");
-
-// api/admin/heroes/[id].ts
 var ADMIN_KEY4 = "1663017721@";
-var json4 = /* @__PURE__ */ __name((data, status = 200) => new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json" } }), "json");
-var unauthorized4 = /* @__PURE__ */ __name(() => json4({ error: "Unauthorized" }, 401), "unauthorized");
-var onRequestPut4 = /* @__PURE__ */ __name(async ({ env, request, params }) => {
+var json4 = /* @__PURE__ */ __name2((data, status = 200) => new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json" } }), "json");
+var unauthorized4 = /* @__PURE__ */ __name2(() => json4({ error: "Unauthorized" }, 401), "unauthorized");
+var onRequestPut4 = /* @__PURE__ */ __name2(async ({ env, request, params }) => {
   if (request.headers.get("x-admin-key") !== ADMIN_KEY4) return unauthorized4();
   try {
     const existing = await env.DB.prepare("SELECT * FROM heroes WHERE id = ?").bind(params.id).first();
@@ -135,7 +156,7 @@ var onRequestPut4 = /* @__PURE__ */ __name(async ({ env, request, params }) => {
     return json4({ error: e.message ?? "Internal error" }, 500);
   }
 }, "onRequestPut");
-var onRequestDelete4 = /* @__PURE__ */ __name(async ({ env, request, params }) => {
+var onRequestDelete4 = /* @__PURE__ */ __name2(async ({ env, request, params }) => {
   if (request.headers.get("x-admin-key") !== ADMIN_KEY4) return unauthorized4();
   try {
     const result = await env.DB.prepare("DELETE FROM heroes WHERE id = ?").bind(params.id).run();
@@ -145,12 +166,10 @@ var onRequestDelete4 = /* @__PURE__ */ __name(async ({ env, request, params }) =
     return json4({ error: e.message ?? "Internal error" }, 500);
   }
 }, "onRequestDelete");
-
-// api/admin/inventory/[id].ts
 var ADMIN_KEY5 = "1663017721@";
-var json5 = /* @__PURE__ */ __name((data, status = 200) => new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json" } }), "json");
-var unauthorized5 = /* @__PURE__ */ __name(() => json5({ error: "Unauthorized" }, 401), "unauthorized");
-var onRequestGet = /* @__PURE__ */ __name(async ({ env, request, params }) => {
+var json5 = /* @__PURE__ */ __name2((data, status = 200) => new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json" } }), "json");
+var unauthorized5 = /* @__PURE__ */ __name2(() => json5({ error: "Unauthorized" }, 401), "unauthorized");
+var onRequestGet = /* @__PURE__ */ __name2(async ({ env, request, params }) => {
   if (request.headers.get("x-admin-key") !== ADMIN_KEY5) return unauthorized5();
   try {
     const result = await env.DB.prepare("SELECT size, stock FROM product_inventory WHERE product_id = ? ORDER BY CAST(size AS REAL)").bind(params.id).all();
@@ -159,7 +178,7 @@ var onRequestGet = /* @__PURE__ */ __name(async ({ env, request, params }) => {
     return json5({ error: e.message ?? "Internal error" }, 500);
   }
 }, "onRequestGet");
-var onRequestPut5 = /* @__PURE__ */ __name(async ({ env, request, params }) => {
+var onRequestPut5 = /* @__PURE__ */ __name2(async ({ env, request, params }) => {
   if (request.headers.get("x-admin-key") !== ADMIN_KEY5) return unauthorized5();
   try {
     const b = await request.json();
@@ -172,12 +191,10 @@ var onRequestPut5 = /* @__PURE__ */ __name(async ({ env, request, params }) => {
     return json5({ error: e.message ?? "Internal error" }, 500);
   }
 }, "onRequestPut");
-
-// api/admin/orders/[id].ts
 var ADMIN_KEY6 = "1663017721@";
-var json6 = /* @__PURE__ */ __name((data, status = 200) => new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json" } }), "json");
-var unauthorized6 = /* @__PURE__ */ __name(() => json6({ error: "Unauthorized" }, 401), "unauthorized");
-var onRequestPut6 = /* @__PURE__ */ __name(async ({ env, request, params }) => {
+var json6 = /* @__PURE__ */ __name2((data, status = 200) => new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json" } }), "json");
+var unauthorized6 = /* @__PURE__ */ __name2(() => json6({ error: "Unauthorized" }, 401), "unauthorized");
+var onRequestPut6 = /* @__PURE__ */ __name2(async ({ env, request, params }) => {
   if (request.headers.get("x-admin-key") !== ADMIN_KEY6) return unauthorized6();
   try {
     const id = Number(params["id"]);
@@ -202,12 +219,10 @@ var onRequestPut6 = /* @__PURE__ */ __name(async ({ env, request, params }) => {
     return json6({ error: e.message ?? "Internal error" }, 500);
   }
 }, "onRequestPut");
-
-// api/admin/products/[id].ts
 var ADMIN_KEY7 = "1663017721@";
-var json7 = /* @__PURE__ */ __name((data, status = 200) => new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json" } }), "json");
-var unauthorized7 = /* @__PURE__ */ __name(() => json7({ error: "Unauthorized" }, 401), "unauthorized");
-var onRequestPut7 = /* @__PURE__ */ __name(async ({ env, request, params }) => {
+var json7 = /* @__PURE__ */ __name2((data, status = 200) => new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json" } }), "json");
+var unauthorized7 = /* @__PURE__ */ __name2(() => json7({ error: "Unauthorized" }, 401), "unauthorized");
+var onRequestPut7 = /* @__PURE__ */ __name2(async ({ env, request, params }) => {
   if (request.headers.get("x-admin-key") !== ADMIN_KEY7) return unauthorized7();
   try {
     const b = await request.json();
@@ -217,7 +232,7 @@ var onRequestPut7 = /* @__PURE__ */ __name(async ({ env, request, params }) => {
     }
     const result = await env.DB.prepare(
       `UPDATE products SET name=?, model=?, price=?, brand_id=?, gender_id=?,
-                           image=?, video=?, isBestSeller=?, isNew=?, description=?, sizes=?
+                           image=?, video=?, isBestSeller=?, isNew=?, badge=?, description=?, sizes=?
        WHERE id=?`
     ).bind(
       b.name.trim(),
@@ -229,6 +244,7 @@ var onRequestPut7 = /* @__PURE__ */ __name(async ({ env, request, params }) => {
       b.video || "",
       b.isBestSeller ? 1 : 0,
       b.isNew ? 1 : 0,
+      b.badge?.trim() || "ORIGINAL",
       b.description || null,
       b.sizes || null,
       params.id
@@ -279,7 +295,7 @@ var onRequestPut7 = /* @__PURE__ */ __name(async ({ env, request, params }) => {
     return json7({ error: e.message ?? "Internal error" }, 500);
   }
 }, "onRequestPut");
-var onRequestDelete5 = /* @__PURE__ */ __name(async ({ env, request, params }) => {
+var onRequestDelete5 = /* @__PURE__ */ __name2(async ({ env, request, params }) => {
   if (request.headers.get("x-admin-key") !== ADMIN_KEY7) return unauthorized7();
   try {
     await env.DB.prepare("DELETE FROM product_categories WHERE product_id = ?").bind(params.id).run();
@@ -291,12 +307,10 @@ var onRequestDelete5 = /* @__PURE__ */ __name(async ({ env, request, params }) =
     return json7({ error: e.message ?? "Internal error" }, 500);
   }
 }, "onRequestDelete");
-
-// api/admin/sports/[id].ts
 var ADMIN_KEY8 = "1663017721@";
-var json8 = /* @__PURE__ */ __name((data, status = 200) => new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json" } }), "json");
-var unauthorized8 = /* @__PURE__ */ __name(() => json8({ error: "Unauthorized" }, 401), "unauthorized");
-var onRequestPut8 = /* @__PURE__ */ __name(async ({ env, request, params }) => {
+var json8 = /* @__PURE__ */ __name2((data, status = 200) => new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json" } }), "json");
+var unauthorized8 = /* @__PURE__ */ __name2(() => json8({ error: "Unauthorized" }, 401), "unauthorized");
+var onRequestPut8 = /* @__PURE__ */ __name2(async ({ env, request, params }) => {
   if (request.headers.get("x-admin-key") !== ADMIN_KEY8) return unauthorized8();
   try {
     const b = await request.json();
@@ -312,7 +326,7 @@ var onRequestPut8 = /* @__PURE__ */ __name(async ({ env, request, params }) => {
     return json8({ error: e.message ?? "Internal error" }, 500);
   }
 }, "onRequestPut");
-var onRequestDelete6 = /* @__PURE__ */ __name(async ({ env, request, params }) => {
+var onRequestDelete6 = /* @__PURE__ */ __name2(async ({ env, request, params }) => {
   if (request.headers.get("x-admin-key") !== ADMIN_KEY8) return unauthorized8();
   try {
     await env.DB.prepare("DELETE FROM product_sports WHERE sport_id = ?").bind(params.id).run();
@@ -323,12 +337,10 @@ var onRequestDelete6 = /* @__PURE__ */ __name(async ({ env, request, params }) =
     return json8({ error: e.message ?? "Internal error" }, 500);
   }
 }, "onRequestDelete");
-
-// api/admin/users/[id].ts
 var ADMIN_KEY9 = "1663017721@";
-var json9 = /* @__PURE__ */ __name((data, status = 200) => new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json" } }), "json");
-var unauthorized9 = /* @__PURE__ */ __name(() => json9({ error: "Unauthorized" }, 401), "unauthorized");
-var onRequestPut9 = /* @__PURE__ */ __name(async ({ env, request, params }) => {
+var json9 = /* @__PURE__ */ __name2((data, status = 200) => new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json" } }), "json");
+var unauthorized9 = /* @__PURE__ */ __name2(() => json9({ error: "Unauthorized" }, 401), "unauthorized");
+var onRequestPut9 = /* @__PURE__ */ __name2(async ({ env, request, params }) => {
   if (request.headers.get("x-admin-key") !== ADMIN_KEY9) return unauthorized9();
   try {
     const id = Number(params["id"]);
@@ -357,12 +369,10 @@ var onRequestPut9 = /* @__PURE__ */ __name(async ({ env, request, params }) => {
     return json9({ error: e.message ?? "Internal error" }, 500);
   }
 }, "onRequestPut");
-
-// api/admin/analytics.ts
 var ADMIN_KEY10 = "1663017721@";
-var json10 = /* @__PURE__ */ __name((data, status = 200) => new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json" } }), "json");
-var unauthorized10 = /* @__PURE__ */ __name(() => json10({ error: "Unauthorized" }, 401), "unauthorized");
-var onRequestGet2 = /* @__PURE__ */ __name(async ({ env, request }) => {
+var json10 = /* @__PURE__ */ __name2((data, status = 200) => new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json" } }), "json");
+var unauthorized10 = /* @__PURE__ */ __name2(() => json10({ error: "Unauthorized" }, 401), "unauthorized");
+var onRequestGet2 = /* @__PURE__ */ __name2(async ({ env, request }) => {
   if (request.headers.get("x-admin-key") !== ADMIN_KEY10) return unauthorized10();
   try {
     const [daily, topPages, totals, orderStats] = await Promise.all([
@@ -405,17 +415,15 @@ var onRequestGet2 = /* @__PURE__ */ __name(async ({ env, request }) => {
     return json10({ error: e.message ?? "Internal error" }, 500);
   }
 }, "onRequestGet");
-
-// api/admin/banners.ts
 var ADMIN_KEY11 = "1663017721@";
-var json11 = /* @__PURE__ */ __name((data, status = 200) => new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json" } }), "json");
-var unauthorized11 = /* @__PURE__ */ __name(() => json11({ error: "Unauthorized" }, 401), "unauthorized");
-var onRequestGet3 = /* @__PURE__ */ __name(async ({ env, request }) => {
+var json11 = /* @__PURE__ */ __name2((data, status = 200) => new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json" } }), "json");
+var unauthorized11 = /* @__PURE__ */ __name2(() => json11({ error: "Unauthorized" }, 401), "unauthorized");
+var onRequestGet3 = /* @__PURE__ */ __name2(async ({ env, request }) => {
   if (request.headers.get("x-admin-key") !== ADMIN_KEY11) return unauthorized11();
   const result = await env.DB.prepare('SELECT * FROM feature_banners ORDER BY "order" ASC').all();
   return json11(result.results);
 }, "onRequestGet");
-var onRequestPost = /* @__PURE__ */ __name(async ({ env, request }) => {
+var onRequestPost = /* @__PURE__ */ __name2(async ({ env, request }) => {
   if (request.headers.get("x-admin-key") !== ADMIN_KEY11) return unauthorized11();
   try {
     const b = await request.json();
@@ -427,12 +435,10 @@ var onRequestPost = /* @__PURE__ */ __name(async ({ env, request }) => {
     return json11({ error: e.message ?? "Internal error" }, 500);
   }
 }, "onRequestPost");
-
-// api/admin/brands.ts
 var ADMIN_KEY12 = "1663017721@";
-var json12 = /* @__PURE__ */ __name((data, status = 200) => new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json" } }), "json");
-var unauthorized12 = /* @__PURE__ */ __name(() => json12({ error: "Unauthorized" }, 401), "unauthorized");
-var onRequestGet4 = /* @__PURE__ */ __name(async ({ env, request }) => {
+var json12 = /* @__PURE__ */ __name2((data, status = 200) => new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json" } }), "json");
+var unauthorized12 = /* @__PURE__ */ __name2(() => json12({ error: "Unauthorized" }, 401), "unauthorized");
+var onRequestGet4 = /* @__PURE__ */ __name2(async ({ env, request }) => {
   if (request.headers.get("x-admin-key") !== ADMIN_KEY12) return unauthorized12();
   try {
     const result = await env.DB.prepare('SELECT * FROM brands ORDER BY "order" ASC').all();
@@ -441,7 +447,7 @@ var onRequestGet4 = /* @__PURE__ */ __name(async ({ env, request }) => {
     return json12({ error: e.message ?? "Internal error" }, 500);
   }
 }, "onRequestGet");
-var onRequestPost2 = /* @__PURE__ */ __name(async ({ env, request }) => {
+var onRequestPost2 = /* @__PURE__ */ __name2(async ({ env, request }) => {
   if (request.headers.get("x-admin-key") !== ADMIN_KEY12) return unauthorized12();
   try {
     const b = await request.json();
@@ -454,12 +460,10 @@ var onRequestPost2 = /* @__PURE__ */ __name(async ({ env, request }) => {
     return json12({ error: e.message ?? "Internal error" }, 500);
   }
 }, "onRequestPost");
-
-// api/admin/categories.ts
 var ADMIN_KEY13 = "1663017721@";
-var json13 = /* @__PURE__ */ __name((data, status = 200) => new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json" } }), "json");
-var unauthorized13 = /* @__PURE__ */ __name(() => json13({ error: "Unauthorized" }, 401), "unauthorized");
-var onRequestGet5 = /* @__PURE__ */ __name(async ({ env, request }) => {
+var json13 = /* @__PURE__ */ __name2((data, status = 200) => new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json" } }), "json");
+var unauthorized13 = /* @__PURE__ */ __name2(() => json13({ error: "Unauthorized" }, 401), "unauthorized");
+var onRequestGet5 = /* @__PURE__ */ __name2(async ({ env, request }) => {
   if (request.headers.get("x-admin-key") !== ADMIN_KEY13) return unauthorized13();
   try {
     const result = await env.DB.prepare('SELECT * FROM categories ORDER BY "order" ASC').all();
@@ -468,7 +472,7 @@ var onRequestGet5 = /* @__PURE__ */ __name(async ({ env, request }) => {
     return json13({ error: e.message ?? "Internal error" }, 500);
   }
 }, "onRequestGet");
-var onRequestPost3 = /* @__PURE__ */ __name(async ({ env, request }) => {
+var onRequestPost3 = /* @__PURE__ */ __name2(async ({ env, request }) => {
   if (request.headers.get("x-admin-key") !== ADMIN_KEY13) return unauthorized13();
   try {
     const b = await request.json();
@@ -481,12 +485,10 @@ var onRequestPost3 = /* @__PURE__ */ __name(async ({ env, request }) => {
     return json13({ error: e.message ?? "Internal error" }, 500);
   }
 }, "onRequestPost");
-
-// api/admin/genders.ts
 var ADMIN_KEY14 = "1663017721@";
-var json14 = /* @__PURE__ */ __name((data, status = 200) => new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json" } }), "json");
-var unauthorized14 = /* @__PURE__ */ __name(() => json14({ error: "Unauthorized" }, 401), "unauthorized");
-var onRequestGet6 = /* @__PURE__ */ __name(async ({ env, request }) => {
+var json14 = /* @__PURE__ */ __name2((data, status = 200) => new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json" } }), "json");
+var unauthorized14 = /* @__PURE__ */ __name2(() => json14({ error: "Unauthorized" }, 401), "unauthorized");
+var onRequestGet6 = /* @__PURE__ */ __name2(async ({ env, request }) => {
   if (request.headers.get("x-admin-key") !== ADMIN_KEY14) return unauthorized14();
   try {
     const result = await env.DB.prepare('SELECT * FROM genders ORDER BY "order" ASC').all();
@@ -495,12 +497,10 @@ var onRequestGet6 = /* @__PURE__ */ __name(async ({ env, request }) => {
     return json14({ error: e.message ?? "Internal error" }, 500);
   }
 }, "onRequestGet");
-
-// api/admin/heroes.ts
 var ADMIN_KEY15 = "1663017721@";
-var json15 = /* @__PURE__ */ __name((data, status = 200) => new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json" } }), "json");
-var unauthorized15 = /* @__PURE__ */ __name(() => json15({ error: "Unauthorized" }, 401), "unauthorized");
-var onRequestGet7 = /* @__PURE__ */ __name(async ({ env, request }) => {
+var json15 = /* @__PURE__ */ __name2((data, status = 200) => new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json" } }), "json");
+var unauthorized15 = /* @__PURE__ */ __name2(() => json15({ error: "Unauthorized" }, 401), "unauthorized");
+var onRequestGet7 = /* @__PURE__ */ __name2(async ({ env, request }) => {
   if (request.headers.get("x-admin-key") !== ADMIN_KEY15) return unauthorized15();
   try {
     const result = await env.DB.prepare('SELECT * FROM heroes ORDER BY "order" ASC').all();
@@ -509,7 +509,7 @@ var onRequestGet7 = /* @__PURE__ */ __name(async ({ env, request }) => {
     return json15({ error: e.message ?? "Internal error" }, 500);
   }
 }, "onRequestGet");
-var onRequestPost4 = /* @__PURE__ */ __name(async ({ env, request }) => {
+var onRequestPost4 = /* @__PURE__ */ __name2(async ({ env, request }) => {
   if (request.headers.get("x-admin-key") !== ADMIN_KEY15) return unauthorized15();
   try {
     const b = await request.json();
@@ -521,12 +521,10 @@ var onRequestPost4 = /* @__PURE__ */ __name(async ({ env, request }) => {
     return json15({ error: e.message ?? "Internal error" }, 500);
   }
 }, "onRequestPost");
-
-// api/admin/orders.ts
 var ADMIN_KEY16 = "1663017721@";
-var json16 = /* @__PURE__ */ __name((data, status = 200) => new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json" } }), "json");
-var unauthorized16 = /* @__PURE__ */ __name(() => json16({ error: "Unauthorized" }, 401), "unauthorized");
-var onRequestGet8 = /* @__PURE__ */ __name(async ({ env, request }) => {
+var json16 = /* @__PURE__ */ __name2((data, status = 200) => new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json" } }), "json");
+var unauthorized16 = /* @__PURE__ */ __name2(() => json16({ error: "Unauthorized" }, 401), "unauthorized");
+var onRequestGet8 = /* @__PURE__ */ __name2(async ({ env, request }) => {
   if (request.headers.get("x-admin-key") !== ADMIN_KEY16) return unauthorized16();
   try {
     const orders = await env.DB.prepare(`
@@ -558,16 +556,14 @@ var onRequestGet8 = /* @__PURE__ */ __name(async ({ env, request }) => {
     return json16({ error: e.message ?? "Internal error" }, 500);
   }
 }, "onRequestGet");
-
-// api/admin/products.ts
 var ADMIN_KEY17 = "1663017721@";
-var json17 = /* @__PURE__ */ __name((data, status = 200) => new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json" } }), "json");
-var unauthorized17 = /* @__PURE__ */ __name(() => json17({ error: "Unauthorized" }, 401), "unauthorized");
+var json17 = /* @__PURE__ */ __name2((data, status = 200) => new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json" } }), "json");
+var unauthorized17 = /* @__PURE__ */ __name2(() => json17({ error: "Unauthorized" }, 401), "unauthorized");
 var PRODUCT_SELECT = `
   SELECT
     p.id, p.name, p.model, p.price, p.image, p.video,
     p.brand_id, p.gender_id,
-    p.isBestSeller, p.isNew, p.description, p.sizes, p.createdAt,
+    p.isBestSeller, p.isNew, p.badge, p.description, p.sizes, p.createdAt,
     b.name AS brand,
     g.name AS gender,
     (SELECT GROUP_CONCAT(c.name, ',')
@@ -589,7 +585,7 @@ var PRODUCT_SELECT = `
   LEFT JOIN brands  b ON b.id = p.brand_id
   LEFT JOIN genders g ON g.id = p.gender_id
 `;
-var onRequestGet9 = /* @__PURE__ */ __name(async ({ env, request }) => {
+var onRequestGet9 = /* @__PURE__ */ __name2(async ({ env, request }) => {
   if (request.headers.get("x-admin-key") !== ADMIN_KEY17) return unauthorized17();
   try {
     const result = await env.DB.prepare(`${PRODUCT_SELECT} ORDER BY p.id ASC`).all();
@@ -598,7 +594,7 @@ var onRequestGet9 = /* @__PURE__ */ __name(async ({ env, request }) => {
     return json17({ error: e.message ?? "Internal error" }, 500);
   }
 }, "onRequestGet");
-var onRequestPost5 = /* @__PURE__ */ __name(async ({ env, request }) => {
+var onRequestPost5 = /* @__PURE__ */ __name2(async ({ env, request }) => {
   if (request.headers.get("x-admin-key") !== ADMIN_KEY17) return unauthorized17();
   try {
     const b = await request.json();
@@ -608,8 +604,8 @@ var onRequestPost5 = /* @__PURE__ */ __name(async ({ env, request }) => {
     }
     const ins = await env.DB.prepare(
       `INSERT INTO products (name, model, price, brand_id, gender_id,
-                             image, video, isBestSeller, isNew, description, sizes)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+                             image, video, isBestSeller, isNew, badge, description, sizes)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
     ).bind(
       b.name.trim(),
       b.model?.trim() || null,
@@ -620,6 +616,7 @@ var onRequestPost5 = /* @__PURE__ */ __name(async ({ env, request }) => {
       b.video || "",
       b.isBestSeller ? 1 : 0,
       b.isNew ? 1 : 0,
+      b.badge?.trim() || "ORIGINAL",
       b.description || null,
       b.sizes || null
     ).run();
@@ -655,12 +652,10 @@ var onRequestPost5 = /* @__PURE__ */ __name(async ({ env, request }) => {
     return json17({ error: e.message ?? "Internal error" }, 500);
   }
 }, "onRequestPost");
-
-// api/admin/sports.ts
 var ADMIN_KEY18 = "1663017721@";
-var json18 = /* @__PURE__ */ __name((data, status = 200) => new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json" } }), "json");
-var unauthorized18 = /* @__PURE__ */ __name(() => json18({ error: "Unauthorized" }, 401), "unauthorized");
-var onRequestGet10 = /* @__PURE__ */ __name(async ({ env, request }) => {
+var json18 = /* @__PURE__ */ __name2((data, status = 200) => new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json" } }), "json");
+var unauthorized18 = /* @__PURE__ */ __name2(() => json18({ error: "Unauthorized" }, 401), "unauthorized");
+var onRequestGet10 = /* @__PURE__ */ __name2(async ({ env, request }) => {
   if (request.headers.get("x-admin-key") !== ADMIN_KEY18) return unauthorized18();
   try {
     const result = await env.DB.prepare('SELECT * FROM sports ORDER BY "order" ASC').all();
@@ -669,7 +664,7 @@ var onRequestGet10 = /* @__PURE__ */ __name(async ({ env, request }) => {
     return json18({ error: e.message ?? "Internal error" }, 500);
   }
 }, "onRequestGet");
-var onRequestPost6 = /* @__PURE__ */ __name(async ({ env, request }) => {
+var onRequestPost6 = /* @__PURE__ */ __name2(async ({ env, request }) => {
   if (request.headers.get("x-admin-key") !== ADMIN_KEY18) return unauthorized18();
   try {
     const b = await request.json();
@@ -684,12 +679,10 @@ var onRequestPost6 = /* @__PURE__ */ __name(async ({ env, request }) => {
     return json18({ error: e.message ?? "Internal error" }, 500);
   }
 }, "onRequestPost");
-
-// api/admin/upload.ts
 var ADMIN_KEY19 = "1663017721@";
-var json19 = /* @__PURE__ */ __name((data, status = 200) => new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json" } }), "json");
-var unauthorized19 = /* @__PURE__ */ __name(() => json19({ error: "Unauthorized" }, 401), "unauthorized");
-var onRequestPost7 = /* @__PURE__ */ __name(async ({ env, request }) => {
+var json19 = /* @__PURE__ */ __name2((data, status = 200) => new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json" } }), "json");
+var unauthorized19 = /* @__PURE__ */ __name2(() => json19({ error: "Unauthorized" }, 401), "unauthorized");
+var onRequestPost7 = /* @__PURE__ */ __name2(async ({ env, request }) => {
   if (request.headers.get("x-admin-key") !== ADMIN_KEY19) return unauthorized19();
   try {
     const formData = await request.formData();
@@ -707,7 +700,7 @@ var onRequestPost7 = /* @__PURE__ */ __name(async ({ env, request }) => {
     return json19({ error: e.message ?? "Internal error" }, 500);
   }
 }, "onRequestPost");
-var onRequestGet11 = /* @__PURE__ */ __name(async ({ env, request }) => {
+var onRequestGet11 = /* @__PURE__ */ __name2(async ({ env, request }) => {
   if (request.headers.get("x-admin-key") !== ADMIN_KEY19) return unauthorized19();
   try {
     const url = new URL(request.url);
@@ -720,7 +713,7 @@ var onRequestGet11 = /* @__PURE__ */ __name(async ({ env, request }) => {
     return json19({ error: e.message ?? "Internal error" }, 500);
   }
 }, "onRequestGet");
-var onRequestDelete7 = /* @__PURE__ */ __name(async ({ env, request }) => {
+var onRequestDelete7 = /* @__PURE__ */ __name2(async ({ env, request }) => {
   if (request.headers.get("x-admin-key") !== ADMIN_KEY19) return unauthorized19();
   try {
     const body = await request.json();
@@ -731,11 +724,9 @@ var onRequestDelete7 = /* @__PURE__ */ __name(async ({ env, request }) => {
     return json19({ error: e.message ?? "Internal error" }, 500);
   }
 }, "onRequestDelete");
-
-// api/admin/upload-url.ts
 var ADMIN_KEY20 = "1663017721@";
-var json20 = /* @__PURE__ */ __name((data, status = 200) => new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json" } }), "json");
-var unauthorized20 = /* @__PURE__ */ __name(() => json20({ error: "Unauthorized" }, 401), "unauthorized");
+var json20 = /* @__PURE__ */ __name2((data, status = 200) => new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json" } }), "json");
+var unauthorized20 = /* @__PURE__ */ __name2(() => json20({ error: "Unauthorized" }, 401), "unauthorized");
 var EXT_TO_MIME = {
   jpg: "image/jpeg",
   jpeg: "image/jpeg",
@@ -756,7 +747,8 @@ function resolveContentType(rawCT, pathname) {
   return null;
 }
 __name(resolveContentType, "resolveContentType");
-var onRequestPost8 = /* @__PURE__ */ __name(async ({ env, request }) => {
+__name2(resolveContentType, "resolveContentType");
+var onRequestPost8 = /* @__PURE__ */ __name2(async ({ env, request }) => {
   if (request.headers.get("x-admin-key") !== ADMIN_KEY20) return unauthorized20();
   try {
     const body = await request.json();
@@ -803,12 +795,10 @@ var onRequestPost8 = /* @__PURE__ */ __name(async ({ env, request }) => {
     return json20({ error: e.message ?? "Internal error" }, 500);
   }
 }, "onRequestPost");
-
-// api/admin/users.ts
 var ADMIN_KEY21 = "1663017721@";
-var json21 = /* @__PURE__ */ __name((data, status = 200) => new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json" } }), "json");
-var unauthorized21 = /* @__PURE__ */ __name(() => json21({ error: "Unauthorized" }, 401), "unauthorized");
-var onRequestGet12 = /* @__PURE__ */ __name(async ({ env, request }) => {
+var json21 = /* @__PURE__ */ __name2((data, status = 200) => new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json" } }), "json");
+var unauthorized21 = /* @__PURE__ */ __name2(() => json21({ error: "Unauthorized" }, 401), "unauthorized");
+var onRequestGet12 = /* @__PURE__ */ __name2(async ({ env, request }) => {
   if (request.headers.get("x-admin-key") !== ADMIN_KEY21) return unauthorized21();
   try {
     const users = await env.DB.prepare(`
@@ -824,16 +814,14 @@ var onRequestGet12 = /* @__PURE__ */ __name(async ({ env, request }) => {
     return json21({ error: e.message ?? "Internal error" }, 500);
   }
 }, "onRequestGet");
-
-// api/analytics/pageview.ts
-var onRequestOptions = /* @__PURE__ */ __name(async () => new Response(null, {
+var onRequestOptions = /* @__PURE__ */ __name2(async () => new Response(null, {
   headers: {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type"
   }
 }), "onRequestOptions");
-var onRequestPost9 = /* @__PURE__ */ __name(async ({ env, request }) => {
+var onRequestPost9 = /* @__PURE__ */ __name2(async ({ env, request }) => {
   try {
     const body = await request.json();
     await env.DB.prepare("INSERT INTO pageviews (path, referrer, session_id) VALUES (?, ?, ?)").bind(body.path ?? "/", body.referrer ?? null, body.session_id ?? null).run();
@@ -842,8 +830,6 @@ var onRequestPost9 = /* @__PURE__ */ __name(async ({ env, request }) => {
     return new Response(null, { status: 204 });
   }
 }, "onRequestPost");
-
-// api/auth/_helpers.ts
 var JSON_HEADERS = {
   "Content-Type": "application/json",
   "Access-Control-Allow-Origin": "*"
@@ -859,10 +845,12 @@ function jsonOk(data, status = 200) {
   return new Response(JSON.stringify(data), { status, headers: JSON_HEADERS });
 }
 __name(jsonOk, "jsonOk");
+__name2(jsonOk, "jsonOk");
 function jsonErr(message, status = 400) {
   return new Response(JSON.stringify({ error: message }), { status, headers: JSON_HEADERS });
 }
 __name(jsonErr, "jsonErr");
+__name2(jsonErr, "jsonErr");
 async function hashPassword(password) {
   const encoder = new TextEncoder();
   const salt = crypto.getRandomValues(new Uint8Array(16));
@@ -883,6 +871,7 @@ async function hashPassword(password) {
   return `${saltHex}:${hashHex}`;
 }
 __name(hashPassword, "hashPassword");
+__name2(hashPassword, "hashPassword");
 async function verifyPassword(password, stored) {
   const [saltHex, hashHex] = stored.split(":");
   if (!saltHex || !hashHex) return false;
@@ -904,11 +893,13 @@ async function verifyPassword(password, stored) {
   return computed === hashHex;
 }
 __name(verifyPassword, "verifyPassword");
+__name2(verifyPassword, "verifyPassword");
 function generateToken() {
   const bytes = crypto.getRandomValues(new Uint8Array(32));
   return Array.from(bytes).map((b) => b.toString(16).padStart(2, "0")).join("");
 }
 __name(generateToken, "generateToken");
+__name2(generateToken, "generateToken");
 async function getAuthenticatedUser(request, DB) {
   const auth = request.headers.get("Authorization") ?? "";
   const token = auth.startsWith("Bearer ") ? auth.slice(7) : null;
@@ -923,10 +914,9 @@ async function getAuthenticatedUser(request, DB) {
   return row ?? null;
 }
 __name(getAuthenticatedUser, "getAuthenticatedUser");
-
-// api/auth/login.ts
-var onRequestOptions2 = /* @__PURE__ */ __name(async () => CORS_OPTIONS, "onRequestOptions");
-var onRequestPost10 = /* @__PURE__ */ __name(async ({ env, request }) => {
+__name2(getAuthenticatedUser, "getAuthenticatedUser");
+var onRequestOptions2 = /* @__PURE__ */ __name2(async () => CORS_OPTIONS, "onRequestOptions");
+var onRequestPost10 = /* @__PURE__ */ __name2(async ({ env, request }) => {
   try {
     const body = await request.json();
     const email = body.email?.trim().toLowerCase();
@@ -945,10 +935,8 @@ var onRequestPost10 = /* @__PURE__ */ __name(async ({ env, request }) => {
     return jsonErr(e.message ?? "Error interno", 500);
   }
 }, "onRequestPost");
-
-// api/auth/logout.ts
-var onRequestOptions3 = /* @__PURE__ */ __name(async () => CORS_OPTIONS, "onRequestOptions");
-var onRequestPost11 = /* @__PURE__ */ __name(async ({ env, request }) => {
+var onRequestOptions3 = /* @__PURE__ */ __name2(async () => CORS_OPTIONS, "onRequestOptions");
+var onRequestPost11 = /* @__PURE__ */ __name2(async ({ env, request }) => {
   try {
     const auth = request.headers.get("Authorization") ?? "";
     const token = auth.startsWith("Bearer ") ? auth.slice(7) : null;
@@ -960,18 +948,14 @@ var onRequestPost11 = /* @__PURE__ */ __name(async ({ env, request }) => {
     return jsonErr(e.message ?? "Error interno", 500);
   }
 }, "onRequestPost");
-
-// api/auth/me.ts
-var onRequestOptions4 = /* @__PURE__ */ __name(async () => CORS_OPTIONS, "onRequestOptions");
-var onRequestGet13 = /* @__PURE__ */ __name(async ({ env, request }) => {
+var onRequestOptions4 = /* @__PURE__ */ __name2(async () => CORS_OPTIONS, "onRequestOptions");
+var onRequestGet13 = /* @__PURE__ */ __name2(async ({ env, request }) => {
   const user = await getAuthenticatedUser(request, env.DB);
   if (!user) return jsonErr("No autenticado", 401);
   return jsonOk({ user });
 }, "onRequestGet");
-
-// api/auth/orders.ts
-var onRequestOptions5 = /* @__PURE__ */ __name(async () => CORS_OPTIONS, "onRequestOptions");
-var onRequestGet14 = /* @__PURE__ */ __name(async ({ env, request }) => {
+var onRequestOptions5 = /* @__PURE__ */ __name2(async () => CORS_OPTIONS, "onRequestOptions");
+var onRequestGet14 = /* @__PURE__ */ __name2(async ({ env, request }) => {
   const user = await getAuthenticatedUser(request, env.DB);
   if (!user) return jsonErr("No autenticado", 401);
   const orders = await env.DB.prepare(`
@@ -992,10 +976,8 @@ var onRequestGet14 = /* @__PURE__ */ __name(async ({ env, request }) => {
   }
   return jsonOk(orders.results.map((o) => ({ ...o, items: byOrder[o.id] ?? [] })));
 }, "onRequestGet");
-
-// api/auth/password.ts
-var onRequestOptions6 = /* @__PURE__ */ __name(async () => CORS_OPTIONS, "onRequestOptions");
-var onRequestPut10 = /* @__PURE__ */ __name(async ({ env, request }) => {
+var onRequestOptions6 = /* @__PURE__ */ __name2(async () => CORS_OPTIONS, "onRequestOptions");
+var onRequestPut10 = /* @__PURE__ */ __name2(async ({ env, request }) => {
   try {
     const user = await getAuthenticatedUser(request, env.DB);
     if (!user) return jsonErr("No autenticado", 401);
@@ -1018,15 +1000,13 @@ var onRequestPut10 = /* @__PURE__ */ __name(async ({ env, request }) => {
     return jsonErr(e.message ?? "Error interno", 500);
   }
 }, "onRequestPut");
-
-// api/auth/profile.ts
-var onRequestOptions7 = /* @__PURE__ */ __name(async () => CORS_OPTIONS, "onRequestOptions");
-var onRequestGet15 = /* @__PURE__ */ __name(async ({ env, request }) => {
+var onRequestOptions7 = /* @__PURE__ */ __name2(async () => CORS_OPTIONS, "onRequestOptions");
+var onRequestGet15 = /* @__PURE__ */ __name2(async ({ env, request }) => {
   const user = await getAuthenticatedUser(request, env.DB);
   if (!user) return jsonErr("No autenticado", 401);
   return jsonOk({ user });
 }, "onRequestGet");
-var onRequestPut11 = /* @__PURE__ */ __name(async ({ env, request }) => {
+var onRequestPut11 = /* @__PURE__ */ __name2(async ({ env, request }) => {
   try {
     const user = await getAuthenticatedUser(request, env.DB);
     if (!user) return jsonErr("No autenticado", 401);
@@ -1055,10 +1035,8 @@ var onRequestPut11 = /* @__PURE__ */ __name(async ({ env, request }) => {
     return jsonErr(e.message ?? "Error interno", 500);
   }
 }, "onRequestPut");
-
-// api/auth/register.ts
-var onRequestOptions8 = /* @__PURE__ */ __name(async () => CORS_OPTIONS, "onRequestOptions");
-var onRequestPost12 = /* @__PURE__ */ __name(async ({ env, request }) => {
+var onRequestOptions8 = /* @__PURE__ */ __name2(async () => CORS_OPTIONS, "onRequestOptions");
+var onRequestPost12 = /* @__PURE__ */ __name2(async ({ env, request }) => {
   try {
     const body = await request.json();
     const email = body.email?.trim().toLowerCase();
@@ -1088,10 +1066,8 @@ var onRequestPost12 = /* @__PURE__ */ __name(async ({ env, request }) => {
     return jsonErr(e.message ?? "Error interno", 500);
   }
 }, "onRequestPost");
-
-// api/wompi/transaction.ts
 var WOMPI_API = "https://production.wompi.co/v1";
-var onRequestGet16 = /* @__PURE__ */ __name(async ({ env, request }) => {
+var onRequestGet16 = /* @__PURE__ */ __name2(async ({ env, request }) => {
   const id = new URL(request.url).searchParams.get("id");
   if (!id) {
     return new Response(JSON.stringify({ error: "ID requerido" }), {
@@ -1118,19 +1094,19 @@ var onRequestGet16 = /* @__PURE__ */ __name(async ({ env, request }) => {
     { headers: { "Content-Type": "application/json" } }
   );
 }, "onRequestGet");
-
-// api/wompi/webhook.ts
 async function sha256hex(text) {
   const data = new TextEncoder().encode(text);
   const buf = await crypto.subtle.digest("SHA-256", data);
   return Array.from(new Uint8Array(buf)).map((b) => b.toString(16).padStart(2, "0")).join("");
 }
 __name(sha256hex, "sha256hex");
+__name2(sha256hex, "sha256hex");
 function getNestedValue(obj, path) {
   return path.split(".").reduce((o, k) => o?.[k], obj)?.toString() ?? "";
 }
 __name(getNestedValue, "getNestedValue");
-var onRequestPost13 = /* @__PURE__ */ __name(async ({ env, request }) => {
+__name2(getNestedValue, "getNestedValue");
+var onRequestPost13 = /* @__PURE__ */ __name2(async ({ env, request }) => {
   try {
     const event = await request.json();
     const propertyValues = event.signature.properties.map((p) => getNestedValue(event, p));
@@ -1155,8 +1131,6 @@ var onRequestPost13 = /* @__PURE__ */ __name(async ({ env, request }) => {
     return new Response(e.message ?? "Error", { status: 500 });
   }
 }, "onRequestPost");
-
-// api/products/[id].ts
 var cors = { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" };
 var QUERY = `
   SELECT p.id, p.name, p.model, CAST(p.price AS INTEGER) AS price,
@@ -1188,7 +1162,7 @@ var QUERY = `
   WHERE p.id = ?
   GROUP BY p.id
 `;
-var onRequestGet17 = /* @__PURE__ */ __name(async ({ env, params }) => {
+var onRequestGet17 = /* @__PURE__ */ __name2(async ({ env, params }) => {
   try {
     const id = params.id;
     if (!id || isNaN(+id)) {
@@ -1203,10 +1177,8 @@ var onRequestGet17 = /* @__PURE__ */ __name(async ({ env, params }) => {
     return new Response(JSON.stringify({ error: e.message ?? "Internal error" }), { status: 500, headers: cors });
   }
 }, "onRequestGet");
-
-// api/banners.ts
 var corsHeaders = { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" };
-var onRequestGet18 = /* @__PURE__ */ __name(async ({ env }) => {
+var onRequestGet18 = /* @__PURE__ */ __name2(async ({ env }) => {
   try {
     const result = await env.DB.prepare(
       'SELECT * FROM feature_banners WHERE isActive = 1 ORDER BY "order" ASC'
@@ -1219,10 +1191,8 @@ var onRequestGet18 = /* @__PURE__ */ __name(async ({ env }) => {
     });
   }
 }, "onRequestGet");
-
-// api/brands.ts
 var corsHeaders2 = { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" };
-var onRequestGet19 = /* @__PURE__ */ __name(async ({ env }) => {
+var onRequestGet19 = /* @__PURE__ */ __name2(async ({ env }) => {
   try {
     const result = await env.DB.prepare(
       'SELECT * FROM brands WHERE isActive = 1 ORDER BY "order" ASC'
@@ -1235,10 +1205,8 @@ var onRequestGet19 = /* @__PURE__ */ __name(async ({ env }) => {
     });
   }
 }, "onRequestGet");
-
-// api/categories.ts
 var corsHeaders3 = { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" };
-var onRequestGet20 = /* @__PURE__ */ __name(async ({ env }) => {
+var onRequestGet20 = /* @__PURE__ */ __name2(async ({ env }) => {
   try {
     const result = await env.DB.prepare(
       'SELECT * FROM categories WHERE isActive = 1 ORDER BY "order" ASC'
@@ -1248,10 +1216,8 @@ var onRequestGet20 = /* @__PURE__ */ __name(async ({ env }) => {
     return new Response(JSON.stringify({ error: "Internal server error" }), { status: 500, headers: corsHeaders3 });
   }
 }, "onRequestGet");
-
-// api/genders.ts
 var corsHeaders4 = { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" };
-var onRequestGet21 = /* @__PURE__ */ __name(async ({ env }) => {
+var onRequestGet21 = /* @__PURE__ */ __name2(async ({ env }) => {
   try {
     const result = await env.DB.prepare(
       'SELECT * FROM genders ORDER BY "order" ASC'
@@ -1264,10 +1230,8 @@ var onRequestGet21 = /* @__PURE__ */ __name(async ({ env }) => {
     });
   }
 }, "onRequestGet");
-
-// api/heroes.ts
 var corsHeaders5 = { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" };
-var onRequestGet22 = /* @__PURE__ */ __name(async ({ env }) => {
+var onRequestGet22 = /* @__PURE__ */ __name2(async ({ env }) => {
   try {
     const result = await env.DB.prepare(
       'SELECT * FROM heroes WHERE isActive = 1 ORDER BY "order" ASC'
@@ -1280,8 +1244,6 @@ var onRequestGet22 = /* @__PURE__ */ __name(async ({ env }) => {
     });
   }
 }, "onRequestGet");
-
-// api/orders.ts
 var headers = {
   "Content-Type": "application/json",
   "Access-Control-Allow-Origin": "*"
@@ -1291,15 +1253,16 @@ async function sha256hex2(text) {
   const buf = await crypto.subtle.digest("SHA-256", data);
   return Array.from(new Uint8Array(buf)).map((b) => b.toString(16).padStart(2, "0")).join("");
 }
-__name(sha256hex2, "sha256hex");
-var onRequestOptions9 = /* @__PURE__ */ __name(async () => new Response(null, {
+__name(sha256hex2, "sha256hex2");
+__name2(sha256hex2, "sha256hex");
+var onRequestOptions9 = /* @__PURE__ */ __name2(async () => new Response(null, {
   headers: {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type"
   }
 }), "onRequestOptions");
-var onRequestPost14 = /* @__PURE__ */ __name(async ({ env, request }) => {
+var onRequestPost14 = /* @__PURE__ */ __name2(async ({ env, request }) => {
   try {
     const body = await request.json();
     if (!body.items?.length) {
@@ -1370,13 +1333,11 @@ var onRequestPost14 = /* @__PURE__ */ __name(async ({ env, request }) => {
     );
   }
 }, "onRequestPost");
-
-// api/products.ts
 var headers2 = {
   "Content-Type": "application/json",
   "Access-Control-Allow-Origin": "*"
 };
-var onRequestGet23 = /* @__PURE__ */ __name(async ({ env, request }) => {
+var onRequestGet23 = /* @__PURE__ */ __name2(async ({ env, request }) => {
   try {
     const url = new URL(request.url);
     const gender = url.searchParams.get("gender");
@@ -1395,6 +1356,7 @@ var onRequestGet23 = /* @__PURE__ */ __name(async ({ env, request }) => {
         p.image,
         p.isBestSeller,
         p.isNew,
+        p.badge,
         p.description,
         (
           SELECT GROUP_CONCAT(pi2.size, ',')
@@ -1466,10 +1428,8 @@ var onRequestGet23 = /* @__PURE__ */ __name(async ({ env, request }) => {
     );
   }
 }, "onRequestGet");
-
-// api/sports.ts
 var corsHeaders6 = { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" };
-var onRequestGet24 = /* @__PURE__ */ __name(async ({ env }) => {
+var onRequestGet24 = /* @__PURE__ */ __name2(async ({ env }) => {
   try {
     const result = await env.DB.prepare(
       'SELECT * FROM sports WHERE isActive = 1 ORDER BY "order" ASC'
@@ -1482,8 +1442,6 @@ var onRequestGet24 = /* @__PURE__ */ __name(async ({ env }) => {
     });
   }
 }, "onRequestGet");
-
-// images/[[path]].ts
 var MIME_TYPES = {
   jpg: "image/jpeg",
   jpeg: "image/jpeg",
@@ -1493,7 +1451,7 @@ var MIME_TYPES = {
   svg: "image/svg+xml",
   avif: "image/avif"
 };
-var onRequestGet25 = /* @__PURE__ */ __name(async ({ env, params }) => {
+var onRequestGet25 = /* @__PURE__ */ __name2(async ({ env, params }) => {
   try {
     const pathParts = Array.isArray(params.path) ? params.path : [params.path];
     const key = "images/" + pathParts.join("/");
@@ -1511,8 +1469,6 @@ var onRequestGet25 = /* @__PURE__ */ __name(async ({ env, params }) => {
     return new Response("Internal server error", { status: 500 });
   }
 }, "onRequestGet");
-
-// ../.wrangler/tmp/pages-RydO6F/functionsRoutes-0.39258875021885464.mjs
 var routes = [
   {
     routePath: "/api/admin/banners/:id",
@@ -1977,8 +1933,6 @@ var routes = [
     modules: [onRequestGet25]
   }
 ];
-
-// ../node_modules/wrangler/node_modules/path-to-regexp/dist.es2015/index.js
 function lexer(str) {
   var tokens = [];
   var i = 0;
@@ -2063,6 +2017,7 @@ function lexer(str) {
   return tokens;
 }
 __name(lexer, "lexer");
+__name2(lexer, "lexer");
 function parse(str, options) {
   if (options === void 0) {
     options = {};
@@ -2073,18 +2028,18 @@ function parse(str, options) {
   var key = 0;
   var i = 0;
   var path = "";
-  var tryConsume = /* @__PURE__ */ __name(function(type) {
+  var tryConsume = /* @__PURE__ */ __name2(function(type) {
     if (i < tokens.length && tokens[i].type === type)
       return tokens[i++].value;
   }, "tryConsume");
-  var mustConsume = /* @__PURE__ */ __name(function(type) {
+  var mustConsume = /* @__PURE__ */ __name2(function(type) {
     var value2 = tryConsume(type);
     if (value2 !== void 0)
       return value2;
     var _a2 = tokens[i], nextType = _a2.type, index = _a2.index;
     throw new TypeError("Unexpected ".concat(nextType, " at ").concat(index, ", expected ").concat(type));
   }, "mustConsume");
-  var consumeText = /* @__PURE__ */ __name(function() {
+  var consumeText = /* @__PURE__ */ __name2(function() {
     var result2 = "";
     var value2;
     while (value2 = tryConsume("CHAR") || tryConsume("ESCAPED_CHAR")) {
@@ -2092,7 +2047,7 @@ function parse(str, options) {
     }
     return result2;
   }, "consumeText");
-  var isSafe = /* @__PURE__ */ __name(function(value2) {
+  var isSafe = /* @__PURE__ */ __name2(function(value2) {
     for (var _i = 0, delimiter_1 = delimiter; _i < delimiter_1.length; _i++) {
       var char2 = delimiter_1[_i];
       if (value2.indexOf(char2) > -1)
@@ -2100,7 +2055,7 @@ function parse(str, options) {
     }
     return false;
   }, "isSafe");
-  var safePattern = /* @__PURE__ */ __name(function(prefix2) {
+  var safePattern = /* @__PURE__ */ __name2(function(prefix2) {
     var prev = result[result.length - 1];
     var prevText = prefix2 || (prev && typeof prev === "string" ? prev : "");
     if (prev && !prevText) {
@@ -2163,12 +2118,14 @@ function parse(str, options) {
   return result;
 }
 __name(parse, "parse");
+__name2(parse, "parse");
 function match(str, options) {
   var keys = [];
   var re = pathToRegexp(str, keys, options);
   return regexpToFunction(re, keys, options);
 }
 __name(match, "match");
+__name2(match, "match");
 function regexpToFunction(re, keys, options) {
   if (options === void 0) {
     options = {};
@@ -2182,7 +2139,7 @@ function regexpToFunction(re, keys, options) {
       return false;
     var path = m[0], index = m.index;
     var params = /* @__PURE__ */ Object.create(null);
-    var _loop_1 = /* @__PURE__ */ __name(function(i2) {
+    var _loop_1 = /* @__PURE__ */ __name2(function(i2) {
       if (m[i2] === void 0)
         return "continue";
       var key = keys[i2 - 1];
@@ -2201,14 +2158,17 @@ function regexpToFunction(re, keys, options) {
   };
 }
 __name(regexpToFunction, "regexpToFunction");
+__name2(regexpToFunction, "regexpToFunction");
 function escapeString(str) {
   return str.replace(/([.+*?=^!:${}()[\]|/\\])/g, "\\$1");
 }
 __name(escapeString, "escapeString");
+__name2(escapeString, "escapeString");
 function flags(options) {
   return options && options.sensitive ? "" : "i";
 }
 __name(flags, "flags");
+__name2(flags, "flags");
 function regexpToRegexp(path, keys) {
   if (!keys)
     return path;
@@ -2229,6 +2189,7 @@ function regexpToRegexp(path, keys) {
   return path;
 }
 __name(regexpToRegexp, "regexpToRegexp");
+__name2(regexpToRegexp, "regexpToRegexp");
 function arrayToRegexp(paths, keys, options) {
   var parts = paths.map(function(path) {
     return pathToRegexp(path, keys, options).source;
@@ -2236,10 +2197,12 @@ function arrayToRegexp(paths, keys, options) {
   return new RegExp("(?:".concat(parts.join("|"), ")"), flags(options));
 }
 __name(arrayToRegexp, "arrayToRegexp");
+__name2(arrayToRegexp, "arrayToRegexp");
 function stringToRegexp(path, keys, options) {
   return tokensToRegexp(parse(path, options), keys, options);
 }
 __name(stringToRegexp, "stringToRegexp");
+__name2(stringToRegexp, "stringToRegexp");
 function tokensToRegexp(tokens, keys, options) {
   if (options === void 0) {
     options = {};
@@ -2295,6 +2258,7 @@ function tokensToRegexp(tokens, keys, options) {
   return new RegExp(route, flags(options));
 }
 __name(tokensToRegexp, "tokensToRegexp");
+__name2(tokensToRegexp, "tokensToRegexp");
 function pathToRegexp(path, keys, options) {
   if (path instanceof RegExp)
     return regexpToRegexp(path, keys);
@@ -2303,8 +2267,7 @@ function pathToRegexp(path, keys, options) {
   return stringToRegexp(path, keys, options);
 }
 __name(pathToRegexp, "pathToRegexp");
-
-// ../node_modules/wrangler/templates/pages-template-worker.ts
+__name2(pathToRegexp, "pathToRegexp");
 var escapeRegex = /[.+?^${}()|[\]\\]/g;
 function* executeRequest(request) {
   const requestPath = new URL(request.url).pathname;
@@ -2355,13 +2318,14 @@ function* executeRequest(request) {
   }
 }
 __name(executeRequest, "executeRequest");
+__name2(executeRequest, "executeRequest");
 var pages_template_worker_default = {
   async fetch(originalRequest, env, workerContext) {
     let request = originalRequest;
     const handlerIterator = executeRequest(request);
     let data = {};
     let isFailOpen = false;
-    const next = /* @__PURE__ */ __name(async (input, init) => {
+    const next = /* @__PURE__ */ __name2(async (input, init) => {
       if (input !== void 0) {
         let url = input;
         if (typeof input === "string") {
@@ -2388,7 +2352,7 @@ var pages_template_worker_default = {
           },
           env,
           waitUntil: workerContext.waitUntil.bind(workerContext),
-          passThroughOnException: /* @__PURE__ */ __name(() => {
+          passThroughOnException: /* @__PURE__ */ __name2(() => {
             isFailOpen = true;
           }, "passThroughOnException")
         };
@@ -2416,16 +2380,14 @@ var pages_template_worker_default = {
     }
   }
 };
-var cloneResponse = /* @__PURE__ */ __name((response) => (
+var cloneResponse = /* @__PURE__ */ __name2((response) => (
   // https://fetch.spec.whatwg.org/#null-body-status
   new Response(
     [101, 204, 205, 304].includes(response.status) ? null : response.body,
     response
   )
 ), "cloneResponse");
-
-// ../node_modules/wrangler/templates/middleware/middleware-ensure-req-body-drained.ts
-var drainBody = /* @__PURE__ */ __name(async (request, env, _ctx, middlewareCtx) => {
+var drainBody = /* @__PURE__ */ __name2(async (request, env, _ctx, middlewareCtx) => {
   try {
     return await middlewareCtx.next(request, env);
   } finally {
@@ -2441,8 +2403,6 @@ var drainBody = /* @__PURE__ */ __name(async (request, env, _ctx, middlewareCtx)
   }
 }, "drainBody");
 var middleware_ensure_req_body_drained_default = drainBody;
-
-// ../node_modules/wrangler/templates/middleware/middleware-miniflare3-json-error.ts
 function reduceError(e) {
   return {
     name: e?.name,
@@ -2452,7 +2412,8 @@ function reduceError(e) {
   };
 }
 __name(reduceError, "reduceError");
-var jsonError = /* @__PURE__ */ __name(async (request, env, _ctx, middlewareCtx) => {
+__name2(reduceError, "reduceError");
+var jsonError = /* @__PURE__ */ __name2(async (request, env, _ctx, middlewareCtx) => {
   try {
     return await middlewareCtx.next(request, env);
   } catch (e) {
@@ -2464,20 +2425,17 @@ var jsonError = /* @__PURE__ */ __name(async (request, env, _ctx, middlewareCtx)
   }
 }, "jsonError");
 var middleware_miniflare3_json_error_default = jsonError;
-
-// ../.wrangler/tmp/bundle-FrV9gn/middleware-insertion-facade.js
 var __INTERNAL_WRANGLER_MIDDLEWARE__ = [
   middleware_ensure_req_body_drained_default,
   middleware_miniflare3_json_error_default
 ];
 var middleware_insertion_facade_default = pages_template_worker_default;
-
-// ../node_modules/wrangler/templates/middleware/common.ts
 var __facade_middleware__ = [];
 function __facade_register__(...args) {
   __facade_middleware__.push(...args.flat());
 }
 __name(__facade_register__, "__facade_register__");
+__name2(__facade_register__, "__facade_register__");
 function __facade_invokeChain__(request, env, ctx, dispatch, middlewareChain) {
   const [head, ...tail] = middlewareChain;
   const middlewareCtx = {
@@ -2489,6 +2447,7 @@ function __facade_invokeChain__(request, env, ctx, dispatch, middlewareChain) {
   return head(request, env, ctx, middlewareCtx);
 }
 __name(__facade_invokeChain__, "__facade_invokeChain__");
+__name2(__facade_invokeChain__, "__facade_invokeChain__");
 function __facade_invoke__(request, env, ctx, dispatch, finalMiddleware) {
   return __facade_invokeChain__(request, env, ctx, dispatch, [
     ...__facade_middleware__,
@@ -2496,16 +2455,18 @@ function __facade_invoke__(request, env, ctx, dispatch, finalMiddleware) {
   ]);
 }
 __name(__facade_invoke__, "__facade_invoke__");
-
-// ../.wrangler/tmp/bundle-FrV9gn/middleware-loader.entry.ts
+__name2(__facade_invoke__, "__facade_invoke__");
 var __Facade_ScheduledController__ = class ___Facade_ScheduledController__ {
+  static {
+    __name(this, "___Facade_ScheduledController__");
+  }
   constructor(scheduledTime, cron, noRetry) {
     this.scheduledTime = scheduledTime;
     this.cron = cron;
     this.#noRetry = noRetry;
   }
   static {
-    __name(this, "__Facade_ScheduledController__");
+    __name2(this, "__Facade_ScheduledController__");
   }
   #noRetry;
   noRetry() {
@@ -2522,7 +2483,7 @@ function wrapExportedHandler(worker) {
   for (const middleware of __INTERNAL_WRANGLER_MIDDLEWARE__) {
     __facade_register__(middleware);
   }
-  const fetchDispatcher = /* @__PURE__ */ __name(function(request, env, ctx) {
+  const fetchDispatcher = /* @__PURE__ */ __name2(function(request, env, ctx) {
     if (worker.fetch === void 0) {
       throw new Error("Handler does not export a fetch() function.");
     }
@@ -2531,7 +2492,7 @@ function wrapExportedHandler(worker) {
   return {
     ...worker,
     fetch(request, env, ctx) {
-      const dispatcher = /* @__PURE__ */ __name(function(type, init) {
+      const dispatcher = /* @__PURE__ */ __name2(function(type, init) {
         if (type === "scheduled" && worker.scheduled !== void 0) {
           const controller = new __Facade_ScheduledController__(
             Date.now(),
@@ -2547,6 +2508,7 @@ function wrapExportedHandler(worker) {
   };
 }
 __name(wrapExportedHandler, "wrapExportedHandler");
+__name2(wrapExportedHandler, "wrapExportedHandler");
 function wrapWorkerEntrypoint(klass) {
   if (__INTERNAL_WRANGLER_MIDDLEWARE__ === void 0 || __INTERNAL_WRANGLER_MIDDLEWARE__.length === 0) {
     return klass;
@@ -2555,7 +2517,7 @@ function wrapWorkerEntrypoint(klass) {
     __facade_register__(middleware);
   }
   return class extends klass {
-    #fetchDispatcher = /* @__PURE__ */ __name((request, env, ctx) => {
+    #fetchDispatcher = /* @__PURE__ */ __name2((request, env, ctx) => {
       this.env = env;
       this.ctx = ctx;
       if (super.fetch === void 0) {
@@ -2563,7 +2525,7 @@ function wrapWorkerEntrypoint(klass) {
       }
       return super.fetch(request);
     }, "#fetchDispatcher");
-    #dispatcher = /* @__PURE__ */ __name((type, init) => {
+    #dispatcher = /* @__PURE__ */ __name2((type, init) => {
       if (type === "scheduled" && super.scheduled !== void 0) {
         const controller = new __Facade_ScheduledController__(
           Date.now(),
@@ -2586,6 +2548,7 @@ function wrapWorkerEntrypoint(klass) {
   };
 }
 __name(wrapWorkerEntrypoint, "wrapWorkerEntrypoint");
+__name2(wrapWorkerEntrypoint, "wrapWorkerEntrypoint");
 var WRAPPED_ENTRY;
 if (typeof middleware_insertion_facade_default === "object") {
   WRAPPED_ENTRY = wrapExportedHandler(middleware_insertion_facade_default);
@@ -2593,8 +2556,178 @@ if (typeof middleware_insertion_facade_default === "object") {
   WRAPPED_ENTRY = wrapWorkerEntrypoint(middleware_insertion_facade_default);
 }
 var middleware_loader_entry_default = WRAPPED_ENTRY;
-export {
-  __INTERNAL_WRANGLER_MIDDLEWARE__,
-  middleware_loader_entry_default as default
+
+// node_modules/wrangler/templates/middleware/middleware-ensure-req-body-drained.ts
+var drainBody2 = /* @__PURE__ */ __name(async (request, env, _ctx, middlewareCtx) => {
+  try {
+    return await middlewareCtx.next(request, env);
+  } finally {
+    try {
+      if (request.body !== null && !request.bodyUsed) {
+        const reader = request.body.getReader();
+        while (!(await reader.read()).done) {
+        }
+      }
+    } catch (e) {
+      console.error("Failed to drain the unused request body.", e);
+    }
+  }
+}, "drainBody");
+var middleware_ensure_req_body_drained_default2 = drainBody2;
+
+// node_modules/wrangler/templates/middleware/middleware-miniflare3-json-error.ts
+function reduceError2(e) {
+  return {
+    name: e?.name,
+    message: e?.message ?? String(e),
+    stack: e?.stack,
+    cause: e?.cause === void 0 ? void 0 : reduceError2(e.cause)
+  };
+}
+__name(reduceError2, "reduceError");
+var jsonError2 = /* @__PURE__ */ __name(async (request, env, _ctx, middlewareCtx) => {
+  try {
+    return await middlewareCtx.next(request, env);
+  } catch (e) {
+    const error = reduceError2(e);
+    return Response.json(error, {
+      status: 500,
+      headers: { "MF-Experimental-Error-Stack": "true" }
+    });
+  }
+}, "jsonError");
+var middleware_miniflare3_json_error_default2 = jsonError2;
+
+// .wrangler/tmp/bundle-Lpe83j/middleware-insertion-facade.js
+var __INTERNAL_WRANGLER_MIDDLEWARE__2 = [
+  middleware_ensure_req_body_drained_default2,
+  middleware_miniflare3_json_error_default2
+];
+var middleware_insertion_facade_default2 = middleware_loader_entry_default;
+
+// node_modules/wrangler/templates/middleware/common.ts
+var __facade_middleware__2 = [];
+function __facade_register__2(...args) {
+  __facade_middleware__2.push(...args.flat());
+}
+__name(__facade_register__2, "__facade_register__");
+function __facade_invokeChain__2(request, env, ctx, dispatch, middlewareChain) {
+  const [head, ...tail] = middlewareChain;
+  const middlewareCtx = {
+    dispatch,
+    next(newRequest, newEnv) {
+      return __facade_invokeChain__2(newRequest, newEnv, ctx, dispatch, tail);
+    }
+  };
+  return head(request, env, ctx, middlewareCtx);
+}
+__name(__facade_invokeChain__2, "__facade_invokeChain__");
+function __facade_invoke__2(request, env, ctx, dispatch, finalMiddleware) {
+  return __facade_invokeChain__2(request, env, ctx, dispatch, [
+    ...__facade_middleware__2,
+    finalMiddleware
+  ]);
+}
+__name(__facade_invoke__2, "__facade_invoke__");
+
+// .wrangler/tmp/bundle-Lpe83j/middleware-loader.entry.ts
+var __Facade_ScheduledController__2 = class ___Facade_ScheduledController__2 {
+  constructor(scheduledTime, cron, noRetry) {
+    this.scheduledTime = scheduledTime;
+    this.cron = cron;
+    this.#noRetry = noRetry;
+  }
+  static {
+    __name(this, "__Facade_ScheduledController__");
+  }
+  #noRetry;
+  noRetry() {
+    if (!(this instanceof ___Facade_ScheduledController__2)) {
+      throw new TypeError("Illegal invocation");
+    }
+    this.#noRetry();
+  }
 };
-//# sourceMappingURL=functionsWorker-0.0821403947263667.mjs.map
+function wrapExportedHandler2(worker) {
+  if (__INTERNAL_WRANGLER_MIDDLEWARE__2 === void 0 || __INTERNAL_WRANGLER_MIDDLEWARE__2.length === 0) {
+    return worker;
+  }
+  for (const middleware of __INTERNAL_WRANGLER_MIDDLEWARE__2) {
+    __facade_register__2(middleware);
+  }
+  const fetchDispatcher = /* @__PURE__ */ __name(function(request, env, ctx) {
+    if (worker.fetch === void 0) {
+      throw new Error("Handler does not export a fetch() function.");
+    }
+    return worker.fetch(request, env, ctx);
+  }, "fetchDispatcher");
+  return {
+    ...worker,
+    fetch(request, env, ctx) {
+      const dispatcher = /* @__PURE__ */ __name(function(type, init) {
+        if (type === "scheduled" && worker.scheduled !== void 0) {
+          const controller = new __Facade_ScheduledController__2(
+            Date.now(),
+            init.cron ?? "",
+            () => {
+            }
+          );
+          return worker.scheduled(controller, env, ctx);
+        }
+      }, "dispatcher");
+      return __facade_invoke__2(request, env, ctx, dispatcher, fetchDispatcher);
+    }
+  };
+}
+__name(wrapExportedHandler2, "wrapExportedHandler");
+function wrapWorkerEntrypoint2(klass) {
+  if (__INTERNAL_WRANGLER_MIDDLEWARE__2 === void 0 || __INTERNAL_WRANGLER_MIDDLEWARE__2.length === 0) {
+    return klass;
+  }
+  for (const middleware of __INTERNAL_WRANGLER_MIDDLEWARE__2) {
+    __facade_register__2(middleware);
+  }
+  return class extends klass {
+    #fetchDispatcher = /* @__PURE__ */ __name((request, env, ctx) => {
+      this.env = env;
+      this.ctx = ctx;
+      if (super.fetch === void 0) {
+        throw new Error("Entrypoint class does not define a fetch() function.");
+      }
+      return super.fetch(request);
+    }, "#fetchDispatcher");
+    #dispatcher = /* @__PURE__ */ __name((type, init) => {
+      if (type === "scheduled" && super.scheduled !== void 0) {
+        const controller = new __Facade_ScheduledController__2(
+          Date.now(),
+          init.cron ?? "",
+          () => {
+          }
+        );
+        return super.scheduled(controller);
+      }
+    }, "#dispatcher");
+    fetch(request) {
+      return __facade_invoke__2(
+        request,
+        this.env,
+        this.ctx,
+        this.#dispatcher,
+        this.#fetchDispatcher
+      );
+    }
+  };
+}
+__name(wrapWorkerEntrypoint2, "wrapWorkerEntrypoint");
+var WRAPPED_ENTRY2;
+if (typeof middleware_insertion_facade_default2 === "object") {
+  WRAPPED_ENTRY2 = wrapExportedHandler2(middleware_insertion_facade_default2);
+} else if (typeof middleware_insertion_facade_default2 === "function") {
+  WRAPPED_ENTRY2 = wrapWorkerEntrypoint2(middleware_insertion_facade_default2);
+}
+var middleware_loader_entry_default2 = WRAPPED_ENTRY2;
+export {
+  __INTERNAL_WRANGLER_MIDDLEWARE__2 as __INTERNAL_WRANGLER_MIDDLEWARE__,
+  middleware_loader_entry_default2 as default
+};
+//# sourceMappingURL=functionsWorker-0.11226448078115414.js.map

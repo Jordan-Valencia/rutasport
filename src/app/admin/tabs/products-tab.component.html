@@ -488,6 +488,39 @@
                 <span class="px-1.5 py-0.5 rounded-md bg-blue-500 text-white text-[10px] font-bold">NEW</span>
               </label>
             </div>
+
+            <!-- Badge personalizado -->
+            <div class="pt-1">
+              <label class="block text-xs font-medium text-slate-500 mb-1.5">
+                Badge del producto
+                <span class="ml-1 px-1.5 py-0.5 rounded-md bg-[#E31C1C] text-white text-[9px] font-black">{{ formData.badge || 'ORIGINAL' }}</span>
+              </label>
+              <div class="flex flex-wrap gap-1.5 mb-2">
+                <button type="button"
+                  class="rs-size-btn"
+                  [class.rs-size-btn-active]="formData.badge === 'ORIGINAL'"
+                  (click)="formData = { ...formData, badge: 'ORIGINAL' }">
+                  ORIGINAL
+                </button>
+                <button type="button"
+                  class="rs-size-btn"
+                  [class.rs-size-btn-active]="formData.badge === 'REPLICA'"
+                  (click)="formData = { ...formData, badge: 'REPLICA' }">
+                  REPLICA
+                </button>
+                <button type="button"
+                  class="rs-size-btn"
+                  [class.rs-size-btn-active]="formData.badge === 'PREMIUM'"
+                  (click)="formData = { ...formData, badge: 'PREMIUM' }">
+                  PREMIUM
+                </button>
+              </div>
+              <input
+                class="rs-input uppercase"
+                [(ngModel)]="formData.badge"
+                placeholder="O escribe un texto personalizado…"
+                maxlength="20" />
+            </div>
           </div>
 
         </div><!-- /columna izquierda -->

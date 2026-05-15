@@ -63,6 +63,7 @@ export const products = sqliteTable("products", {
 	image: text().default("").notNull(),
 	isBestSeller: integer().default(0),
 	isNew: integer().default(0),
+	badge: text().default("ORIGINAL"),
 	description: text(),
 	sizes: text(),
 	createdAt: text().default("2026-04-19T01:59:30.678Z"),

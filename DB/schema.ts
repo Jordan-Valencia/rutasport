@@ -42,6 +42,7 @@ export const productsTable = sqliteTable('products', {
   image:        text().notNull().default(''),  // imagen principal / thumbnail
   isBestSeller: int({ mode: 'boolean' }).default(false),
   isNew:        int({ mode: 'boolean' }).default(false),
+  badge:        text().default('ORIGINAL'),
   description:  text(),
   sizes:        text(),              // tallas disponibles separadas por coma: "7,7.5,8"
   createdAt:    text().default(new Date().toISOString()),

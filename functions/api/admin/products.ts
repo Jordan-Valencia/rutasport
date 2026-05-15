@@ -9,7 +9,7 @@ const PRODUCT_SELECT = `
   SELECT
     p.id, p.name, p.model, p.price, p.image, p.video,
     p.brand_id, p.gender_id,
-    p.isBestSeller, p.isNew, p.description, p.sizes, p.createdAt,
+    p.isBestSeller, p.isNew, p.badge, p.description, p.sizes, p.createdAt,
     b.name AS brand,
     g.name AS gender,
     (SELECT GROUP_CONCAT(c.name, ',')
@@ -53,13 +53,14 @@ export const onRequestPost: PagesFunction<Env> = async ({ env, request }) => {
 
     const ins = await env.DB.prepare(
       `INSERT INTO products (name, model, price, brand_id, gender_id,
-                             image, video, isBestSeller, isNew, description, sizes)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+                             image, video, isBestSeller, isNew, badge, description, sizes)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
     ).bind(
       b.name.trim(), b.model?.trim() || null, Math.round(price),
       b.brand_id || null, b.gender_id || null,
       b.image || '', b.video || '',
       b.isBestSeller ? 1 : 0, b.isNew ? 1 : 0,
+      b.badge?.trim() || 'ORIGINAL',
       b.description || null, b.sizes || null
     ).run()
 

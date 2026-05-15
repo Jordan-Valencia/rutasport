@@ -1064,6 +1064,34 @@ var onRequestPost12 = /* @__PURE__ */ __name2(async ({ env, request }) => {
     return jsonErr(e.message ?? "Error interno", 500);
   }
 }, "onRequestPost");
+var WOMPI_API = "https://production.wompi.co/v1";
+var onRequestGet16 = /* @__PURE__ */ __name2(async ({ env, request }) => {
+  const id = new URL(request.url).searchParams.get("id");
+  if (!id) {
+    return new Response(JSON.stringify({ error: "ID requerido" }), {
+      status: 400,
+      headers: { "Content-Type": "application/json" }
+    });
+  }
+  const res = await fetch(`${WOMPI_API}/transactions/${encodeURIComponent(id)}`, {
+    headers: { Authorization: `Bearer ${env.WOMPI_PUBLIC_KEY}` }
+  });
+  if (!res.ok) {
+    return new Response(JSON.stringify({ error: "No se pudo consultar la transacci\xF3n" }), {
+      status: res.status,
+      headers: { "Content-Type": "application/json" }
+    });
+  }
+  const body = await res.json();
+  return new Response(
+    JSON.stringify({
+      id: body.data.id,
+      status: body.data.status,
+      reference: body.data.reference
+    }),
+    { headers: { "Content-Type": "application/json" } }
+  );
+}, "onRequestGet");
 async function sha256hex(text) {
   const data = new TextEncoder().encode(text);
   const buf = await crypto.subtle.digest("SHA-256", data);
@@ -1132,7 +1160,7 @@ var QUERY = `
   WHERE p.id = ?
   GROUP BY p.id
 `;
-var onRequestGet16 = /* @__PURE__ */ __name2(async ({ env, params }) => {
+var onRequestGet17 = /* @__PURE__ */ __name2(async ({ env, params }) => {
   try {
     const id = params.id;
     if (!id || isNaN(+id)) {
@@ -1148,7 +1176,7 @@ var onRequestGet16 = /* @__PURE__ */ __name2(async ({ env, params }) => {
   }
 }, "onRequestGet");
 var corsHeaders = { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" };
-var onRequestGet17 = /* @__PURE__ */ __name2(async ({ env }) => {
+var onRequestGet18 = /* @__PURE__ */ __name2(async ({ env }) => {
   try {
     const result = await env.DB.prepare(
       'SELECT * FROM feature_banners WHERE isActive = 1 ORDER BY "order" ASC'
@@ -1162,7 +1190,7 @@ var onRequestGet17 = /* @__PURE__ */ __name2(async ({ env }) => {
   }
 }, "onRequestGet");
 var corsHeaders2 = { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" };
-var onRequestGet18 = /* @__PURE__ */ __name2(async ({ env }) => {
+var onRequestGet19 = /* @__PURE__ */ __name2(async ({ env }) => {
   try {
     const result = await env.DB.prepare(
       'SELECT * FROM brands WHERE isActive = 1 ORDER BY "order" ASC'
@@ -1176,7 +1204,7 @@ var onRequestGet18 = /* @__PURE__ */ __name2(async ({ env }) => {
   }
 }, "onRequestGet");
 var corsHeaders3 = { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" };
-var onRequestGet19 = /* @__PURE__ */ __name2(async ({ env }) => {
+var onRequestGet20 = /* @__PURE__ */ __name2(async ({ env }) => {
   try {
     const result = await env.DB.prepare(
       'SELECT * FROM categories WHERE isActive = 1 ORDER BY "order" ASC'
@@ -1187,7 +1215,7 @@ var onRequestGet19 = /* @__PURE__ */ __name2(async ({ env }) => {
   }
 }, "onRequestGet");
 var corsHeaders4 = { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" };
-var onRequestGet20 = /* @__PURE__ */ __name2(async ({ env }) => {
+var onRequestGet21 = /* @__PURE__ */ __name2(async ({ env }) => {
   try {
     const result = await env.DB.prepare(
       'SELECT * FROM genders ORDER BY "order" ASC'
@@ -1201,7 +1229,7 @@ var onRequestGet20 = /* @__PURE__ */ __name2(async ({ env }) => {
   }
 }, "onRequestGet");
 var corsHeaders5 = { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" };
-var onRequestGet21 = /* @__PURE__ */ __name2(async ({ env }) => {
+var onRequestGet22 = /* @__PURE__ */ __name2(async ({ env }) => {
   try {
     const result = await env.DB.prepare(
       'SELECT * FROM heroes WHERE isActive = 1 ORDER BY "order" ASC'
@@ -1251,7 +1279,15 @@ var onRequestPost14 = /* @__PURE__ */ __name2(async ({ env, request }) => {
       const inv = await env.DB.prepare("SELECT stock FROM product_inventory WHERE product_id = ? AND size = ?").bind(item.productId, rawSize).first();
       if (!inv || inv.stock < item.quantity) {
         return new Response(
-          JSON.stringify({ error: `Sin stock disponible para talla ${item.size}` }),
+          JSON.stringify({
+            error: "Sin stock disponible",
+            outOfStock: [{
+              productId: item.productId,
+              size: item.size,
+              name: item.name,
+              available: inv?.stock ?? 0
+            }]
+          }),
           { status: 409, headers }
         );
       }
@@ -1299,7 +1335,7 @@ var headers2 = {
   "Content-Type": "application/json",
   "Access-Control-Allow-Origin": "*"
 };
-var onRequestGet22 = /* @__PURE__ */ __name2(async ({ env, request }) => {
+var onRequestGet23 = /* @__PURE__ */ __name2(async ({ env, request }) => {
   try {
     const url = new URL(request.url);
     const gender = url.searchParams.get("gender");
@@ -1390,7 +1426,7 @@ var onRequestGet22 = /* @__PURE__ */ __name2(async ({ env, request }) => {
   }
 }, "onRequestGet");
 var corsHeaders6 = { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" };
-var onRequestGet23 = /* @__PURE__ */ __name2(async ({ env }) => {
+var onRequestGet24 = /* @__PURE__ */ __name2(async ({ env }) => {
   try {
     const result = await env.DB.prepare(
       'SELECT * FROM sports WHERE isActive = 1 ORDER BY "order" ASC'
@@ -1412,7 +1448,7 @@ var MIME_TYPES = {
   svg: "image/svg+xml",
   avif: "image/avif"
 };
-var onRequestGet24 = /* @__PURE__ */ __name2(async ({ env, params }) => {
+var onRequestGet25 = /* @__PURE__ */ __name2(async ({ env, params }) => {
   try {
     const pathParts = Array.isArray(params.path) ? params.path : [params.path];
     const key = "images/" + pathParts.join("/");
@@ -1803,6 +1839,13 @@ var routes = [
     modules: [onRequestPost12]
   },
   {
+    routePath: "/api/wompi/transaction",
+    mountPath: "/api/wompi",
+    method: "GET",
+    middlewares: [],
+    modules: [onRequestGet16]
+  },
+  {
     routePath: "/api/wompi/webhook",
     mountPath: "/api/wompi",
     method: "POST",
@@ -1814,42 +1857,42 @@ var routes = [
     mountPath: "/api/products",
     method: "GET",
     middlewares: [],
-    modules: [onRequestGet16]
+    modules: [onRequestGet17]
   },
   {
     routePath: "/api/banners",
     mountPath: "/api",
     method: "GET",
     middlewares: [],
-    modules: [onRequestGet17]
+    modules: [onRequestGet18]
   },
   {
     routePath: "/api/brands",
     mountPath: "/api",
     method: "GET",
     middlewares: [],
-    modules: [onRequestGet18]
+    modules: [onRequestGet19]
   },
   {
     routePath: "/api/categories",
     mountPath: "/api",
     method: "GET",
     middlewares: [],
-    modules: [onRequestGet19]
+    modules: [onRequestGet20]
   },
   {
     routePath: "/api/genders",
     mountPath: "/api",
     method: "GET",
     middlewares: [],
-    modules: [onRequestGet20]
+    modules: [onRequestGet21]
   },
   {
     routePath: "/api/heroes",
     mountPath: "/api",
     method: "GET",
     middlewares: [],
-    modules: [onRequestGet21]
+    modules: [onRequestGet22]
   },
   {
     routePath: "/api/orders",
@@ -1870,21 +1913,21 @@ var routes = [
     mountPath: "/api",
     method: "GET",
     middlewares: [],
-    modules: [onRequestGet22]
+    modules: [onRequestGet23]
   },
   {
     routePath: "/api/sports",
     mountPath: "/api",
     method: "GET",
     middlewares: [],
-    modules: [onRequestGet23]
+    modules: [onRequestGet24]
   },
   {
     routePath: "/images/:path*",
     mountPath: "/images",
     method: "GET",
     middlewares: [],
-    modules: [onRequestGet24]
+    modules: [onRequestGet25]
   }
 ];
 function lexer(str) {

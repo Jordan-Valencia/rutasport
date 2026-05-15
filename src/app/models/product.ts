@@ -18,6 +18,7 @@ export interface Product {
   gallery?:      string   // comma-separated URLs
   isBestSeller?: boolean | number
   isNew?:        boolean | number
+  badge?:        string
   description?:  string
   sizes?:        string
   inventory_raw?: string  // "7.5:1,8:2" — stock disponible por talla

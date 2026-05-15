@@ -1,6 +1,7 @@
-import { Component, OnInit, signal, inject, computed, HostListener } from '@angular/core'
+import { Component, OnInit, OnDestroy, signal, inject, computed, HostListener } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { ActivatedRoute, Router, RouterModule } from '@angular/router'
+import { Subscription } from 'rxjs'
 import { DataService } from '../../services/data.service'
 import { CartService } from '../../services/cart.service'
 import { Product } from '../../models/product'
@@ -15,7 +16,7 @@ import { CopPipe } from '../../shared/cop.pipe'
   templateUrl: './product-detail.component.html',
   styleUrl: './product-detail.component.css',
 })
-export class ProductDetailComponent implements OnInit {
+export class ProductDetailComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute)
   private router = inject(Router)
   private dataService = inject(DataService)
@@ -240,11 +241,54 @@ export class ProductDetailComponent implements OnInit {
     this.dragging.set(false)
   }
 
-  addToCart() {
+  // ── Quantity picker ───────────────────────────────────────────
+  showQtyPicker = signal(false)
+  pendingQty    = signal(1)
+
+  maxPurchasableQty = computed(() => {
+    const p = this.product()
+    if (!p) return 1
+    if (!p.inventory_raw) return 10
+    const sel = this.selectedSize()
+    if (!sel && this.sizes().length > 0) return 1
+    return this.stockForSelectedSize()
+  })
+
+  cartQtyForCurrentSelection = computed(() => {
+    const p = this.product()
+    const sel = this.selectedSize() || undefined
+    if (!p?.id) return 0
+    return this.cart.items().find(i => i.productId === p.id! && i.size === sel)?.quantity ?? 0
+  })
+
+  remainingQty = computed(() =>
+    Math.max(0, this.maxPurchasableQty() - this.cartQtyForCurrentSelection())
+  )
+
+  selectSize(size: string) {
+    this.selectedSize.set(size === this.selectedSize() ? '' : size)
+    this.showQtyPicker.set(false)
+    this.pendingQty.set(1)
+  }
+
+  incrementPendingQty() {
+    if (this.pendingQty() < this.remainingQty()) this.pendingQty.update(v => v + 1)
+  }
+
+  decrementPendingQty() {
+    if (this.pendingQty() > 1) this.pendingQty.update(v => v - 1)
+  }
+
+  cancelQtyPicker() {
+    this.showQtyPicker.set(false)
+    this.pendingQty.set(1)
+  }
+
+  confirmAddToCart() {
     const p = this.product()
     if (!p) return
-    if (this.sizes().length > 0 && !this.selectedSize()) return
     const size = this.selectedSize() || undefined
+    const hasInventory = !!p.inventory_raw
     this.cart.add({
       productId: p.id!,
       name: p.name,
@@ -253,25 +297,82 @@ export class ProductDetailComponent implements OnInit {
       price: p.price,
       image: p.image,
       size,
-      maxStock: size ? this.stockForSelectedSize() : undefined,
-    })
+      maxStock: (size && hasInventory) ? this.stockForSelectedSize() : undefined,
+    }, this.pendingQty())
+    this.showQtyPicker.set(false)
+    this.pendingQty.set(1)
     this.justAdded.set(true)
     setTimeout(() => this.justAdded.set(false), 2000)
   }
 
-  ngOnInit() {
-    const id = this.route.snapshot.paramMap.get('id')
-    if (!id) {
-      this.router.navigate(['/catalogo'])
-      return
-    }
-    this.dataService.getProductById(+id).subscribe(p => {
-      if (!p) {
-        this.router.navigate(['/catalogo'])
-        return
+  // ── Related products ───────────────────────────────────────────────────────
+  relatedProducts = signal<Product[]>([])
+  relatedVisible  = signal(false)
+  private relatedObserver?: IntersectionObserver
+
+  relatedSportColor(p: Product): string {
+    const sport = p.sports?.split(',')[0]?.trim() ?? ''
+    return this.SPORT_COLORS[sport] ?? '#E31C1C'
+  }
+
+  private setupRelatedObserver() {
+    const el = document.getElementById('related-section')
+    if (!el) return
+    this.relatedObserver = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        this.relatedVisible.set(true)
+        this.relatedObserver?.disconnect()
       }
+    }, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' })
+    this.relatedObserver.observe(el)
+  }
+
+  addToCart() {
+    if (this.sizes().length > 0 && !this.selectedSize()) return
+    if (this.remainingQty() === 0) return
+    if (this.remainingQty() === 1) {
+      this.pendingQty.set(1)
+      this.confirmAddToCart()
+    } else {
+      this.pendingQty.set(1)
+      this.showQtyPicker.set(true)
+    }
+  }
+
+  private routeSub?: Subscription
+
+  private loadProduct(id: string) {
+    this.loading.set(true)
+    this.product.set(null)
+    this.selectedSize.set('')
+    this.showQtyPicker.set(false)
+    this.pendingQty.set(1)
+    this.relatedProducts.set([])
+    this.relatedVisible.set(false)
+    this.relatedObserver?.disconnect()
+
+    this.dataService.getProductById(+id).subscribe(p => {
+      if (!p) { this.router.navigate(['/catalogo']); return }
       this.product.set(p)
       this.loading.set(false)
+
+      this.dataService.getProducts(p.brand ? { brand: p.brand } : {}).subscribe(all => {
+        this.relatedProducts.set(all.filter(r => r.id !== p.id).slice(0, 8))
+        setTimeout(() => this.setupRelatedObserver(), 120)
+      })
     })
+  }
+
+  ngOnInit() {
+    this.routeSub = this.route.paramMap.subscribe(params => {
+      const id = params.get('id')
+      if (!id) { this.router.navigate(['/catalogo']); return }
+      this.loadProduct(id)
+    })
+  }
+
+  ngOnDestroy() {
+    this.routeSub?.unsubscribe()
+    this.relatedObserver?.disconnect()
   }
 }

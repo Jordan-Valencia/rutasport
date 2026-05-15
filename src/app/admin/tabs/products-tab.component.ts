@@ -154,6 +154,7 @@ export class ProductsTabComponent implements OnInit {
       gender_id: null,
       isBestSeller: false,
       isNew: false,
+      badge: 'ORIGINAL',
       description: '',
     }
 

@@ -69,7 +69,15 @@ export const onRequestPost: PagesFunction<Env> = async ({ env, request }) => {
 
       if (!inv || inv.stock < item.quantity) {
         return new Response(
-          JSON.stringify({ error: `Sin stock disponible para talla ${item.size}` }),
+          JSON.stringify({
+            error: 'Sin stock disponible',
+            outOfStock: [{
+              productId: item.productId,
+              size: item.size,
+              name: item.name,
+              available: inv?.stock ?? 0,
+            }],
+          }),
           { status: 409, headers }
         )
       }

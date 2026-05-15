@@ -2,6 +2,7 @@ import { Injectable, signal, computed, inject, PLATFORM_ID } from '@angular/core
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { isPlatformBrowser } from '@angular/common'
 import { firstValueFrom } from 'rxjs'
+import { CartService } from './cart.service'
 
 export interface User {
   id: number
@@ -20,6 +21,7 @@ const TOKEN_KEY = 'rs_auth_token'
 export class AuthService {
   private readonly http = inject(HttpClient)
   private readonly platformId = inject(PLATFORM_ID)
+  private readonly cart = inject(CartService)
 
   readonly user = signal<User | null>(null)
   readonly isAuthenticated = computed(() => this.user() !== null)
@@ -75,6 +77,7 @@ export class AuthService {
     }
     this.clearToken()
     this.user.set(null)
+    this.cart.clear()
   }
 
   async fetchMe(): Promise<void> {

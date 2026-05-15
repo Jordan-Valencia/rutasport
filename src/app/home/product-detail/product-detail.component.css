@@ -40,3 +40,94 @@
 .cursor-zoom-in  { cursor: zoom-in; }
 .cursor-grab     { cursor: grab; }
 .cursor-grabbing { cursor: grabbing; }
+
+/* ══ Quantity picker ═════════════════════════════════════════════ */
+
+.qty-picker-enter {
+  animation: qty-in 0.28s cubic-bezier(0.34, 1.4, 0.64, 1) both;
+}
+
+@keyframes qty-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.qty-number {
+  transition: transform 0.15s cubic-bezier(0.34, 1.6, 0.64, 1);
+}
+
+.qty-number:not(:empty) {
+  animation: qty-pop 0.18s cubic-bezier(0.34, 1.6, 0.64, 1) both;
+}
+
+@keyframes qty-pop {
+  from { transform: scale(0.82); }
+  to   { transform: scale(1); }
+}
+
+/* ══ Related Products ════════════════════════════════════════════ */
+
+/* Section header fade-up */
+.related-header,
+.related-cta {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.related-header.related-anim {
+  opacity: 1;
+  transform: translateY(0);
+}
+.related-cta.related-anim {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.55s;
+}
+
+/* Title underline expand */
+.related-title-line {
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 1s cubic-bezier(0.22, 1, 0.36, 1) 0.25s;
+}
+.related-title-line.related-line-anim {
+  transform: scaleX(1);
+}
+
+/* Card reveal — staggered per card via CSS custom property --i */
+.related-card.related-card-anim {
+  animation: related-reveal 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(var(--i, 0) * 75ms + 150ms);
+}
+
+@keyframes related-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(36px) scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Card hover lift — separate from animation so they don't conflict */
+.related-card {
+  transition: box-shadow 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+              transform  0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.related-card:hover {
+  transform: translateY(-6px);
+  box-shadow:
+    0 28px 60px rgba(0, 0, 0, 0.75),
+    0 0 0 1px rgba(227, 28, 28, 0.18),
+    0 0 40px rgba(227, 28, 28, 0.06);
+  z-index: 1;
+}

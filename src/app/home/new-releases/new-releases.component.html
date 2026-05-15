@@ -88,8 +88,15 @@
             <!-- Gradient bottom -->
             <div class="absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-black/70 to-transparent pointer-events-none"></div>
 
-            <!-- NEW badge -->
-            <span class="absolute top-3 left-3 bg-[#E31C1C] text-white text-[8px] font-black tracking-[0.25em] px-2 py-1 uppercase leading-none">ORIGINAL</span>
+            <!-- Badge -->
+            <span class="absolute top-3 left-3 bg-[#E31C1C] text-white text-[8px] font-black tracking-[0.25em] px-2 py-1 uppercase leading-none">{{ product.badge || 'ORIGINAL' }}</span>
+
+            <!-- New icon -->
+            <div class="absolute top-3 right-3 w-6 h-6 rounded-full bg-black/55 backdrop-blur-sm flex items-center justify-center pointer-events-none">
+              <svg class="w-3.5 h-3.5 text-blue-400 fill-current" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/>
+              </svg>
+            </div>
 
             <!-- Add to cart CTA -->
             <button (click)="onAddClick(product, $event)"

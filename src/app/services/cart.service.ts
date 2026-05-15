@@ -1,4 +1,5 @@
-import { Injectable, signal, computed } from '@angular/core'
+import { Injectable, signal, computed, inject, effect, PLATFORM_ID } from '@angular/core'
+import { isPlatformBrowser } from '@angular/common'
 import { formatCOP } from '../shared/cop.pipe'
 
 export interface CartItem {
@@ -13,10 +14,26 @@ export interface CartItem {
   maxStock?: number  // stock máximo disponible para esta talla al momento de agregar
 }
 
+const CART_KEY = 'rs_cart'
+
 @Injectable({ providedIn: 'root' })
 export class CartService {
+  private platformId = inject(PLATFORM_ID)
+
   items = signal<CartItem[]>([])
   isOpen = signal(false)
+
+  constructor() {
+    if (isPlatformBrowser(this.platformId)) {
+      const stored = localStorage.getItem(CART_KEY)
+      if (stored) {
+        try { this.items.set(JSON.parse(stored)) } catch {}
+      }
+      effect(() => {
+        localStorage.setItem(CART_KEY, JSON.stringify(this.items()))
+      })
+    }
+  }
 
   readonly count = computed(() =>
     this.items().reduce((acc, item) => acc + item.quantity, 0)
@@ -32,7 +49,7 @@ export class CartService {
   close() { this.isOpen.set(false) }
   toggle() { this.isOpen.update(v => !v) }
 
-  add(item: Omit<CartItem, 'quantity'>) {
+  add(item: Omit<CartItem, 'quantity'>, qty = 1) {
     const idx = this.items().findIndex(
       i => i.productId === item.productId && i.size === item.size && i.model === item.model
     )
@@ -42,12 +59,13 @@ export class CartService {
         arr.map((i, n) => {
           if (n !== idx) return i
           const limit = item.maxStock ?? i.maxStock
-          if (limit !== undefined && i.quantity >= limit) return i
-          return { ...i, quantity: i.quantity + 1, maxStock: item.maxStock ?? i.maxStock }
+          const newQty = i.quantity + qty
+          return { ...i, quantity: limit !== undefined ? Math.min(newQty, limit) : newQty, maxStock: item.maxStock ?? i.maxStock }
         })
       )
     } else {
-      this.items.update(arr => [...arr, { ...item, quantity: 1 }])
+      const safeQty = item.maxStock !== undefined ? Math.min(qty, item.maxStock) : qty
+      this.items.update(arr => [...arr, { ...item, quantity: safeQty }])
     }
 
     this.open()

@@ -6,6 +6,13 @@ import { firstValueFrom } from 'rxjs'
 import { CartService } from './cart.service'
 import { AuthService } from './auth.service'
 
+export interface OutOfStockItem {
+  productId: number
+  size?: string
+  name: string
+  available: number
+}
+
 @Injectable({ providedIn: 'root' })
 export class CheckoutService {
   private platformId = inject(PLATFORM_ID)
@@ -16,6 +23,11 @@ export class CheckoutService {
 
   isLoading = signal(false)
   error = signal<string | null>(null)
+  outOfStockItems = signal<OutOfStockItem[]>([])
+
+  clearOutOfStock() {
+    this.outOfStockItems.set([])
+  }
 
   async checkout() {
     if (!isPlatformBrowser(this.platformId)) return
@@ -28,6 +40,7 @@ export class CheckoutService {
 
     this.isLoading.set(true)
     this.error.set(null)
+    this.outOfStockItems.set([])
 
     try {
       const headers = this.auth.token
@@ -39,8 +52,12 @@ export class CheckoutService {
       if (res?.wompiUrl) {
         window.location.href = res.wompiUrl
       }
-    } catch {
-      this.error.set('Error al procesar el pago. Intenta de nuevo.')
+    } catch (err: any) {
+      if (err?.status === 409 && err?.error?.outOfStock?.length) {
+        this.outOfStockItems.set(err.error.outOfStock)
+      } else {
+        this.error.set('Error al procesar el pago. Intenta de nuevo.')
+      }
       this.isLoading.set(false)
     }
   }

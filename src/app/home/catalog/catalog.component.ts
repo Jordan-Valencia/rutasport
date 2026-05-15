@@ -95,9 +95,7 @@ export class CatalogComponent {
     }
 
     if (gender) {
-      products = products.filter(
-        p => p.gender === gender || p.gender?.toLowerCase() === 'unisex'
-      )
+      products = products.filter(p => p.gender === gender)
     }
 
     if (this.filterBestSeller()) {

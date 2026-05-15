@@ -1,7 +1,7 @@
 var __defProp = Object.defineProperty;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
 
-// ../.wrangler/tmp/bundle-FrV9gn/checked-fetch.js
+// ../.wrangler/tmp/bundle-JZy5lF/checked-fetch.js
 var urls = /* @__PURE__ */ new Set();
 function checkURL(request, init) {
   const url = request instanceof URL ? request : new URL(
@@ -217,7 +217,7 @@ var onRequestPut7 = /* @__PURE__ */ __name(async ({ env, request, params }) => {
     }
     const result = await env.DB.prepare(
       `UPDATE products SET name=?, model=?, price=?, brand_id=?, gender_id=?,
-                           image=?, video=?, isBestSeller=?, isNew=?, description=?, sizes=?
+                           image=?, video=?, isBestSeller=?, isNew=?, badge=?, description=?, sizes=?
        WHERE id=?`
     ).bind(
       b.name.trim(),
@@ -229,6 +229,7 @@ var onRequestPut7 = /* @__PURE__ */ __name(async ({ env, request, params }) => {
       b.video || "",
       b.isBestSeller ? 1 : 0,
       b.isNew ? 1 : 0,
+      b.badge?.trim() || "ORIGINAL",
       b.description || null,
       b.sizes || null,
       params.id
@@ -567,7 +568,7 @@ var PRODUCT_SELECT = `
   SELECT
     p.id, p.name, p.model, p.price, p.image, p.video,
     p.brand_id, p.gender_id,
-    p.isBestSeller, p.isNew, p.description, p.sizes, p.createdAt,
+    p.isBestSeller, p.isNew, p.badge, p.description, p.sizes, p.createdAt,
     b.name AS brand,
     g.name AS gender,
     (SELECT GROUP_CONCAT(c.name, ',')
@@ -608,8 +609,8 @@ var onRequestPost5 = /* @__PURE__ */ __name(async ({ env, request }) => {
     }
     const ins = await env.DB.prepare(
       `INSERT INTO products (name, model, price, brand_id, gender_id,
-                             image, video, isBestSeller, isNew, description, sizes)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+                             image, video, isBestSeller, isNew, badge, description, sizes)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
     ).bind(
       b.name.trim(),
       b.model?.trim() || null,
@@ -620,6 +621,7 @@ var onRequestPost5 = /* @__PURE__ */ __name(async ({ env, request }) => {
       b.video || "",
       b.isBestSeller ? 1 : 0,
       b.isNew ? 1 : 0,
+      b.badge?.trim() || "ORIGINAL",
       b.description || null,
       b.sizes || null
     ).run();
@@ -1395,6 +1397,7 @@ var onRequestGet23 = /* @__PURE__ */ __name(async ({ env, request }) => {
         p.image,
         p.isBestSeller,
         p.isNew,
+        p.badge,
         p.description,
         (
           SELECT GROUP_CONCAT(pi2.size, ',')
@@ -1512,7 +1515,7 @@ var onRequestGet25 = /* @__PURE__ */ __name(async ({ env, params }) => {
   }
 }, "onRequestGet");
 
-// ../.wrangler/tmp/pages-RydO6F/functionsRoutes-0.39258875021885464.mjs
+// ../.wrangler/tmp/pages-IQ6imA/functionsRoutes-0.020142472924778443.mjs
 var routes = [
   {
     routePath: "/api/admin/banners/:id",
@@ -2465,7 +2468,7 @@ var jsonError = /* @__PURE__ */ __name(async (request, env, _ctx, middlewareCtx)
 }, "jsonError");
 var middleware_miniflare3_json_error_default = jsonError;
 
-// ../.wrangler/tmp/bundle-FrV9gn/middleware-insertion-facade.js
+// ../.wrangler/tmp/bundle-JZy5lF/middleware-insertion-facade.js
 var __INTERNAL_WRANGLER_MIDDLEWARE__ = [
   middleware_ensure_req_body_drained_default,
   middleware_miniflare3_json_error_default
@@ -2497,7 +2500,7 @@ function __facade_invoke__(request, env, ctx, dispatch, finalMiddleware) {
 }
 __name(__facade_invoke__, "__facade_invoke__");
 
-// ../.wrangler/tmp/bundle-FrV9gn/middleware-loader.entry.ts
+// ../.wrangler/tmp/bundle-JZy5lF/middleware-loader.entry.ts
 var __Facade_ScheduledController__ = class ___Facade_ScheduledController__ {
   constructor(scheduledTime, cron, noRetry) {
     this.scheduledTime = scheduledTime;
@@ -2597,4 +2600,4 @@ export {
   __INTERNAL_WRANGLER_MIDDLEWARE__,
   middleware_loader_entry_default as default
 };
-//# sourceMappingURL=functionsWorker-0.0821403947263667.mjs.map
+//# sourceMappingURL=functionsWorker-0.11226448078115414.mjs.map

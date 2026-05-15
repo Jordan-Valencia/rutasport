@@ -25,6 +25,7 @@ export const onRequestGet: PagesFunction<Env> = async ({ env, request }) => {
         p.image,
         p.isBestSeller,
         p.isNew,
+        p.badge,
         p.description,
         (
           SELECT GROUP_CONCAT(pi2.size, ',')
