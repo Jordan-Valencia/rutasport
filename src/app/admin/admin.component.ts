@@ -9,11 +9,12 @@ import { SportsTabComponent }     from './tabs/sports-tab.component'
 import { BrandsTabComponent }     from './tabs/brands-tab.component'
 import { CategoriesTabComponent } from './tabs/categories-tab.component'
 import { ImagesTabComponent }     from './tabs/images-tab.component'
+import { VideosTabComponent }     from './tabs/videos-tab.component'
 import { OrdersTabComponent }     from './tabs/orders-tab.component'
 import { UsersTabComponent }      from './tabs/users-tab.component'
 import { AnalyticsTabComponent }  from './tabs/analytics-tab.component'
 
-type AdminTab = 'products' | 'banners' | 'heroes' | 'sports' | 'brands' | 'categories' | 'images' | 'orders' | 'users' | 'analytics'
+type AdminTab = 'products' | 'banners' | 'heroes' | 'sports' | 'brands' | 'categories' | 'images' | 'videos' | 'orders' | 'users' | 'analytics'
 
 @Component({
   selector: 'app-admin',
@@ -22,7 +23,7 @@ type AdminTab = 'products' | 'banners' | 'heroes' | 'sports' | 'brands' | 'categ
     CommonModule, FormsModule,
     ProductsTabComponent, BannersTabComponent, HeroesTabComponent,
     SportsTabComponent, BrandsTabComponent, CategoriesTabComponent,
-    ImagesTabComponent, OrdersTabComponent, UsersTabComponent, AnalyticsTabComponent,
+    ImagesTabComponent, VideosTabComponent, OrdersTabComponent, UsersTabComponent, AnalyticsTabComponent,
   ],
   templateUrl: './admin.component.html',
 })
@@ -43,6 +44,7 @@ export class AdminComponent implements OnInit {
     { id: 'brands',     label: 'Marcas',       icon: '🏷️', section: 'Contenido' },
     { id: 'categories', label: 'Categorías',   icon: '🗂️', section: 'Contenido' },
     { id: 'images',     label: 'Imágenes',     icon: '📷', section: 'Contenido' },
+    { id: 'videos',     label: 'Videos',       icon: '🎬', section: 'Contenido' },
     { id: 'orders',     label: 'Ventas',       icon: '💳', section: 'Gestión' },
     { id: 'users',      label: 'Usuarios',     icon: '👥', section: 'Gestión' },
     { id: 'analytics',  label: 'Tráfico',      icon: '📊', section: 'Gestión' },

@@ -34,6 +34,9 @@ import { onRequestGet as __api_admin_upload_ts_onRequestGet } from "C:\\Users\\J
 import { onRequestPost as __api_admin_upload_ts_onRequestPost } from "C:\\Users\\Jordan\\Desktop\\trabajo\\rutasport\\functions\\api\\admin\\upload.ts"
 import { onRequestPost as __api_admin_upload_url_ts_onRequestPost } from "C:\\Users\\Jordan\\Desktop\\trabajo\\rutasport\\functions\\api\\admin\\upload-url.ts"
 import { onRequestGet as __api_admin_users_ts_onRequestGet } from "C:\\Users\\Jordan\\Desktop\\trabajo\\rutasport\\functions\\api\\admin\\users.ts"
+import { onRequestDelete as __api_admin_videos_ts_onRequestDelete } from "C:\\Users\\Jordan\\Desktop\\trabajo\\rutasport\\functions\\api\\admin\\videos.ts"
+import { onRequestGet as __api_admin_videos_ts_onRequestGet } from "C:\\Users\\Jordan\\Desktop\\trabajo\\rutasport\\functions\\api\\admin\\videos.ts"
+import { onRequestPost as __api_admin_videos_ts_onRequestPost } from "C:\\Users\\Jordan\\Desktop\\trabajo\\rutasport\\functions\\api\\admin\\videos.ts"
 import { onRequestOptions as __api_analytics_pageview_ts_onRequestOptions } from "C:\\Users\\Jordan\\Desktop\\trabajo\\rutasport\\functions\\api\\analytics\\pageview.ts"
 import { onRequestPost as __api_analytics_pageview_ts_onRequestPost } from "C:\\Users\\Jordan\\Desktop\\trabajo\\rutasport\\functions\\api\\analytics\\pageview.ts"
 import { onRequestOptions as __api_auth_login_ts_onRequestOptions } from "C:\\Users\\Jordan\\Desktop\\trabajo\\rutasport\\functions\\api\\auth\\login.ts"
@@ -64,6 +67,7 @@ import { onRequestPost as __api_orders_ts_onRequestPost } from "C:\\Users\\Jorda
 import { onRequestGet as __api_products_ts_onRequestGet } from "C:\\Users\\Jordan\\Desktop\\trabajo\\rutasport\\functions\\api\\products.ts"
 import { onRequestGet as __api_sports_ts_onRequestGet } from "C:\\Users\\Jordan\\Desktop\\trabajo\\rutasport\\functions\\api\\sports.ts"
 import { onRequestGet as __images___path___ts_onRequestGet } from "C:\\Users\\Jordan\\Desktop\\trabajo\\rutasport\\functions\\images\\[[path]].ts"
+import { onRequestGet as __videos___path___ts_onRequestGet } from "C:\\Users\\Jordan\\Desktop\\trabajo\\rutasport\\functions\\videos\\[[path]].ts"
 
 export const routes = [
     {
@@ -319,6 +323,27 @@ export const routes = [
       modules: [__api_admin_users_ts_onRequestGet],
     },
   {
+      routePath: "/api/admin/videos",
+      mountPath: "/api/admin",
+      method: "DELETE",
+      middlewares: [],
+      modules: [__api_admin_videos_ts_onRequestDelete],
+    },
+  {
+      routePath: "/api/admin/videos",
+      mountPath: "/api/admin",
+      method: "GET",
+      middlewares: [],
+      modules: [__api_admin_videos_ts_onRequestGet],
+    },
+  {
+      routePath: "/api/admin/videos",
+      mountPath: "/api/admin",
+      method: "POST",
+      middlewares: [],
+      modules: [__api_admin_videos_ts_onRequestPost],
+    },
+  {
       routePath: "/api/analytics/pageview",
       mountPath: "/api/analytics",
       method: "OPTIONS",
@@ -527,5 +552,12 @@ export const routes = [
       method: "GET",
       middlewares: [],
       modules: [__images___path___ts_onRequestGet],
+    },
+  {
+      routePath: "/videos/:path*",
+      mountPath: "/videos",
+      method: "GET",
+      middlewares: [],
+      modules: [__videos___path___ts_onRequestGet],
     },
   ]

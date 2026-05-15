@@ -49,7 +49,7 @@
     <!-- ═══ LEFT: 2-column 16:9 image grid ═══ -->
     <div class="grid grid-cols-2 gap-[2px] bg-[#141414] content-start">
 
-      @if (images().length === 0) {
+      @if (gridSlots().length === 0) {
         <div class="col-span-2 aspect-video bg-[#0e0e0e] flex items-center justify-center">
           <svg class="w-14 h-14 text-white/10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="0.75"
@@ -58,33 +58,74 @@
         </div>
       }
 
-      <!-- Todas las imágenes en grid uniforme 16:9.
-           Si el total es impar, la última ocupa las 2 columnas. -->
-      @for (img of images(); track $index; let last = $last) {
-        <div
-          class="cursor-zoom-in bg-[#0e0e0e]"
-          [class.aspect-video]="!(last && images().length % 2 !== 0)"
-          [class.overflow-hidden]="!(last && images().length % 2 !== 0)"
-          [class.col-span-2]="last && images().length % 2 !== 0"
-          [class.flex]="last && images().length % 2 !== 0"
-          [class.justify-center]="last && images().length % 2 !== 0"
-          (click)="openLightboxAt($index)"
-          (mouseenter)="hoveredIndex.set($index)"
-          (mouseleave)="hoveredIndex.set(-1)"
-          (mousemove)="onGalleryMouseMove($event)"
-        >
-          <div [class]="(last && images().length % 2 !== 0) ? 'w-1/2 aspect-video overflow-hidden' : 'w-full h-full'">
-            <img
-              [src]="img"
-              [alt]="product()!.name + ($index > 0 ? ' — vista ' + ($index + 1) : '')"
-              class="w-full h-full object-contain select-none gallery-img"
-              [style.transform]="hoveredIndex() === $index ? 'scale(' + HOVER_ZOOM + ')' : 'scale(1)'"
-              [style.transform-origin]="hoveredIndex() === $index ? hoverOriginX() + '% ' + hoverOriginY() + '%' : '50% 50%'"
-              [style.transition]="galleryImgTransition($index)"
-              onerror="this.style.opacity='0'"
-            />
+      @for (slot of gridSlots(); track $index; let last = $last) {
+
+        @if (slot.kind === 'video') {
+          <!-- ── Video cell (same size/look as image cells) ── -->
+          <div
+            class="relative bg-[#0e0e0e]"
+            [class.aspect-video]="!(last && gridSlots().length % 2 !== 0)"
+            [class.overflow-hidden]="!(last && gridSlots().length % 2 !== 0)"
+            [class.col-span-2]="last && gridSlots().length % 2 !== 0"
+            [class.flex]="last && gridSlots().length % 2 !== 0"
+            [class.justify-center]="last && gridSlots().length % 2 !== 0"
+          >
+            <div [class]="(last && gridSlots().length % 2 !== 0) ? 'w-1/2 aspect-video overflow-hidden relative' : 'w-full h-full relative'">
+              <video
+                class="grid-video w-full h-full object-contain"
+                [src]="slot.src"
+                autoplay
+                loop
+                muted
+                playsinline
+                (play)="videoPaused.set(false)"
+                (pause)="videoPaused.set(true)"
+              ></video>
+              <button
+                class="absolute top-2 right-2 w-7 h-7 flex items-center justify-center bg-black/55 hover:bg-black/80 text-white/70 hover:text-white rounded-full transition-all duration-200 cursor-pointer z-10"
+                (click)="toggleVideo()"
+              >
+                @if (videoPaused()) {
+                  <svg class="w-3.5 h-3.5 ml-0.5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z"/>
+                  </svg>
+                } @else {
+                  <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                  </svg>
+                }
+              </button>
+            </div>
           </div>
-        </div>
+
+        } @else {
+          <!-- ── Image cell ── -->
+          <div
+            class="cursor-zoom-in bg-[#0e0e0e]"
+            [class.aspect-video]="!(last && gridSlots().length % 2 !== 0)"
+            [class.overflow-hidden]="!(last && gridSlots().length % 2 !== 0)"
+            [class.col-span-2]="last && gridSlots().length % 2 !== 0"
+            [class.flex]="last && gridSlots().length % 2 !== 0"
+            [class.justify-center]="last && gridSlots().length % 2 !== 0"
+            (click)="openLightboxAt(slot.imgIdx)"
+            (mouseenter)="hoveredIndex.set($index)"
+            (mouseleave)="hoveredIndex.set(-1)"
+            (mousemove)="onGalleryMouseMove($event)"
+          >
+            <div [class]="(last && gridSlots().length % 2 !== 0) ? 'w-1/2 aspect-video overflow-hidden' : 'w-full h-full'">
+              <img
+                [src]="slot.src"
+                [alt]="product()!.name + (slot.imgIdx > 0 ? ' — vista ' + (slot.imgIdx + 1) : '')"
+                class="w-full h-full object-contain select-none gallery-img"
+                [style.transform]="hoveredIndex() === $index ? 'scale(' + HOVER_ZOOM + ')' : 'scale(1)'"
+                [style.transform-origin]="hoveredIndex() === $index ? hoverOriginX() + '% ' + hoverOriginY() + '%' : '50% 50%'"
+                [style.transition]="galleryImgTransition($index)"
+                onerror="this.style.opacity='0'"
+              />
+            </div>
+          </div>
+        }
+
       }
 
     </div>
@@ -324,22 +365,6 @@
             <p class="text-[13px] text-white/45 leading-relaxed whitespace-pre-line">
               {{ product()!.description }}
             </p>
-          </div>
-        }
-
-        <!-- Video -->
-        @if (product()!.video) {
-          <div class="border-t border-white/[0.07] pt-6 mb-6">
-            <span class="block text-[9px] font-black uppercase tracking-[0.25em] text-white/25 mb-3">
-              Video
-            </span>
-            <video
-              [src]="product()!.video"
-              class="w-full rounded-lg bg-black/40"
-              controls
-              playsinline>
-              Tu navegador no soporta video.
-            </video>
           </div>
         }
 

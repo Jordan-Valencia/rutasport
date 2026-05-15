@@ -71,6 +71,29 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     return p.image ? [p.image, ...gallery] : gallery
   })
 
+  gridSlots = computed(() => {
+    const imgs = this.images()
+    const video = this.product()?.video
+    const slots: Array<{ kind: 'image' | 'video'; src: string; imgIdx: number }> =
+      imgs.map((src, i) => ({ kind: 'image' as const, src, imgIdx: i }))
+    if (video) slots.splice(1, 0, { kind: 'video', src: video, imgIdx: -1 })
+    return slots
+  })
+
+  videoPaused = signal(false)
+
+  toggleVideo() {
+    const el = document.querySelector('video.grid-video') as HTMLVideoElement | null
+    if (!el) return
+    if (el.paused) {
+      el.play()
+      this.videoPaused.set(false)
+    } else {
+      el.pause()
+      this.videoPaused.set(true)
+    }
+  }
+
   sizes = computed(() => {
     const p = this.product()
     if (!p?.sizes) return []

@@ -2,16 +2,16 @@ import { Component, OnInit, signal, inject, ChangeDetectionStrategy } from '@ang
 import { CommonModule } from '@angular/common'
 import { AdminService } from '../admin.service'
 
-const PAGE_SIZE = 24
+const PAGE_SIZE = 18
 
 @Component({
-  selector: 'app-images-tab',
+  selector: 'app-videos-tab',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './images-tab.component.html',
+  templateUrl: './videos-tab.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ImagesTabComponent implements OnInit {
+export class VideosTabComponent implements OnInit {
   protected svc = inject(AdminService)
 
   items = signal<any[]>([])
@@ -63,7 +63,7 @@ export class ImagesTabComponent implements OnInit {
   private async fetchPage(cursor: string | null) {
     const params = new URLSearchParams({ limit: String(PAGE_SIZE) })
     if (cursor) params.set('cursor', cursor)
-    const res = await fetch(`/api/admin/upload?${params}`, { headers: { 'x-admin-key': this.svc.adminKey() } })
+    const res = await fetch(`/api/admin/videos?${params}`, { headers: { 'x-admin-key': this.svc.adminKey() } })
     const data = await res.json()
     if (!res.ok) throw new Error((data as any).error ?? `Error ${res.status}`)
     return data as { items: any[]; nextCursor: string | null; hasMore: boolean }
@@ -72,21 +72,29 @@ export class ImagesTabComponent implements OnInit {
   async upload(event: Event) {
     const input = event.target as HTMLInputElement
     if (!input.files?.length) return
+    const file = input.files[0]
     this.uploading.set(true)
     this.uploadedPath.set('')
-    const fd = new FormData()
-    fd.append('file', input.files[0])
     try {
-      const res = await fetch('/api/admin/upload', { method: 'POST', headers: { 'x-admin-key': this.svc.adminKey() }, body: fd })
-      const { path } = await res.json()
-      this.uploadedPath.set(path)
+      const res = await fetch('/api/admin/videos', {
+        method: 'POST',
+        headers: {
+          'x-admin-key': this.svc.adminKey(),
+          'content-type': file.type || 'video/mp4',
+          'x-filename': encodeURIComponent(file.name),
+        },
+        body: file,
+      })
+      const data = await res.json() as any
+      if (!res.ok) { this.apiError.set(data.error ?? 'Error al subir'); return }
+      this.uploadedPath.set(data.path)
       await this.load()
     } finally { this.uploading.set(false); input.value = '' }
   }
 
-  async deleteImage(key: string) {
-    if (!confirm('¿Eliminar esta imagen?')) return
-    await fetch('/api/admin/upload', {
+  async deleteVideo(key: string) {
+    if (!confirm('¿Eliminar este video?')) return
+    await fetch('/api/admin/videos', {
       method: 'DELETE',
       headers: { 'x-admin-key': this.svc.adminKey(), 'Content-Type': 'application/json' },
       body: JSON.stringify({ key }),
@@ -100,11 +108,11 @@ export class ImagesTabComponent implements OnInit {
     setTimeout(() => this.copiedKey.set(''), 1500)
   }
 
-  async downloadImage(url: string, filename = 'image') {
+  async downloadVideo(url: string, filename = 'video') {
     try {
       const res = await fetch(url)
       const blob = await res.blob()
-      const ext = blob.type.split('/')[1]?.replace('jpeg', 'jpg') ?? 'jpg'
+      const ext = blob.type.split('/')[1] ?? 'mp4'
       const name = filename.includes('.') ? filename : `${filename}.${ext}`
       const blobUrl = URL.createObjectURL(blob)
       const a = document.createElement('a')
@@ -122,7 +130,7 @@ export class ImagesTabComponent implements OnInit {
   formatBytes(bytes: number) {
     if (bytes < 1024) return bytes + ' B'
     if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB'
-    return (bytes / 1048576).toFixed(1) + ' MB'
+    if (bytes < 1073741824) return (bytes / 1048576).toFixed(1) + ' MB'
+    return (bytes / 1073741824).toFixed(1) + ' GB'
   }
-
 }

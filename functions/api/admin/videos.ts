@@ -10,20 +10,16 @@ const unauthorized = () => json({ error: 'Unauthorized' }, 401)
 export const onRequestPost: PagesFunction<Env> = async ({ env, request }) => {
   if (request.headers.get('x-admin-key') !== ADMIN_KEY) return unauthorized()
   try {
-    const formData = await request.formData()
-    const entry = formData.get('file')
-    if (!entry || typeof entry === 'string') return json({ error: 'No file provided' }, 400)
-    const file: File = entry
+    const contentType = request.headers.get('content-type') ?? ''
+    if (!contentType.startsWith('video/')) return json({ error: 'Solo se permiten archivos de video' }, 400)
 
-    const ext = file.name.split('.').pop()?.toLowerCase() ?? 'mp4'
-    const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_')
+    const rawFilename = request.headers.get('x-filename') ?? 'video'
+    const filename = decodeURIComponent(rawFilename)
+    const safeName = filename.replace(/[^a-zA-Z0-9._-]/g, '_')
+    const key = `videos/${Date.now()}-${safeName}`
 
-    const isVideo = file.type.startsWith('video/')
-    const folder = isVideo ? 'videos' : 'images'
-    const key = `${folder}/${Date.now()}-${safeName}`
-
-    const buffer = await file.arrayBuffer()
-    await env.IMAGES.put(key, buffer, { httpMetadata: { contentType: file.type } })
+    if (!request.body) return json({ error: 'No file provided' }, 400)
+    await env.IMAGES.put(key, request.body, { httpMetadata: { contentType } })
 
     return json({ path: `/${key}`, key })
   } catch (e: any) {
@@ -38,7 +34,7 @@ export const onRequestGet: PagesFunction<Env> = async ({ env, request }) => {
     const limit = Math.min(Math.max(parseInt(url.searchParams.get('limit') ?? '24'), 1), 100)
     const cursor = url.searchParams.get('cursor') ?? undefined
 
-    const list = await env.IMAGES.list({ prefix: 'images/', limit, cursor })
+    const list = await env.IMAGES.list({ prefix: 'videos/', limit, cursor })
     const items = list.objects.map(o => ({ key: o.key, path: `/${o.key}`, size: o.size, uploaded: o.uploaded }))
 
     return json({ items, nextCursor: list.truncated ? list.cursor : null, hasMore: list.truncated })
