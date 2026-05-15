@@ -504,16 +504,10 @@
                 </button>
                 <button type="button"
                   class="rs-size-btn"
-                  [class.rs-size-btn-active]="formData.badge === 'REPLICA'"
-                  (click)="formData = { ...formData, badge: 'REPLICA' }">
-                  REPLICA
-                </button>
-                <button type="button"
-                  class="rs-size-btn"
-                  [class.rs-size-btn-active]="formData.badge === 'PREMIUM'"
-                  (click)="formData = { ...formData, badge: 'PREMIUM' }">
-                  PREMIUM
-                </button>
+                  [class.rs-size-btn-active]="formData.badge === '1.1'"
+                  (click)="formData = { ...formData, badge: '1.1' }">
+                  1.1
+                </button>    
               </div>
               <input
                 class="rs-input uppercase"
@@ -650,7 +644,9 @@
             @if (formData.video) {
               <div class="relative rounded-xl overflow-hidden border border-slate-200 bg-black" style="aspect-ratio:16/9">
                 <video [src]="formData.video" class="w-full h-full object-contain" controls muted
-                  (canplay)="$any($event.target).muted = true; $any($event.target).volume = 0">
+                  (loadedmetadata)="$any($event.target).muted = true; $any($event.target).volume = 0"
+                  (canplay)="$any($event.target).muted = true; $any($event.target).volume = 0"
+                  (play)="$any($event.target).muted = true; $any($event.target).volume = 0">
                   Tu navegador no soporta video.
                 </video>
                 <button

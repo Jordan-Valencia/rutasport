@@ -1,13 +1,15 @@
 import { Component, OnInit, signal, inject, ChangeDetectionStrategy } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { AdminService } from '../admin.service'
+import { VirtualImgDirective } from './virtual-img.directive'
 
 const PAGE_SIZE = 24
+const MAX_RENDERED_ITEMS = 120
 
 @Component({
   selector: 'app-images-tab',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, VirtualImgDirective],
   templateUrl: './images-tab.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -18,6 +20,7 @@ export class ImagesTabComponent implements OnInit {
   loading = signal(false)
   loadingMore = signal(false)
   uploading = signal(false)
+  uploadProgress = signal<{ current: number; total: number } | null>(null)
   apiError = signal('')
   uploadedPath = signal('')
   copiedKey = signal('')
@@ -46,7 +49,10 @@ export class ImagesTabComponent implements OnInit {
     this.loadingMore.set(true)
     try {
       const data = await this.fetchPage(cursor)
-      this.items.update(prev => [...prev, ...this.mapItems(data.items)])
+      this.items.update(prev => {
+        const merged = [...prev, ...this.mapItems(data.items)]
+        return merged.length > MAX_RENDERED_ITEMS ? merged.slice(merged.length - MAX_RENDERED_ITEMS) : merged
+      })
       this.nextCursor.set(data.nextCursor)
       this.hasMore.set(data.hasMore)
     } catch { this.apiError.set('Error de red') } finally { this.loadingMore.set(false) }
@@ -72,16 +78,27 @@ export class ImagesTabComponent implements OnInit {
   async upload(event: Event) {
     const input = event.target as HTMLInputElement
     if (!input.files?.length) return
+    const files = Array.from(input.files)
     this.uploading.set(true)
     this.uploadedPath.set('')
-    const fd = new FormData()
-    fd.append('file', input.files[0])
+    this.uploadProgress.set({ current: 0, total: files.length })
+    let lastPath = ''
     try {
-      const res = await fetch('/api/admin/upload', { method: 'POST', headers: { 'x-admin-key': this.svc.adminKey() }, body: fd })
-      const { path } = await res.json()
-      this.uploadedPath.set(path)
+      for (let i = 0; i < files.length; i++) {
+        this.uploadProgress.set({ current: i + 1, total: files.length })
+        const fd = new FormData()
+        fd.append('file', files[i])
+        const res = await fetch('/api/admin/upload', { method: 'POST', headers: { 'x-admin-key': this.svc.adminKey() }, body: fd })
+        const { path } = await res.json()
+        lastPath = path
+      }
+      this.uploadedPath.set(files.length === 1 ? lastPath : `${files.length} imágenes subidas`)
       await this.load()
-    } finally { this.uploading.set(false); input.value = '' }
+    } finally {
+      this.uploading.set(false)
+      this.uploadProgress.set(null)
+      input.value = ''
+    }
   }
 
   async deleteImage(key: string) {
