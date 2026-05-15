@@ -17,8 +17,12 @@ export const onRequestGet: PagesFunction<Env> = async ({ env, params, request })
     const parts = Array.isArray(params.path) ? params.path : [params.path as string]
     const key = 'videos/' + parts.join('/')
 
-    // Pass request headers directly — R2 reads the Range header automatically
-    const obj = await env.IMAGES.get(key, { range: request.headers })
+    const rangeHeader = request.headers.get('range')
+
+    const obj = rangeHeader
+      ? await env.IMAGES.get(key, { range: request.headers })
+      : await env.IMAGES.get(key)
+
     if (!obj) return new Response('Not found', { status: 404 })
 
     const headers = new Headers()
@@ -32,7 +36,7 @@ export const onRequestGet: PagesFunction<Env> = async ({ env, params, request })
     headers.set('accept-ranges', 'bytes')
     headers.set('cache-control', 'public, max-age=31536000, immutable')
 
-    if (obj.range) {
+    if (rangeHeader && obj.range) {
       const r = obj.range as { offset?: number; length?: number }
       const offset = r.offset ?? 0
       const length = r.length ?? obj.size - offset

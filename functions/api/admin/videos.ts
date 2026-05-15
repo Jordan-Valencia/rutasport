@@ -18,8 +18,9 @@ export const onRequestPost: PagesFunction<Env> = async ({ env, request }) => {
     const safeName = filename.replace(/[^a-zA-Z0-9._-]/g, '_')
     const key = `videos/${Date.now()}-${safeName}`
 
-    if (!request.body) return json({ error: 'No file provided' }, 400)
-    await env.IMAGES.put(key, request.body, { httpMetadata: { contentType } })
+    const buffer = await request.arrayBuffer()
+    if (!buffer.byteLength) return json({ error: 'No file provided' }, 400)
+    await env.IMAGES.put(key, buffer, { httpMetadata: { contentType } })
 
     return json({ path: `/${key}`, key })
   } catch (e: any) {

@@ -588,13 +588,29 @@
             @if (imagesArray.length > 0) {
               <div class="grid grid-cols-3 gap-1.5">
                 @for (url of imagesArray; track url; let i = $index) {
-                  <div class="relative rounded-lg overflow-hidden border border-slate-100 bg-white" style="aspect-ratio:1/1">
+                  <div class="relative rounded-lg overflow-hidden border border-slate-100 bg-white flex flex-col" style="aspect-ratio:1/1">
                     <img [src]="url" alt="img {{i+1}}" class="w-full h-full object-cover">
+                    <!-- Eliminar -->
                     <button
                       type="button"
                       (click)="removeExtraImage(i)"
-                      class="cursor-pointer absolute top-1 right-1 w-5 h-5 flex items-center justify-center rounded-full bg-red-500 text-white text-[10px] hover:bg-red-600 transition-colors"
+                      class="cursor-pointer absolute top-1 right-1 w-5 h-5 flex items-center justify-center rounded-full bg-red-500 text-white text-[10px] hover:bg-red-600 transition-colors z-10"
                       aria-label="Eliminar">✕</button>
+                    <!-- Reordenar -->
+                    <div class="absolute bottom-0 left-0 right-0 flex">
+                      <button
+                        type="button"
+                        (click)="moveImageLeft(i)"
+                        [disabled]="i === 0"
+                        class="cursor-pointer flex-1 flex items-center justify-center py-0.5 bg-black/50 text-white text-[10px] hover:bg-black/70 transition-colors disabled:opacity-25 disabled:cursor-not-allowed"
+                        aria-label="Mover izquierda">&#8592;</button>
+                      <button
+                        type="button"
+                        (click)="moveImageRight(i)"
+                        [disabled]="i === imagesArray.length - 1"
+                        class="cursor-pointer flex-1 flex items-center justify-center py-0.5 bg-black/50 text-white text-[10px] hover:bg-black/70 transition-colors disabled:opacity-25 disabled:cursor-not-allowed border-l border-white/20"
+                        aria-label="Mover derecha">&#8594;</button>
+                    </div>
                   </div>
                 }
               </div>
@@ -627,59 +643,63 @@
             </div>
           </div>
 
-          <!-- Video -->
-          <div class="space-y-2 pt-4 border-t border-slate-200">
-            <p class="text-xs font-bold text-slate-400 uppercase tracking-widest pb-1 border-b border-slate-200">Video</p>
-
-            @if (formData.video) {
-              <div class="relative rounded-xl overflow-hidden border border-slate-200 bg-black" style="aspect-ratio:16/9">
-                <video [src]="formData.video" class="w-full h-full object-contain" controls>
-                  Tu navegador no soporta video.
-                </video>
-                <button
-                  type="button"
-                  (click)="removeVideo()"
-                  class="cursor-pointer absolute top-2 right-2 w-7 h-7 flex items-center justify-center rounded-full bg-red-500 text-white text-xs hover:bg-red-600 transition-colors shadow-lg"
-                  aria-label="Eliminar video">
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                  </svg>
-                </button>
-              </div>
-            } @else {
-              <div class="grid grid-cols-2 gap-2">
-                <label class="cursor-pointer flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-slate-200 hover:border-violet-400 hover:bg-violet-50 transition-colors py-4">
-                  @if (videoUploading()) {
-                    <div class="w-6 h-6 border-2 border-violet-600 border-t-transparent rounded-full animate-spin"></div>
-                  } @else {
-                    <svg class="w-8 h-8 text-slate-300 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
-                    </svg>
-                    <span class="text-xs text-slate-400">Subir video</span>
-                  }
-                  <input type="file" accept="video/*" (change)="uploadVideo($event)" class="hidden" [disabled]="videoUploading()">
-                </label>
-
-                <div class="flex flex-col">
-                  <input
-                    class="rs-input text-xs py-2 flex-1 min-w-0"
-                    [(ngModel)]="videoUrlInput"
-                    placeholder="O pega una URL…"
-                    [disabled]="videoUploading()" />
-                  <button
-                    type="button"
-                    class="cursor-pointer mt-2 px-3 py-1.5 rounded-xl border border-slate-200 text-xs text-slate-600 hover:bg-slate-100 transition-colors disabled:opacity-40"
-                    (click)="importVideoFromUrl()"
-                    [disabled]="videoUploading() || !videoUrlInput.trim()">
-                    Importar URL
-                  </button>
-                </div>
-              </div>
-            }
-          </div>
-
         </div><!-- /columna derecha -->
       </div><!-- /grid -->
+
+      <!-- ── Video: sección full-width ──────────────────────────────────── -->
+      <div class="px-5 sm:px-6 pb-5 sm:pb-6 pt-4 border-t border-slate-100 space-y-3">
+        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest pb-1 border-b border-slate-200">Video</p>
+
+        @if (formData.video) {
+          <div class="relative rounded-xl overflow-hidden border border-slate-200 bg-black">
+            <video [src]="formData.video" class="w-full max-h-[420px] object-contain" controls muted>
+              Tu navegador no soporta video.
+            </video>
+            <button
+              type="button"
+              (click)="removeVideo()"
+              class="cursor-pointer absolute top-2 right-2 w-8 h-8 flex items-center justify-center rounded-full bg-red-500 text-white hover:bg-red-600 transition-colors shadow-lg"
+              aria-label="Eliminar video">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+              </svg>
+            </button>
+          </div>
+        } @else {
+          <div class="flex flex-col sm:flex-row gap-3">
+            <label class="cursor-pointer flex-1 flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-slate-200 hover:border-violet-400 hover:bg-violet-50 transition-colors py-10">
+              @if (videoUploading()) {
+                <div class="w-8 h-8 border-2 border-violet-600 border-t-transparent rounded-full animate-spin mb-2"></div>
+                <span class="text-xs text-slate-400">Subiendo video…</span>
+              } @else {
+                <svg class="w-12 h-12 text-slate-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                </svg>
+                <span class="text-sm font-medium text-slate-500">Subir video</span>
+                <span class="text-xs text-slate-400 mt-1">MP4, MOV, WebM…</span>
+              }
+              <input type="file" accept="video/*" (change)="uploadVideo($event)" class="hidden" [disabled]="videoUploading()">
+            </label>
+
+            <div class="flex flex-col gap-2 sm:w-56">
+              <p class="text-xs font-medium text-slate-500">O pega una URL</p>
+              <input
+                class="rs-input text-xs py-2"
+                [(ngModel)]="videoUrlInput"
+                placeholder="https://…"
+                [disabled]="videoUploading()" />
+              <button
+                type="button"
+                class="cursor-pointer px-3 py-2 rounded-xl border border-slate-200 text-xs text-slate-600 hover:bg-slate-100 transition-colors disabled:opacity-40"
+                (click)="importVideoFromUrl()"
+                [disabled]="videoUploading() || !videoUrlInput.trim()">
+                Importar URL
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+
     </div><!-- /body scrollable -->
 
     <!-- Modal footer -->

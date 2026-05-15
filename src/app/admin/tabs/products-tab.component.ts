@@ -351,6 +351,20 @@ export class ProductsTabComponent implements OnInit {
     this.imagesArray = this.imagesArray.filter((_, i) => i !== index)
   }
 
+  moveImageLeft(i: number) {
+    if (i === 0) return
+    const arr = [...this.imagesArray];
+    [arr[i - 1], arr[i]] = [arr[i], arr[i - 1]]
+    this.imagesArray = arr
+  }
+
+  moveImageRight(i: number) {
+    if (i === this.imagesArray.length - 1) return
+    const arr = [...this.imagesArray];
+    [arr[i], arr[i + 1]] = [arr[i + 1], arr[i]]
+    this.imagesArray = arr
+  }
+
   async uploadVideo(event: Event) {
     const input = event.target as HTMLInputElement
     if (!input.files?.length) return
