@@ -1,5 +1,6 @@
 import { Component, signal, inject, PLATFORM_ID, OnInit, OnDestroy } from '@angular/core'
 import { CommonModule, isPlatformBrowser } from '@angular/common'
+import { FormsModule } from '@angular/forms'
 import { RouterModule, Router } from '@angular/router'
 import { CartService } from '../../services/cart.service'
 import { AuthService } from '../../services/auth.service'
@@ -16,7 +17,7 @@ const BANNER_PHRASES = [
 
 @Component({
   selector: 'app-header',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css'],
 })
@@ -31,6 +32,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   protected readonly bannerVisible = signal(false)
   protected readonly scrollProgress = signal(0)
   protected readonly activeSection = signal<string>('')
+  protected readonly searchQuery = signal('')
+  protected readonly searchOpen = signal(false)
 
   private phraseIndex = 0
   private intervalId: ReturnType<typeof setInterval> | null = null
@@ -77,6 +80,24 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   toggleMobileMenu(): void {
     this.mobileMenuOpen.update(v => !v)
+  }
+
+  toggleSearch(): void {
+    this.searchOpen.update(v => !v)
+  }
+
+  doSearch(): void {
+    const q = this.searchQuery().trim()
+    if (q) {
+      this.router.navigate(['/catalogo'], { queryParams: { q } })
+      this.searchOpen.set(false)
+      this.searchQuery.set('')
+    }
+  }
+
+  closeSearch(): void {
+    this.searchQuery.set('')
+    this.searchOpen.set(false)
   }
 
   scrollTo(sectionId: string, event: Event): void {

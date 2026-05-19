@@ -184,9 +184,10 @@
         </div>
 
         <!-- Product name -->
-        <h1 class="text-[clamp(2.6rem,5.5vw,4.2rem)] leading-[0.9] tracking-[-0.025em] font-black text-white mb-5">
+        <h1 class="text-[clamp(2.6rem,5.5vw,4.2rem)] leading-[0.9] tracking-[-0.025em] font-black text-white mb-1">
           {{ product()!.name }}
         </h1>
+        <p class="text-[15px] text-white/35 font-mono mb-5">Referencia: {{ product()!.model }}</p>
 
         <!-- Price + badges -->
         <div class="flex items-center flex-wrap gap-3 mb-7">

@@ -168,6 +168,7 @@ export class CatalogComponent {
       if (params['genero']) this.selectedGender.set(params['genero'])
       if (params['novedades']) this.filterIsNew.set(true)
       if (params['bestSeller']) this.filterBestSeller.set(true)
+      if (params['q']) this.searchQuery.set(params['q'])
     })
   }
 
