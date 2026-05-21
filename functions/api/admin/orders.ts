@@ -11,7 +11,7 @@ export const onRequestGet: PagesFunction<Env> = async ({ env, request }) => {
     const orders = await env.DB
       .prepare(`
         SELECT o.id, o.reference, o.status, o.shipping_status, o.tracking_number,
-               o.shipping_notes, o.total_in_cents, o.wompi_transaction_id, o.createdAt,
+               o.shipping_notes, o.total_in_cents, o.epayco_refpayco, o.createdAt,
                u.id   AS user_id,
                u.email AS user_email,
                u.full_name AS user_name,

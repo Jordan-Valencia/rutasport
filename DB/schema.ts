@@ -83,15 +83,19 @@ export const productInventoryTable = sqliteTable('product_inventory', {
   stock:      int().notNull().default(1),
 })
 
-// ─── Pedidos (integración Wompi) ──────────────────────────────────────────────
+// ─── Pedidos (integración ePayco) ─────────────────────────────────────────────
 
 export const ordersTable = sqliteTable('orders', {
-  id:                   int().primaryKey({ autoIncrement: true }),
-  reference:            text().notNull().unique(),
-  status:               text().notNull().default('PENDING'), // PENDING | APPROVED | DECLINED | VOIDED | ERROR
-  total_in_cents:       int().notNull(),
-  wompi_transaction_id: text(),
-  createdAt:            text().default(new Date().toISOString()),
+  id:              int().primaryKey({ autoIncrement: true }),
+  reference:       text().notNull().unique(),
+  status:          text().notNull().default('PENDING'), // RESERVED | APPROVED | DECLINED | EXPIRED | ERROR
+  total_in_cents:  int().notNull(),
+  user_id:         int(),
+  epayco_refpayco: text(),
+  shipping_status: text().default('PROCESSING'),
+  tracking_number: text(),
+  shipping_notes:  text(),
+  createdAt:       text().default(new Date().toISOString()),
 })
 
 export const orderItemsTable = sqliteTable('order_items', {

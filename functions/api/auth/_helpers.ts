@@ -26,6 +26,29 @@ export const CORS_OPTIONS = new Response(null, {
   },
 })
 
+const SESSION_COOKIE = 'rs_session'
+const SESSION_MAX_AGE = 30 * 24 * 60 * 60 // 30 days in seconds
+
+export function setSessionCookie(token: string): string {
+  return `${SESSION_COOKIE}=${token}; HttpOnly; SameSite=Lax; Path=/; Max-Age=${SESSION_MAX_AGE}`
+}
+
+export function clearSessionCookie(): string {
+  return `${SESSION_COOKIE}=; HttpOnly; SameSite=Lax; Path=/; Max-Age=0`
+}
+
+/** Extracts the session token from the Cookie header */
+export function getTokenFromCookie(request: Request): string | null {
+  const cookie = request.headers.get('Cookie') ?? ''
+  for (const part of cookie.split(';')) {
+    const trimmed = part.trim()
+    if (trimmed.startsWith(SESSION_COOKIE + '=')) {
+      return trimmed.slice(SESSION_COOKIE.length + 1) || null
+    }
+  }
+  return null
+}
+
 export function jsonOk(data: unknown, status = 200): Response {
   return new Response(JSON.stringify(data), { status, headers: JSON_HEADERS })
 }

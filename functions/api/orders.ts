@@ -1,7 +1,11 @@
+import { EpaycoService } from './epayco/epayco.service'
+
 interface Env {
   DB: D1Database
-  WOMPI_PUBLIC_KEY: string
-  WOMPI_INTEGRITY_KEY: string
+  EPAYCO_PUBLIC_KEY: string
+  EPAYCO_PRIVATE_KEY: string
+  EPAYCO_CUSTOMER_ID: string
+  EPAYCO_TEST: string
 }
 
 interface OrderItem {
@@ -19,12 +23,13 @@ const headers = {
   'Access-Control-Allow-Origin': '*',
 }
 
-async function sha256hex(text: string): Promise<string> {
-  const data = new TextEncoder().encode(text)
-  const buf = await crypto.subtle.digest('SHA-256', data)
-  return Array.from(new Uint8Array(buf))
-    .map(b => b.toString(16).padStart(2, '0'))
-    .join('')
+function getEpaycoService(env: Env): EpaycoService {
+  return new EpaycoService({
+    publicKey: env.EPAYCO_PUBLIC_KEY,
+    privateKey: env.EPAYCO_PRIVATE_KEY,
+    customerId: env.EPAYCO_CUSTOMER_ID,
+    test: env.EPAYCO_TEST !== 'false',
+  })
 }
 
 export const onRequestOptions: PagesFunction = async () =>
@@ -44,7 +49,6 @@ export const onRequestPost: PagesFunction<Env> = async ({ env, request }) => {
       return new Response(JSON.stringify({ error: 'Carrito vacío' }), { status: 400, headers })
     }
 
-    // Asociar orden al usuario autenticado (opcional)
     let userId: number | null = null
     const authHeader = request.headers.get('Authorization') ?? ''
     const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null
@@ -56,8 +60,6 @@ export const onRequestPost: PagesFunction<Env> = async ({ env, request }) => {
       userId = session?.user_id ?? null
     }
 
-    // Verificar y reservar stock por talla
-    // Las tallas llegan como "US7.5" desde el carrito; inventory las guarda sin prefijo ("7.5")
     for (const item of body.items) {
       const rawSize = item.size ? item.size.replace(/^US/i, '') : null
       if (!rawSize) continue
@@ -83,33 +85,16 @@ export const onRequestPost: PagesFunction<Env> = async ({ env, request }) => {
       }
     }
 
-    // Decrementar stock (reserva atómica por item)
-    for (const item of body.items) {
-      const rawSize = item.size ? item.size.replace(/^US/i, '') : null
-      if (!rawSize) continue
-      await env.DB
-        .prepare(`UPDATE product_inventory SET stock = stock - ?
-                  WHERE product_id = ? AND size = ? AND stock >= ?`)
-        .bind(item.quantity, item.productId, rawSize, item.quantity)
-        .run()
-    }
-
-    // Total en pesos COP → centavos para Wompi
     const totalCOP = body.items.reduce((acc, item) => acc + (Number(item.price) || 0) * item.quantity, 0)
-    const amountInCents = totalCOP * 100
-
-    // Referencia única
     const reference = `RS-${Date.now()}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`
 
-    // Crear orden en DB
     const order = await env.DB
-      .prepare(`INSERT INTO orders (reference, status, total_in_cents, user_id) VALUES (?, 'PENDING', ?, ?) RETURNING id`)
-      .bind(reference, amountInCents, userId)
+      .prepare(`INSERT INTO orders (reference, status, total_in_cents, user_id) VALUES (?, 'RESERVED', ?, ?) RETURNING id`)
+      .bind(reference, totalCOP, userId)
       .first<{ id: number }>()
 
     if (!order) throw new Error('Error al crear la orden')
 
-    // Insertar items
     const stmts = body.items.map(item =>
       env.DB.prepare(
         `INSERT INTO order_items (order_id, product_id, name, brand, model, size, price, quantity)
@@ -118,23 +103,27 @@ export const onRequestPost: PagesFunction<Env> = async ({ env, request }) => {
     )
     await env.DB.batch(stmts)
 
-    // Firma de integridad: SHA256(reference + amountInCents + "COP" + integrityKey)
-    const signature = await sha256hex(`${reference}${amountInCents}COP${env.WOMPI_INTEGRITY_KEY}`)
-
-    // URL de retorno según el host de la petición
+    const clientIp = request.headers.get('CF-Connecting-IP') || request.headers.get('x-forwarded-for') || '0.0.0.0'
     const origin = new URL(request.url).origin
-    const redirectUrl = `${origin}/pago/exitoso`
 
-    const wompiUrl = new URL('https://checkout.wompi.co/p/')
-    wompiUrl.searchParams.set('public-key', env.WOMPI_PUBLIC_KEY)
-    wompiUrl.searchParams.set('currency', 'COP')
-    wompiUrl.searchParams.set('amount-in-cents', amountInCents.toString())
-    wompiUrl.searchParams.set('reference', reference)
-    wompiUrl.searchParams.set('signature:integrity', signature)
-    wompiUrl.searchParams.set('redirect-url', redirectUrl)
+    const epayco = getEpaycoService(env)
+    const session = await epayco.createSession({
+      invoice: reference,
+      description: `Pedido ${reference}`,
+      amount: totalCOP,
+      ip: clientIp,
+      responseUrl: `${origin}/pago/exitoso`,
+      confirmationUrl: `${origin}/api/epayco/webhook`,
+    })
 
     return new Response(
-      JSON.stringify({ orderId: order.id, reference, wompiUrl: wompiUrl.toString() }),
+      JSON.stringify({
+        orderId: order.id,
+        reference,
+        totalCOP,
+        sessionId: session.sessionId,
+        test: epayco.isTest,
+      }),
       { headers }
     )
   } catch (e: any) {

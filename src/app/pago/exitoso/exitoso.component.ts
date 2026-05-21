@@ -25,7 +25,7 @@ export class PagoExitosoComponent implements OnInit, OnDestroy {
   private http       = inject(HttpClient)
   private platformId = inject(PLATFORM_ID)
 
-  transactionId = signal<string | null>(null)
+  transactionRef = signal<string | null>(null)
   status        = signal<TxStatus | 'LOADING' | 'ERROR_FETCH'>('LOADING')
 
   isLoading  = computed(() => this.status() === 'LOADING')
@@ -41,23 +41,23 @@ export class PagoExitosoComponent implements OnInit, OnDestroy {
   ngOnInit() {
     if (!isPlatformBrowser(this.platformId)) return
 
-    const id = this.route.snapshot.queryParamMap.get('id')
-    if (!id) {
+    const ref = this.route.snapshot.queryParamMap.get('ref_payco')
+    if (!ref) {
       this.status.set('ERROR_FETCH')
       return
     }
-    this.transactionId.set(id)
-    this.fetchStatus(id)
+    this.transactionRef.set(ref)
+    this.fetchStatus(ref)
   }
 
   ngOnDestroy() {
     if (this.pollTimer) clearTimeout(this.pollTimer)
   }
 
-  private async fetchStatus(id: string) {
+  private async fetchStatus(ref: string) {
     try {
       const tx = await firstValueFrom(
-        this.http.get<TxResponse>(`/api/wompi/transaction?id=${encodeURIComponent(id)}`)
+        this.http.get<TxResponse>(`/api/epayco/transaction?ref=${encodeURIComponent(ref)}`)
       )
       this.status.set(tx.status)
 
@@ -66,10 +66,9 @@ export class PagoExitosoComponent implements OnInit, OnDestroy {
         return
       }
 
-      // Si sigue PENDING, reintentar hasta MAX_POLLS veces
       if (tx.status === 'PENDING' && this.pollCount < this.MAX_POLLS) {
         this.pollCount++
-        this.pollTimer = setTimeout(() => this.fetchStatus(id), this.POLL_INTERVAL_MS)
+        this.pollTimer = setTimeout(() => this.fetchStatus(ref), this.POLL_INTERVAL_MS)
       }
     } catch {
       this.status.set('ERROR_FETCH')

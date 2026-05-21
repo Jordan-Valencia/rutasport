@@ -1,4 +1,4 @@
-import { Env, jsonOk, jsonErr, CORS_OPTIONS } from './_helpers'
+import { Env, jsonOk, jsonErr, CORS_OPTIONS, clearSessionCookie, JSON_HEADERS } from './_helpers'
 
 export const onRequestOptions: PagesFunction = async () => CORS_OPTIONS
 
@@ -14,7 +14,13 @@ export const onRequestPost: PagesFunction<Env> = async ({ env, request }) => {
         .run()
     }
 
-    return jsonOk({ message: 'Sesión cerrada' })
+    return new Response(JSON.stringify({ message: 'Sesión cerrada' }), {
+      status: 200,
+      headers: {
+        ...JSON_HEADERS,
+        'Set-Cookie': clearSessionCookie(),
+      },
+    })
   } catch (e: any) {
     return jsonErr(e.message ?? 'Error interno', 500)
   }

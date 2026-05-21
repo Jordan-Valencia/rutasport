@@ -1,4 +1,4 @@
-import { Env, jsonOk, jsonErr, CORS_OPTIONS, verifyPassword, generateToken } from './_helpers'
+import { Env, jsonOk, jsonErr, CORS_OPTIONS, verifyPassword, generateToken, setSessionCookie, JSON_HEADERS } from './_helpers'
 
 export const onRequestOptions: PagesFunction = async () => CORS_OPTIONS
 
@@ -31,7 +31,13 @@ export const onRequestPost: PagesFunction<Env> = async ({ env, request }) => {
 
     const { password_hash: _, ...user } = row
 
-    return jsonOk({ token, user })
+    return new Response(JSON.stringify({ token, user }), {
+      status: 200,
+      headers: {
+        ...JSON_HEADERS,
+        'Set-Cookie': setSessionCookie(token),
+      },
+    })
   } catch (e: any) {
     return jsonErr(e.message ?? 'Error interno', 500)
   }

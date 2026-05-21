@@ -5,12 +5,21 @@ import { Router } from '@angular/router'
 import { firstValueFrom } from 'rxjs'
 import { CartService } from './cart.service'
 import { AuthService } from './auth.service'
+import { EpaycoCheckoutService } from './epayco-checkout.service'
 
 export interface OutOfStockItem {
   productId: number
   size?: string
   name: string
   available: number
+}
+
+interface CheckoutResponse {
+  orderId: number
+  reference: string
+  totalCOP: number
+  sessionId: string
+  test: boolean
 }
 
 @Injectable({ providedIn: 'root' })
@@ -20,6 +29,7 @@ export class CheckoutService {
   private router = inject(Router)
   private cart = inject(CartService)
   private auth = inject(AuthService)
+  private epaycoCheckout = inject(EpaycoCheckoutService)
 
   isLoading = signal(false)
   error = signal<string | null>(null)
@@ -47,11 +57,16 @@ export class CheckoutService {
         ? new HttpHeaders({ Authorization: `Bearer ${this.auth.token}` })
         : undefined
       const res = await firstValueFrom(
-        this.http.post<{ wompiUrl: string }>('/api/orders', { items: this.cart.items() }, { headers })
+        this.http.post<CheckoutResponse>('/api/orders', { items: this.cart.items() }, { headers })
       )
-      if (res?.wompiUrl) {
-        window.location.href = res.wompiUrl
+
+      if (res?.sessionId) {
+        this.isLoading.set(false)
+        await this.epaycoCheckout.openCheckout(res.sessionId, res.test)
+        return
       }
+
+      this.isLoading.set(false)
     } catch (err: any) {
       if (err?.status === 409 && err?.error?.outOfStock?.length) {
         this.outOfStockItems.set(err.error.outOfStock)

@@ -12,7 +12,7 @@ interface OrderItem {
 interface Order {
   id: number; reference: string; status: string; shipping_status: string
   tracking_number: string | null; shipping_notes: string | null
-  total_in_cents: number; wompi_transaction_id: string | null; createdAt: string
+  total_in_cents: number; epayco_refpayco: string | null; createdAt: string
   user_id: number | null; user_email: string | null; user_name: string | null
   user_phone: string | null; user_region: string | null; user_city: string | null
   user_address: string | null
