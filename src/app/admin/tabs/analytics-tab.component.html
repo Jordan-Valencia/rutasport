@@ -38,7 +38,7 @@
     </div>
 
     <!-- Revenue KPIs -->
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+    <div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
       <div class="bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl p-5 text-white sm:col-span-2">
         <p class="text-xs text-white/60 mb-1">Ingresos totales</p>
         <p class="text-3xl font-bold">{{ formatRevenue(data()!.orderStats.revenue_cop) }}</p>
@@ -51,6 +51,14 @@
       <div class="bg-white rounded-2xl border border-slate-100 p-5">
         <p class="text-xs text-slate-400 mb-1">Aprobadas</p>
         <p class="text-3xl font-bold text-emerald-600">{{ data()!.orderStats.approved }}</p>
+      </div>
+      <div class="bg-white rounded-2xl border border-slate-100 p-5">
+        <p class="text-xs text-slate-400 mb-1">Rechazadas</p>
+        <p class="text-3xl font-bold text-red-600">{{ data()!.orderStats.declined }}</p>
+      </div>
+      <div class="bg-white rounded-2xl border border-slate-100 p-5">
+        <p class="text-xs text-slate-400 mb-1">Canceladas</p>
+        <p class="text-3xl font-bold text-rose-600">{{ data()!.orderStats.cancelled }}</p>
       </div>
     </div>
 

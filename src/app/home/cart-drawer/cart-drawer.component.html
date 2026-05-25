@@ -239,7 +239,7 @@
         <button
           (click)="checkout.checkout()"
           [disabled]="checkout.isLoading()"
-          class="cursor-pointer w-full py-4 bg-[#7B3FE4] hover:bg-[#6B32CC] disabled:opacity-60 disabled:cursor-not-allowed active:scale-[0.99] text-white font-black tracking-widest transition-all flex items-center justify-center gap-3 text-sm rounded-2xl shadow-lg shadow-purple-500/20">
+          class="cursor-pointer w-full py-4 bg-[#7B3FE4] hover:bg-[#6B32CC] disabled:opacity-60 disabled:cursor-not-allowed active:scale-[0.99] text-white font-black tracking-widest transition-all flex items-center justify-center gap-3 text-sm rounded-2xl shadow-lg shadow-red-500/20">
 
           @if (checkout.isLoading()) {
             <svg class="w-5 h-5 animate-spin flex-shrink-0" fill="none" viewBox="0 0 24 24">
@@ -251,7 +251,7 @@
             <svg class="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
             </svg>
-            PAGAR CON ePayco
+            PAGAR
           }
         </button>
 

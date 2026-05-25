@@ -24,7 +24,7 @@
         <li><a (click)="scrollTo('acceso')" class="hover:text-black transition-colors cursor-pointer">Condiciones de acceso y uso</a></li>
         <li><a (click)="scrollTo('compra')" class="hover:text-black transition-colors cursor-pointer">Proceso de compra</a></li>
         <li><a (click)="scrollTo('precios')" class="hover:text-black transition-colors cursor-pointer">Precios e impuestos</a></li>
-        <li><a (click)="scrollTo('pasarela')" class="hover:text-black transition-colors cursor-pointer">Pasarela de pago — Wompi (Bancolombia)</a></li>
+        <li><a (click)="scrollTo('pasarela')" class="hover:text-black transition-colors cursor-pointer">Pasarela de pago — ePayco</a></li>
         <li><a (click)="scrollTo('retracto')" class="hover:text-black transition-colors cursor-pointer">Derecho de retracto</a></li>
         <li><a (click)="scrollTo('garantia')" class="hover:text-black transition-colors cursor-pointer">Garantía y devoluciones</a></li>
         <li><a (click)="scrollTo('envio')" class="hover:text-black transition-colors cursor-pointer">Despacho y entrega</a></li>
@@ -79,7 +79,7 @@
         <li><strong>Selección del producto:</strong> el usuario elige el artículo, la talla y la cantidad deseada y lo agrega al carrito de compras.</li>
         <li><strong>Revisión del carrito:</strong> el usuario verifica los productos seleccionados, sus precios y el subtotal antes de continuar.</li>
         <li><strong>Datos de envío:</strong> se ingresan o confirman los datos de entrega (nombre, dirección, ciudad, departamento y teléfono).</li>
-        <li><strong>Pago:</strong> el usuario elige el método de pago disponible y es redirigido de forma segura a la pasarela Wompi para completar la transacción.</li>
+        <li><strong>Pago:</strong> el usuario elige el método de pago disponible y es redirigido de forma segura a la pasarela ePayco para completar la transacción.</li>
         <li><strong>Confirmación:</strong> una vez aprobado el pago, RutaSport enviará al correo registrado la confirmación del pedido con el número de referencia.</li>
       </ol>
       <p class="text-sm text-gray-700 leading-relaxed">
@@ -104,19 +104,19 @@
       </p>
     </section>
 
-    <!-- 5. Pasarela de pago — Wompi -->
+    <!-- 5. Pasarela de pago — ePayco -->
     <section id="pasarela" class="space-y-4">
-      <h2 class="text-xl font-bold border-b border-gray-200 pb-2">5. Pasarela de pago — Wompi (Bancolombia)</h2>
+      <h2 class="text-xl font-bold border-b border-gray-200 pb-2">5. Pasarela de pago — ePayco</h2>
 
       <div class="bg-gray-50 rounded-xl p-4 text-sm text-gray-700 space-y-1">
         <p class="font-semibold text-gray-800">Importante</p>
-        <p>Los pagos realizados en RutaSport son procesados de manera exclusiva por <strong>Wompi S.A.S.</strong>, plataforma tecnológica de pagos en línea propiedad de <strong>Bancolombia S.A.</strong>, entidad vigilada por la Superintendencia Financiera de Colombia (SFC). RutaSport no almacena, procesa ni tiene acceso a los datos financieros del usuario.</p>
+        <p>Los pagos realizados en RutaSport son procesados de manera exclusiva por <strong>ePayco S.A.S.</strong>, plataforma tecnológica de pagos en línea, entidad vigilada por la Superintendencia Financiera de Colombia (SFC). RutaSport no almacena, procesa ni tiene acceso a los datos financieros del usuario.</p>
       </div>
 
       <h3 class="font-semibold text-sm text-gray-800 mt-2">5.1 Métodos de pago aceptados</h3>
       <ul class="list-disc list-inside text-sm text-gray-700 space-y-1 pl-2">
         <li><strong>Tarjetas de crédito y débito:</strong> Visa, Mastercard, American Express y Diners Club, nacionales e internacionales.</li>
-        <li><strong>PSE (Pago Seguro en Línea):</strong> transferencia bancaria directa desde más de 40 entidades financieras colombianas, regulado bajo la Circular Externa 029 de 2014 de la SFC.</li>
+        <li><strong>PSE (Pago Seguro en Línea):</strong> transferencia bancaria directa desde las principales entidades financieras colombianas, regulado bajo la Circular Externa 029 de 2014 de la SFC.</li>
         <li><strong>Nequi:</strong> billetera digital vinculada a número celular.</li>
         <li><strong>Bancolombia QR / A la Mano:</strong> pago mediante código QR desde la app Bancolombia.</li>
         <li><strong>Efectivo (Efecty / corresponsales):</strong> generación de cupón de pago con vigencia determinada.</li>
@@ -124,7 +124,7 @@
 
       <h3 class="font-semibold text-sm text-gray-800">5.2 Procesamiento y seguridad</h3>
       <p class="text-sm text-gray-700 leading-relaxed">
-        Todas las transacciones realizadas a través de Wompi están protegidas con cifrado <strong>TLS/SSL de 256 bits</strong>. Wompi cumple con el estándar internacional <strong>PCI DSS (Payment Card Industry Data Security Standard)</strong>, lo que garantiza que los datos de tarjetas de crédito y débito se traten con los más altos estándares de seguridad.
+        Todas las transacciones realizadas a través de ePayco están protegidas con cifrado <strong>TLS/SSL de 256 bits</strong>. ePayco cumple con el estándar internacional <strong>PCI DSS (Payment Card Industry Data Security Standard)</strong>, lo que garantiza que los datos de tarjetas de crédito y débito se traten con los más altos estándares de seguridad.
       </p>
       <p class="text-sm text-gray-700 leading-relaxed">
         Las transacciones con tarjeta pueden estar sujetas a verificación adicional mediante el protocolo <strong>3-D Secure (3DS)</strong>, conforme a los requisitos de las redes de pago internacionales. El usuario podrá ser redirigido a la página de autenticación de su banco emisor para validar la operación.
@@ -135,7 +135,7 @@
         La aprobación de una transacción depende exclusivamente de la entidad financiera emisora del medio de pago. RutaSport no interviene ni puede modificar las decisiones de aprobación o rechazo. Si una transacción es rechazada, el usuario deberá contactar directamente a su entidad financiera o intentar con otro método de pago.
       </p>
       <p class="text-sm text-gray-700 leading-relaxed">
-        En caso de que un pago quede en estado <em>pendiente</em> (frecuente en PSE y pagos en efectivo), el pedido quedará en espera hasta que Wompi reporte la confirmación. Si el pago no se confirma dentro del plazo establecido, el pedido será cancelado automáticamente.
+        En caso de que un pago quede en estado <em>pendiente</em> (frecuente en PSE y pagos en efectivo), el pedido quedará en espera hasta que ePayco reporte la confirmación. Si el pago no se confirma dentro del plazo establecido, el pedido será cancelado automáticamente.
       </p>
 
       <h3 class="font-semibold text-sm text-gray-800">5.4 Contracargos y disputas</h3>
@@ -144,13 +144,13 @@
       </p>
       <p class="text-sm text-gray-700 leading-relaxed">
         Para disputas genuinas sobre cobros no reconocidos, el usuario debe contactar primero a RutaSport al
-        <strong>3226953551</strong> para resolver el inconveniente de forma directa antes de iniciar un proceso de contracargo.
+        <strong>3151322221</strong> para resolver el inconveniente de forma directa antes de iniciar un proceso de contracargo.
       </p>
 
       <h3 class="font-semibold text-sm text-gray-800">5.5 Términos propios de ePayco</h3>
       <p class="text-sm text-gray-700 leading-relaxed">
         Al utilizar la pasarela ePayco, el usuario acepta también los términos y condiciones de dicha plataforma, disponibles en
-        <a href="https://epayco.com/terminos/terminos-condiciones/index.php" target="_blank" rel="noopener noreferrer"
+        <a href="https://epayco.com/terminos/terminos-condiciones" target="_blank" rel="noopener noreferrer"
            class="underline hover:text-black transition-colors font-medium">epayco.com</a>.
         RutaSport no es responsable por interrupciones, errores técnicos o cambios en la disponibilidad del servicio de ePayco.
       </p>
@@ -203,7 +203,7 @@
         <li>Daños estéticos menores que no afecten la funcionalidad del producto.</li>
       </ul>
       <p class="text-sm text-gray-700 leading-relaxed">
-        Para hacer efectiva la garantía, el consumidor debe contactarnos al <strong>3226953551</strong> dentro del plazo establecido, describiendo el defecto y adjuntando evidencia fotográfica o en video, junto con la prueba de compra. Conforme al <strong>artículo 11 de la Ley 1480 de 2011</strong>, RutaSport procederá, según corresponda, con la reparación del producto, su cambio por uno equivalente o la devolución del dinero pagado.
+        Para hacer efectiva la garantía, el consumidor debe contactarnos al <strong>3151322221</strong> dentro del plazo establecido, describiendo el defecto y adjuntando evidencia fotográfica o en video, junto con la prueba de compra. Conforme al <strong>artículo 11 de la Ley 1480 de 2011</strong>, RutaSport procederá, según corresponda, con la reparación del producto, su cambio por uno equivalente o la devolución del dinero pagado.
       </p>
     </section>
 
@@ -248,7 +248,7 @@
 
       <h3 class="font-semibold text-sm text-gray-800">9.3 Transferencia y transmisión de datos</h3>
       <p class="text-sm text-gray-700 leading-relaxed">
-        RutaSport podrá compartir datos personales con terceros únicamente en los siguientes casos: (i) operadores logísticos para el despacho de pedidos; (ii) Wompi para el procesamiento de pagos; (iii) proveedores de servicios tecnológicos que actúen como encargados del tratamiento bajo instrucciones de RutaSport; y (iv) autoridades competentes cuando así lo exija la ley. En ningún caso se venderán o cederán datos personales a terceros con fines comerciales propios sin la autorización del titular.
+        RutaSport podrá compartir datos personales con terceros únicamente en los siguientes casos: (i) operadores logísticos para el despacho de pedidos; (ii) ePayco para el procesamiento de pagos; (iii) proveedores de servicios tecnológicos que actúen como encargados del tratamiento bajo instrucciones de RutaSport; y (iv) autoridades competentes cuando así lo exija la ley. En ningún caso se venderán o cederán datos personales a terceros con fines comerciales propios sin la autorización del titular.
       </p>
 
       <h3 class="font-semibold text-sm text-gray-800">9.4 Derechos del titular</h3>
@@ -263,7 +263,7 @@
         <li><strong>Presentar quejas</strong> ante la Superintendencia de Industria y Comercio (SIC) por posibles infracciones.</li>
       </ul>
       <p class="text-sm text-gray-700 leading-relaxed">
-        Estas solicitudes podrán realizarse al <strong>3226953551</strong> o al correo de atención al cliente registrado. RutaSport dará respuesta dentro de los plazos establecidos en la ley (10 días hábiles para consultas; 15 días hábiles para reclamos).
+        Estas solicitudes podrán realizarse al <strong>3151322221</strong> o al correo <strong>Rutasport26@hotmail.com</strong>. RutaSport dará respuesta dentro de los plazos establecidos en la ley (10 días hábiles para consultas; 15 días hábiles para reclamos).
       </p>
 
       <h3 class="font-semibold text-sm text-gray-800">9.5 Conservación de datos</h3>
@@ -290,7 +290,7 @@
         RutaSport no será responsable por:
       </p>
       <ul class="list-disc list-inside text-sm text-gray-700 space-y-1 pl-2">
-        <li>Interrupciones, errores o fallas técnicas del sitio web o de la pasarela de pago Wompi, causadas por circunstancias fuera de su control.</li>
+        <li>Interrupciones, errores o fallas técnicas del sitio web o de la pasarela de pago ePayco, causadas por circunstancias fuera de su control.</li>
         <li>Daños derivados del uso indebido de la plataforma por parte del usuario.</li>
         <li>Pérdida de datos por ataques de terceros o causas de fuerza mayor.</li>
         <li>Demoras en la entrega imputables al operador logístico o a situaciones de fuerza mayor (emergencias, desastres naturales, cierres viales, huelgas, etc.).</li>
@@ -325,7 +325,8 @@
       </p>
       <div class="bg-gray-50 rounded-xl p-4 text-sm text-gray-700 space-y-1">
         <p><strong>RutaSport</strong></p>
-        <p>WhatsApp / Teléfono: <strong>3226953551</strong></p>
+        <p>WhatsApp / Teléfono: <strong>3151322221</strong></p>
+        <p>Email: <strong>Rutasport26@hotmail.com</strong></p>
         <p>Horario de atención: Lunes a Sábado, 8:00 a.m. – 6:00 p.m. (hora Colombia)</p>
       </div>
       <p class="text-xs text-gray-500 mt-2">

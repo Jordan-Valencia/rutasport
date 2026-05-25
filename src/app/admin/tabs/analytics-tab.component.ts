@@ -6,7 +6,7 @@ import { formatCOP } from '../../shared/cop.pipe'
 interface DailyRow  { day: string; views: number; sessions: number }
 interface PageRow    { path: string; views: number }
 interface Totals     { total: number; today: number; week: number; unique_sessions: number }
-interface OrderStats { total: number; approved: number; pending: number; revenue_cop: number }
+interface OrderStats { total: number; approved: number; pending: number; declined: number; cancelled: number; revenue_cop: number }
 
 interface Analytics {
   daily: DailyRow[]

@@ -16,13 +16,27 @@ function getEpaycoService(env: Env): EpaycoService {
   })
 }
 
+const headers = {
+  'Content-Type': 'application/json',
+  'Access-Control-Allow-Origin': '*',
+}
+
+export const onRequestOptions: PagesFunction = async () =>
+  new Response(null, {
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type',
+    },
+  })
+
 export const onRequestGet: PagesFunction<Env> = async ({ env, request }) => {
   const ref = new URL(request.url).searchParams.get('ref')
 
   if (!ref) {
     return new Response(JSON.stringify({ error: 'ref requerido' }), {
       status: 400,
-      headers: { 'Content-Type': 'application/json' },
+      headers,
     })
   }
 
@@ -36,12 +50,12 @@ export const onRequestGet: PagesFunction<Env> = async ({ env, request }) => {
         status: tx.status,
         reference: ref,
       }),
-      { headers: { 'Content-Type': 'application/json' } }
+      { headers }
     )
   } catch (e: any) {
     return new Response(
       JSON.stringify({ error: e.message ?? 'Error al validar transacción' }),
-      { status: 500, headers: { 'Content-Type': 'application/json' } }
+      { status: 500, headers }
     )
   }
 }

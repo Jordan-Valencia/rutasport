@@ -45,7 +45,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ env, request }) => {
       return new Response('Firma inválida', { status: 401 })
     }
 
-    const reference = extra1
+    const reference = data.x_id_factura ?? data.x_id_invoice ?? data.x_extra1 ?? ''
     if (!reference) {
       return new Response('Referencia no encontrada', { status: 400 })
     }
@@ -87,7 +87,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ env, request }) => {
     }
 
     await env.DB
-      .prepare('UPDATE orders SET status = ?, epayco_refpayco = ? WHERE reference = ?')
+      .prepare("UPDATE orders SET status = ?, epayco_refpayco = ?, updatedAt = datetime('now') WHERE reference = ?")
       .bind(status, refPayco, reference)
       .run()
 

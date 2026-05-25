@@ -8,6 +8,15 @@ interface Env {
   EPAYCO_TEST: string
 }
 
+function getEpaycoService(env: Env): EpaycoService {
+  return new EpaycoService({
+    publicKey: env.EPAYCO_PUBLIC_KEY,
+    privateKey: env.EPAYCO_PRIVATE_KEY,
+    customerId: env.EPAYCO_CUSTOMER_ID,
+    test: env.EPAYCO_TEST !== 'false',
+  })
+}
+
 interface OrderItem {
   productId: number
   name: string
@@ -23,21 +32,12 @@ const headers = {
   'Access-Control-Allow-Origin': '*',
 }
 
-function getEpaycoService(env: Env): EpaycoService {
-  return new EpaycoService({
-    publicKey: env.EPAYCO_PUBLIC_KEY,
-    privateKey: env.EPAYCO_PRIVATE_KEY,
-    customerId: env.EPAYCO_CUSTOMER_ID,
-    test: env.EPAYCO_TEST !== 'false',
-  })
-}
-
 export const onRequestOptions: PagesFunction = async () =>
   new Response(null, {
     headers: {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
     },
   })
 
@@ -107,6 +107,21 @@ export const onRequestPost: PagesFunction<Env> = async ({ env, request }) => {
     const origin = new URL(request.url).origin
 
     const epayco = getEpaycoService(env)
+
+    let billing: { email?: string; name?: string } | undefined
+    if (userId) {
+      const user = await env.DB
+        .prepare('SELECT email, full_name FROM users WHERE id = ?')
+        .bind(userId)
+        .first<{ email: string; full_name: string | null }>()
+      if (user) {
+        billing = {
+          email: user.email,
+          ...(user.full_name ? { name: user.full_name } : {}),
+        }
+      }
+    }
+
     const session = await epayco.createSession({
       invoice: reference,
       description: `Pedido ${reference}`,
@@ -114,6 +129,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ env, request }) => {
       ip: clientIp,
       responseUrl: `${origin}/pago/exitoso`,
       confirmationUrl: `${origin}/api/epayco/webhook`,
+      ...(billing ? { billing } : {}),
     })
 
     return new Response(

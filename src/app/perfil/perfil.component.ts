@@ -19,6 +19,7 @@ interface Order {
   id: number; reference: string; status: string
   shipping_status: string; tracking_number: string | null
   shipping_notes: string | null; total_in_cents: number; createdAt: string
+  updatedAt?: string; cancelled_at?: string | null; cancel_reason?: string | null
   items: OrderItem[]
   expanded?: boolean
 }
@@ -29,8 +30,8 @@ const SHIPPING_LABEL: Record<string, string> = {
   DELIVERED: 'Entregado',
 }
 const PAYMENT_LABEL: Record<string, string> = {
-  PENDING: 'Pendiente', APPROVED: 'Aprobado',
-  DECLINED: 'Rechazado', VOIDED: 'Anulado', ERROR: 'Error',
+  PENDING: 'Pendiente', RESERVED: 'Reservado', APPROVED: 'Aprobado',
+  DECLINED: 'Rechazado', VOIDED: 'Anulado', ERROR: 'Error', CANCELLED: 'Cancelado',
 }
 
 @Component({
@@ -47,6 +48,8 @@ export class PerfilComponent implements OnInit {
   readonly orders = signal<Order[]>([])
   readonly ordersLoading = signal(false)
   readonly ordersError = signal('')
+  readonly cancellingId = signal<number | null>(null)
+  readonly cancelMsg = signal<string | null>(null)
 
   readonly shippingLabel = SHIPPING_LABEL
   readonly paymentLabel  = PAYMENT_LABEL
@@ -126,6 +129,52 @@ export class PerfilComponent implements OnInit {
   toggleOrder(order: Order): void {
     order.expanded = !order.expanded
     this.orders.update(list => [...list])
+  }
+
+  canCancel(status: string): boolean {
+    return status === 'PENDING' || status === 'RESERVED'
+  }
+
+  async cancelOrder(order: Order): Promise<void> {
+    if (!confirm('¿Estás seguro de cancelar este pedido?')) return
+    this.cancellingId.set(order.id)
+    this.cancelMsg.set(null)
+    try {
+      const token = this.auth.token
+      const headers = token ? new HttpHeaders({ Authorization: `Bearer ${token}` }) : undefined
+      await firstValueFrom(
+        this.http.post(`/api/auth/orders/${order.id}`, {}, { headers })
+      )
+      this.orders.update(list => list.map(o =>
+        o.id === order.id
+          ? { ...o, status: 'CANCELLED', cancelled_at: new Date().toISOString(), cancel_reason: 'Cancelado por el usuario' }
+          : o
+      ))
+      this.cancelMsg.set('Pedido cancelado correctamente')
+      setTimeout(() => this.cancelMsg.set(null), 4000)
+    } catch {
+      this.cancelMsg.set('No se pudo cancelar el pedido')
+    } finally {
+      this.cancellingId.set(null)
+    }
+  }
+
+  /** Build timeline steps based on order status */
+  timelineSteps(order: Order): { label: string; done: boolean; active: boolean }[] {
+    const paid = order.status === 'APPROVED'
+    const cancelled = order.status === 'CANCELLED'
+    const steps = [
+      { label: 'Pedido creado', done: true, active: false },
+      { label: 'Pago recibido', done: paid, active: !paid && !cancelled },
+    ]
+    if (!cancelled) {
+      steps.push(
+        { label: 'En preparación', done: order.shipping_status === 'SHIPPED' || order.shipping_status === 'DELIVERED', active: paid && order.shipping_status === 'PROCESSING' },
+        { label: 'Enviado', done: order.shipping_status === 'DELIVERED', active: order.shipping_status === 'SHIPPED' },
+        { label: 'Entregado', done: order.shipping_status === 'DELIVERED', active: false },
+      )
+    }
+    return steps
   }
 
   formatCOP(cents: number): string {

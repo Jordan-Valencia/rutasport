@@ -18,12 +18,21 @@ export class HeroesTabComponent implements OnInit {
   loading = signal(false)
   saving = signal(false)
   imageUploading = signal(false)
+  videoUploading = signal(false)
   apiError = signal('')
 
   showModal = signal(false)
   modalMode = signal<'add' | 'edit'>('add')
   formData: any = {}
   formErrors: Record<string, string> = {}
+  mediaType = signal<'image' | 'video'>('image')
+
+  setMediaType(type: 'image' | 'video') {
+    this.mediaType.set(type)
+    if (type === 'image') {
+      this.formData = { ...this.formData, videoUrl: '' }
+    }
+  }
 
   async ngOnInit() { await this.load() }
 
@@ -40,7 +49,8 @@ export class HeroesTabComponent implements OnInit {
 
   openAdd() {
     this.modalMode.set('add')
-    this.formData = { campaignName: '', category: '', description: '', imageUrl: '', ctaText: 'COMPRAR AHORA', isActive: true, order: 0 }
+    this.formData = { campaignName: '', category: '', description: '', imageUrl: '', videoUrl: '', ctaText: 'COMPRAR AHORA', isActive: true, order: 0 }
+    this.mediaType.set('image')
     this.formErrors = {}
     this.showModal.set(true)
     this.animateModal()
@@ -49,6 +59,7 @@ export class HeroesTabComponent implements OnInit {
   openEdit(item: any) {
     this.modalMode.set('edit')
     this.formData = { ...item }
+    this.mediaType.set(item.videoUrl ? 'video' : 'image')
     this.formErrors = {}
     this.showModal.set(true)
     this.animateModal()
@@ -73,6 +84,22 @@ export class HeroesTabComponent implements OnInit {
       const res = await fetch('/api/admin/upload', { method: 'POST', headers: { 'x-admin-key': this.svc.adminKey() }, body: fd })
       if (res.ok) { const { path } = await res.json(); this.formData = { ...this.formData, imageUrl: path } }
     } finally { this.imageUploading.set(false); input.value = '' }
+  }
+
+  async uploadVideo(event: Event) {
+    const input = event.target as HTMLInputElement
+    if (!input.files?.length) return
+    this.videoUploading.set(true)
+    const fd = new FormData()
+    fd.append('file', input.files[0])
+    try {
+      const res = await fetch('/api/admin/upload', { method: 'POST', headers: { 'x-admin-key': this.svc.adminKey() }, body: fd })
+      if (res.ok) { const { path } = await res.json(); this.formData = { ...this.formData, videoUrl: path } }
+    } finally { this.videoUploading.set(false); input.value = '' }
+  }
+
+  clearVideo() {
+    this.formData = { ...this.formData, videoUrl: '' }
   }
 
   async save() {

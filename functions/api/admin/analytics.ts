@@ -42,6 +42,8 @@ export const onRequestGet: PagesFunction<Env> = async ({ env, request }) => {
           COUNT(*)                                                                  AS total,
           COUNT(CASE WHEN status = 'APPROVED' THEN 1 END)                          AS approved,
           COUNT(CASE WHEN status = 'PENDING'  THEN 1 END)                          AS pending,
+          COUNT(CASE WHEN status = 'DECLINED' THEN 1 END)                          AS declined,
+          COUNT(CASE WHEN status = 'CANCELLED' THEN 1 END)                         AS cancelled,
           SUM(CASE WHEN status = 'APPROVED' THEN total_in_cents ELSE 0 END) / 100  AS revenue_cop
         FROM orders
       `).first<any>(),

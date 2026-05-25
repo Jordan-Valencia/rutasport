@@ -88,14 +88,17 @@ export const productInventoryTable = sqliteTable('product_inventory', {
 export const ordersTable = sqliteTable('orders', {
   id:              int().primaryKey({ autoIncrement: true }),
   reference:       text().notNull().unique(),
-  status:          text().notNull().default('PENDING'), // RESERVED | APPROVED | DECLINED | EXPIRED | ERROR
+  status:          text().notNull().default('PENDING'), // RESERVED | APPROVED | DECLINED | EXPIRED | ERROR | CANCELLED
   total_in_cents:  int().notNull(),
   user_id:         int(),
   epayco_refpayco: text(),
   shipping_status: text().default('PROCESSING'),
   tracking_number: text(),
   shipping_notes:  text(),
+  cancelled_at:    text(),
+  cancel_reason:   text(),
   createdAt:       text().default(new Date().toISOString()),
+  updatedAt:       text().default(new Date().toISOString()),
 })
 
 export const orderItemsTable = sqliteTable('order_items', {

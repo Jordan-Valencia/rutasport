@@ -62,7 +62,7 @@ export class CheckoutService {
 
       if (res?.sessionId) {
         this.isLoading.set(false)
-        await this.epaycoCheckout.openCheckout(res.sessionId, res.test)
+        this.epaycoCheckout.openCheckout(res.sessionId)
         return
       }
 

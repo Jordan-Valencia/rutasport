@@ -32,7 +32,9 @@
 
       <!-- Hero visual preview -->
       <div class="relative rounded-2xl overflow-hidden shadow-lg bg-black" style="aspect-ratio: 16/7; min-height: 220px;">
-        @if (h.imageUrl) {
+        @if (h.videoUrl) {
+          <video [src]="h.videoUrl" [attr.poster]="h.imageUrl || undefined" class="absolute inset-0 w-full h-full object-cover" muted loop autoplay playsinline (canplay)="$any($event.target).muted = true; $any($event.target).volume = 0"></video>
+        } @else if (h.imageUrl) {
           <img [src]="h.imageUrl" [alt]="h.campaignName" class="absolute inset-0 w-full h-full object-cover">
         } @else {
           <div class="absolute inset-0 bg-gradient-to-br from-zinc-900 to-black"></div>
@@ -99,6 +101,21 @@
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
             Eliminar
           </button>
+        </div>
+
+        <!-- Media type badge -->
+        <div class="absolute top-3 left-16 z-10 flex gap-2">
+          @if (h.videoUrl) {
+            <span class="px-2 py-0.5 rounded-md bg-blue-600/80 text-white text-[9px] font-bold tracking-wide backdrop-blur-sm flex items-center gap-1">
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+              VIDEO
+            </span>
+          } @else {
+            <span class="px-2 py-0.5 rounded-md bg-slate-600/80 text-white text-[9px] font-bold tracking-wide backdrop-blur-sm flex items-center gap-1">
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+              IMAGEN
+            </span>
+          }
         </div>
 
         <!-- "Vista previa real" label -->
@@ -194,16 +211,41 @@
             <label for="heroActive" class="cursor-pointer text-sm text-slate-600">Activo (visible en el sitio)</label>
           </div>
 
-          <!-- Image upload -->
+          <!-- Tipo de fondo: Image / Video toggle -->
           <div>
-            <label class="block text-xs font-medium text-slate-500 mb-1.5">Imagen de fondo</label>
+            <label class="block text-xs font-medium text-slate-500 mb-2">Tipo de fondo</label>
+            <div class="flex gap-2">
+              <button type="button" (click)="setMediaType('image')"
+                class="cursor-pointer flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all"
+                [class]="mediaType() === 'image'
+                  ? 'bg-blue-600 text-white shadow-sm'
+                  : 'bg-slate-100 text-slate-500 hover:bg-slate-200'">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                Imagen
+              </button>
+              <button type="button" (click)="setMediaType('video')"
+                class="cursor-pointer flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all"
+                [class]="mediaType() === 'video'
+                  ? 'bg-blue-600 text-white shadow-sm'
+                  : 'bg-slate-100 text-slate-500 hover:bg-slate-200'">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                Video
+              </button>
+            </div>
+          </div>
+
+          <!-- Image upload (visible cuando mediaType === 'image', o como poster cuando mediaType === 'video') -->
+          <div>
+            <label class="block text-xs font-medium text-slate-500 mb-1.5">
+              {{ mediaType() === 'image' ? 'Imagen de fondo' : 'Imagen de respaldo (poster)' }}
+            </label>
             @if (formData.imageUrl) {
               <div class="relative group rounded-xl overflow-hidden border border-slate-200 h-28 bg-slate-50">
                 <img [src]="formData.imageUrl" alt="preview" class="w-full h-full object-cover">
                 <div class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                   <label class="cursor-pointer flex items-center gap-2 px-4 py-2 rounded-xl bg-white text-slate-800 text-sm font-medium">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
-                    Cambiar imagen
+                    {{ mediaType() === 'image' ? 'Cambiar imagen' : 'Cambiar poster' }}
                     <input type="file" accept="image/*" (change)="uploadImage($event)" class="hidden">
                   </label>
                 </div>
@@ -214,20 +256,56 @@
                 @if (imageUploading()) { <div class="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div> }
                 @else {
                   <svg class="w-7 h-7 text-slate-300 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
-                  <span class="text-sm text-slate-400">Subir imagen de fondo</span>
+                  <span class="text-sm text-slate-400">{{ mediaType() === 'image' ? 'Subir imagen de fondo' : 'Subir imagen de respaldo' }}</span>
                   <span class="text-xs text-slate-300 mt-0.5">Recomendado: 1920×1080px</span>
                 }
                 <input type="file" accept="image/*" (change)="uploadImage($event)" class="hidden">
               </label>
             }
           </div>
+
+          <!-- Video upload (solo cuando mediaType === 'video') -->
+          @if (mediaType() === 'video') {
+            <div>
+              <label class="block text-xs font-medium text-slate-500 mb-1.5">Video de fondo</label>
+              @if (formData.videoUrl) {
+                <div class="relative group rounded-xl overflow-hidden border border-slate-200 h-28 bg-slate-900">
+                  <video [src]="formData.videoUrl" class="w-full h-full object-cover" muted loop autoplay playsinline (canplay)="$any($event.target).muted = true; $any($event.target).volume = 0"></video>
+                  <div class="absolute inset-0 bg-black/60 flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button (click)="clearVideo()" class="cursor-pointer flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-500 text-white text-xs font-medium hover:bg-red-600 transition-colors">
+                      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                      Quitar video
+                    </button>
+                    <label class="cursor-pointer flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white text-slate-800 text-xs font-medium hover:bg-gray-100 transition-colors">
+                      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                      Cambiar video
+                      <input type="file" accept="video/*" (change)="uploadVideo($event)" class="hidden">
+                    </label>
+                  </div>
+                  @if (videoUploading()) { <div class="absolute inset-0 bg-black/80 flex items-center justify-center"><div class="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></div></div> }
+                </div>
+              } @else {
+                <label class="cursor-pointer flex flex-col items-center justify-center h-28 rounded-xl border-2 border-dashed border-slate-200 hover:border-blue-400 hover:bg-blue-50 transition-colors">
+                  @if (videoUploading()) { <div class="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div> }
+                  @else {
+                    <svg class="w-7 h-7 text-slate-300 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                    <span class="text-sm text-slate-400">Subir video de fondo</span>
+                    <span class="text-xs text-slate-300 mt-0.5">MP4, recomendado: 1920×1080px</span>
+                  }
+                  <input type="file" accept="video/*" (change)="uploadVideo($event)" class="hidden">
+                </label>
+              }
+            </div>
+          }
         </div>
 
         <!-- Live preview -->
         <div class="p-6 bg-slate-50 flex flex-col gap-3">
           <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Vista previa en tiempo real</p>
           <div class="relative rounded-xl overflow-hidden shadow-md bg-black" style="aspect-ratio: 16/9;">
-            @if (formData.imageUrl) {
+            @if (formData.videoUrl) {
+              <video [src]="formData.videoUrl" [attr.poster]="formData.imageUrl || undefined" class="absolute inset-0 w-full h-full object-cover" muted loop autoplay playsinline (canplay)="$any($event.target).muted = true; $any($event.target).volume = 0"></video>
+            } @else if (formData.imageUrl) {
               <img [src]="formData.imageUrl" alt="preview" class="absolute inset-0 w-full h-full object-cover">
             } @else {
               <div class="absolute inset-0 bg-gradient-to-br from-zinc-900 to-black"></div>
@@ -274,9 +352,22 @@
               </div>
             </div>
 
-            @if (!formData.imageUrl) {
+            <!-- Media type badge in live preview -->
+            <div class="absolute top-2 left-2 z-10">
+              <span class="px-2 py-0.5 rounded-md text-[9px] font-bold tracking-wide backdrop-blur-sm flex items-center gap-1"
+                [class]="mediaType() === 'video' ? 'bg-blue-600/80 text-white' : 'bg-slate-600/80 text-white'">
+                @if (mediaType() === 'video') {
+                  <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                } @else {
+                  <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                }
+                {{ mediaType() === 'video' ? 'VIDEO' : 'IMAGEN' }}
+              </span>
+            </div>
+
+            @if (!formData.imageUrl && !formData.videoUrl) {
               <div class="absolute bottom-2 left-0 right-0 text-center">
-                <span class="text-[9px] text-white/40">Sube una imagen para verla aquí</span>
+                <span class="text-[9px] text-white/40">Sube una imagen o video para verlo aquí</span>
               </div>
             }
           </div>

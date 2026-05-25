@@ -114,19 +114,25 @@ export class EpaycoService {
   async createSession(params: CreateSessionParams): Promise<CreateSessionResponse> {
     const token = await this.authenticate()
 
-    const body = {
+    const body: Record<string, unknown> = {
       checkout_version: '2',
       name: 'RutaSport',
-      currency: params.currency ?? 'COP',
-      amount: params.amount,
+      currency: (params.currency ?? 'COP').toUpperCase(),
+      amount: String(params.amount),
       description: params.description,
       invoice: params.invoice,
-      lang: this.config.lang,
+      lang: (this.config.lang ?? 'ES').toUpperCase(),
       country: 'CO',
       ip: params.ip ?? '0.0.0.0',
       response: params.responseUrl,
       confirmation: params.confirmationUrl,
-      ...(params.billing?.email ? { billing: params.billing } : {}),
+      test: String(this.config.test).toLowerCase(),
+      extra1: params.invoice,
+      ...(params.billing?.email ? {
+        billing: params.billing,
+        nameBilling: params.billing.name ?? '',
+        emailBilling: params.billing.email,
+      } : {}),
     }
 
     const resp = await fetch(`${APIFY_URL}/payment/session/create`, {

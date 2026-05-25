@@ -177,6 +177,13 @@
               </div>
             }
 
+            @if (cancelMsg()) {
+              <div class="flex items-center gap-2.5 text-emerald-400 text-sm mb-5">
+                <div class="w-1 h-5 bg-emerald-400 rounded-full shrink-0"></div>
+                {{ cancelMsg() }}
+              </div>
+            }
+
             @if (ordersError()) {
               <p class="text-[#ff5050] text-sm">{{ ordersError() }}</p>
             }
@@ -208,21 +215,24 @@
                     <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-widest"
                       [ngClass]="{
                         'bg-emerald-500/15 text-emerald-400': order.status === 'APPROVED',
-                        'bg-yellow-500/15 text-yellow-400':  order.status === 'PENDING',
+                        'bg-yellow-500/15 text-yellow-400':  order.status === 'PENDING' || order.status === 'RESERVED',
                         'bg-red-500/15 text-red-400':        order.status === 'DECLINED' || order.status === 'ERROR',
-                        'bg-white/10 text-white/40':         order.status === 'VOIDED'
+                        'bg-white/10 text-white/40':         order.status === 'VOIDED',
+                        'bg-gray-500/15 text-gray-400':      order.status === 'CANCELLED'
                       }">
                       {{ paymentLabel[order.status] || order.status }}
                     </span>
                     <!-- Shipping badge -->
-                    <span class="hidden sm:inline px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-widest"
-                      [ngClass]="{
-                        'bg-blue-500/15 text-blue-400':    order.shipping_status === 'SHIPPED',
-                        'bg-emerald-500/15 text-emerald-400': order.shipping_status === 'DELIVERED',
-                        'bg-white/10 text-white/30':       order.shipping_status === 'PROCESSING'
-                      }">
-                      {{ shippingLabel[order.shipping_status] || order.shipping_status }}
-                    </span>
+                    @if (order.status !== 'CANCELLED') {
+                      <span class="hidden sm:inline px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-widest"
+                        [ngClass]="{
+                          'bg-blue-500/15 text-blue-400':    order.shipping_status === 'SHIPPED',
+                          'bg-emerald-500/15 text-emerald-400': order.shipping_status === 'DELIVERED',
+                          'bg-white/10 text-white/30':       order.shipping_status === 'PROCESSING'
+                        }">
+                        {{ shippingLabel[order.shipping_status] || order.shipping_status }}
+                      </span>
+                    }
                     <svg class="w-4 h-4 text-white/30 transition-transform duration-200"
                          [class.rotate-180]="order.expanded"
                          fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -235,6 +245,45 @@
                 @if (order.expanded) {
                   <div class="px-5 pb-5 pt-3 border-t border-white/[.06] space-y-3">
 
+                    <!-- Timeline -->
+                    @if (order.status !== 'CANCELLED') {
+                      <div class="flex items-start gap-0 py-3 overflow-x-auto">
+                        @for (step of timelineSteps(order); track step.label; let last = $last) {
+                          <div class="flex items-center">
+                            <div class="flex flex-col items-center">
+                              <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-black shrink-0"
+                                [class]="step.done ? 'bg-emerald-500/20 text-emerald-400' : step.active ? 'bg-yellow-500/20 text-yellow-400' : 'bg-white/5 text-white/20'">
+                                @if (step.done) {
+                                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+                                  </svg>
+                                } @else {
+                                  {{ $index + 1 }}
+                                }
+                              </div>
+                              <span class="text-[9px] mt-1.5 whitespace-nowrap font-semibold"
+                                [class]="step.done ? 'text-emerald-400/70' : step.active ? 'text-yellow-400/70' : 'text-white/20'">
+                                {{ step.label }}
+                              </span>
+                            </div>
+                            @if (!last) {
+                              <div class="w-10 sm:w-16 h-px mt-4 mx-1"
+                                [class]="step.done ? 'bg-emerald-500/30' : 'bg-white/10'">
+                              </div>
+                            }
+                          </div>
+                        }
+                      </div>
+                    } @else {
+                      <div class="flex items-center gap-2 text-gray-400 py-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                        <span class="text-xs">Pedido cancelado el {{ order.cancelled_at ? (order.cancelled_at | date:'dd/MM/yyyy') : '—' }}</span>
+                      </div>
+                    }
+
+                    <!-- Tracking info -->
                     @if (order.tracking_number) {
                       <div class="flex items-center gap-2 text-sm">
                         <span class="text-white/30 text-xs uppercase tracking-widest">Guía:</span>
@@ -243,6 +292,25 @@
                     }
                     @if (order.shipping_notes) {
                       <p class="text-white/40 text-xs">{{ order.shipping_notes }}</p>
+                    }
+
+                    <!-- Cancel button -->
+                    @if (canCancel(order.status)) {
+                      <button (click)="cancelOrder(order)" [disabled]="cancellingId() === order.id"
+                        class="cursor-pointer flex items-center gap-2 px-4 py-2 rounded-xl bg-red-500/10 text-red-400 text-xs font-semibold hover:bg-red-500/20 transition-all disabled:opacity-50">
+                        @if (cancellingId() === order.id) {
+                          <svg class="animate-spin w-3.5 h-3.5" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+                          </svg>
+                          Cancelando…
+                        } @else {
+                          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                          </svg>
+                          Cancelar pedido
+                        }
+                      </button>
                     }
 
                     <div class="space-y-2 pt-1">
