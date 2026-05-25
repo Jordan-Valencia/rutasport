@@ -6,6 +6,14 @@ export const serverRoutes: ServerRoute[] = [
     renderMode: RenderMode.Client,
   },
   {
+    path: 'recuperar',
+    renderMode: RenderMode.Client,
+  },
+  {
+    path: 'recuperar/:token',
+    renderMode: RenderMode.Client,
+  },
+  {
     path: 'producto/:id',
     renderMode: RenderMode.Server,
   },

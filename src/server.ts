@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import {
   AngularNodeAppEngine,
   createNodeRequestHandler,
@@ -6,6 +7,7 @@ import {
 } from '@angular/ssr/node';
 import express from 'express';
 import { join } from 'node:path';
+import passwordResetRouter from './password-reset';
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
 
@@ -35,10 +37,9 @@ app.use(
   }),
 );
 
-/**
- * Return 404 for /images/ paths not found as static files.
- * This lets wrangler Pages Functions handle R2-served images instead of Angular SSR.
- */
+app.use(express.json())
+app.use(passwordResetRouter)
+
 app.use('/images', (_req, res) => {
   res.status(404).end();
 });

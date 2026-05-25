@@ -36,6 +36,13 @@
       "when": 1776857534099,
       "tag": "0004_worthless_kronos",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1779738138913,
+      "tag": "0005_password_reset_tokens",
+      "breakpoints": true
     }
   ]
 }

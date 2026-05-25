@@ -1,81 +1,53 @@
-<section class="relative min-h-[60vh] lg:min-h-[88vh] overflow-hidden bg-black">
-
-  @if (loading()) {
-    <div class="hero-skeleton absolute inset-0">
-      <div class="skeleton-img absolute inset-0 bg-[#1a1a1a]"></div>
-      <div class="absolute inset-0 bg-linear-to-r from-black/90 via-black/60 to-transparent"></div>
-      <div class="absolute inset-0 flex items-center px-4 lg:px-16">
-        <div class="max-w-3xl w-full">
-          <div class="skeleton-block h-5 w-48 mb-6 rounded-sm"></div>
-          <div class="skeleton-block h-10 lg:h-24 w-3/4 mb-3 rounded-sm"></div>
-          <div class="skeleton-block h-10 lg:h-24 w-1/2 mb-6 rounded-sm"></div>
-          <div class="skeleton-block h-4 w-96 max-w-full mb-2 rounded-sm"></div>
-          <div class="skeleton-block h-4 w-72 max-w-full mb-8 rounded-sm"></div>
-          <div class="flex gap-4">
-            <div class="skeleton-block h-14 w-52 rounded-sm"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  }
+<section class="relative overflow-hidden bg-black aspect-video lg:min-h-[88vh]">
 
   @let h = hero();
   @if (h) {
-    @if (h.videoUrl && !videoError()) {
-      <video #heroVideo
-        [attr.poster]="h.imageUrl || undefined"
-        class="hero-media absolute inset-0 w-full h-full object-cover object-[center_25%] lg:object-center"
-        [src]="h.videoUrl"
-        autoplay muted loop playsinline
-        (loadedmetadata)="onVideoReady()"
-        (error)="onVideoError()">
-      </video>
-    } @else {
+    <div class="hero-entrance-wrap" style="opacity: 0; filter: blur(20px);">
+    <div class="hero-media-container absolute inset-0 w-full h-full">
       <img
         [src]="h.imageUrl"
         [alt]="h.campaignName"
-        class="hero-media absolute inset-0 w-full h-full object-cover object-[center_25%] lg:object-center"
+        class="hero-media absolute inset-0 w-full h-full object-cover"
+        (load)="onImgReady()"
       />
-    }
-
-    <div class="absolute inset-0 bg-black/70 lg:bg-linear-to-r lg:from-black/95 lg:via-black/70 lg:to-black/20"></div>
+    </div>
 
     <div class="absolute right-0 bottom-0 w-0 h-0
       border-l-[180px] border-l-transparent
       border-b-[180px] border-b-[#E31C1C]
-      opacity-80 hidden lg:block">
+      opacity-0 hidden lg:block">
     </div>
 
     <div class="hero-slide-content absolute inset-0 flex items-center">
       <div class="px-5 lg:px-16 max-w-4xl w-full">
 
         <div class="flex items-center gap-3 mb-3 lg:mb-5">
-          <span class="text-[#E31C1C] text-[10px] lg:text-[11px] font-black tracking-[0.35em] uppercase">
+          <span class="hero-badge hero-entrance-blur text-[#E31C1C] text-[10px] lg:text-[11px] font-black tracking-[0.35em] uppercase">
             {{ h.category || 'Equipamiento para cada disciplina' }}
           </span>
           <div class="h-px w-10 lg:w-12 bg-[#E31C1C]"></div>
         </div>
 
         <h1 class="leading-none mb-4 lg:mb-6">
-          <span class="hero-title block text-white text-3xl lg:text-8xl font-black">
+          <span class="hero-title hero-entrance-blur block text-white text-3xl lg:text-8xl font-black">
             {{ h.campaignName }}
           </span>
-          @if (h.description) {
-            <span class="hero-subtitle block text-[#E31C1C] text-2xl lg:text-7xl font-black italic mt-1">
-              LLEGA MÁS LEJOS.
+          @if (h.slogan) {
+            <span class="hero-subtitle hero-entrance-blur block text-[#E31C1C] text-2xl lg:text-7xl font-black italic mt-1">
+              {{ h.slogan }}
             </span>
           }
         </h1>
 
         @if (h.description) {
-          <p class="hero-desc text-white/60 text-sm lg:text-lg mb-6 lg:mb-8 max-w-lg leading-relaxed">
+          <p class="hero-desc hero-entrance-blur text-white/60 text-sm lg:text-lg mb-6 lg:mb-8 max-w-lg leading-relaxed">
             {{ h.description }}
           </p>
         }
 
         <div class="flex flex-wrap gap-3 lg:gap-4 mb-8 lg:mb-16">
           <a href="/catalogo"
-            class="hero-btn bg-[#E31C1C] text-white px-6 lg:px-8 py-3 lg:py-4 font-black text-xs lg:text-sm tracking-widest hover:bg-[#C41515] transition-colors flex items-center gap-2 lg:gap-3">
+            class="hero-btn hero-entrance-blur bg-[#E31C1C] text-white px-6 lg:px-8 py-3 lg:py-4 font-black text-xs lg:text-sm tracking-widest hover:bg-[#C41515] transition-colors flex items-center gap-2 lg:gap-3">
             {{ h.ctaText || 'EXPLORAR COLECCIÓN' }}
             <svg class="w-3.5 h-3.5 lg:w-4 lg:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
@@ -123,5 +95,6 @@
 
       </div>
     </div>
+  </div>
   }
 </section>

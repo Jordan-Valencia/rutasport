@@ -12,6 +12,7 @@ export interface Hero {
   campaignName: string
   category: string
   description?: string
+  slogan?: string
   imageUrl: string
   videoUrl?: string
   ctaText?: string

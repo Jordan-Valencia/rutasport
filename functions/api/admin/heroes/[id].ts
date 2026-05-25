@@ -13,8 +13,8 @@ export const onRequestPut: PagesFunction<Env> = async ({ env, request, params })
     const b = await request.json() as any
     const merged = { ...existing, ...b }
     await env.DB.prepare(
-      'UPDATE heroes SET campaignName=?, category=?, description=?, imageUrl=?, videoUrl=?, ctaText=?, isActive=?, "order"=? WHERE id=?'
-    ).bind(merged.campaignName || null, merged.category || null, merged.description || null, merged.imageUrl || null, merged.videoUrl || null, merged.ctaText || 'COMPRAR AHORA', merged.isActive ? 1 : 0, merged.order ?? 0, params.id).run()
+      'UPDATE heroes SET campaignName=?, category=?, description=?, slogan=?, imageUrl=?, videoUrl=?, ctaText=?, isActive=?, "order"=? WHERE id=?'
+    ).bind(merged.campaignName || null, merged.category || null, merged.description || null, merged.slogan || null, merged.imageUrl || null, merged.videoUrl || null, merged.ctaText || 'COMPRAR AHORA', merged.isActive ? 1 : 0, merged.order ?? 0, params.id).run()
     return json({ success: true })
   } catch (e: any) {
     return json({ error: e.message ?? 'Internal error' }, 500)

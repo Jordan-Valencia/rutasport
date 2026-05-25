@@ -49,7 +49,7 @@ export class HeroesTabComponent implements OnInit {
 
   openAdd() {
     this.modalMode.set('add')
-    this.formData = { campaignName: '', category: '', description: '', imageUrl: '', videoUrl: '', ctaText: 'COMPRAR AHORA', isActive: true, order: 0 }
+    this.formData = { campaignName: '', category: '', description: '', slogan: '', imageUrl: '', videoUrl: '', ctaText: 'COMPRAR AHORA', isActive: true, order: 0 }
     this.mediaType.set('image')
     this.formErrors = {}
     this.showModal.set(true)

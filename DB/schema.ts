@@ -135,6 +135,17 @@ export const userSessionsTable = sqliteTable('user_sessions', {
   createdAt:  text().default(new Date().toISOString()),
 })
 
+// ─── Restablecimiento de contraseñas ──────────────────────────────────────────
+
+export const passwordResetTokensTable = sqliteTable('password_reset_tokens', {
+  id:         int().primaryKey({ autoIncrement: true }),
+  user_id:    int().notNull(),               // FK → users.id ON DELETE CASCADE
+  token:      text().notNull().unique(),
+  expires_at: text().notNull(),
+  used:       int({ mode: 'boolean' }).default(false),
+  createdAt:  text().default(new Date().toISOString()),
+})
+
 // ─── Resto del contenido ──────────────────────────────────────────────────────
 
 export const featureBannersTable = sqliteTable('feature_banners', {
@@ -155,6 +166,7 @@ export const heroesTable = sqliteTable('heroes', {
   campaignName: text().notNull(),
   category:     text().notNull(),
   description:  text(),
+  slogan:       text(),
   imageUrl:     text().notNull(),
   videoUrl:     text(),
   ctaText:      text().default('COMPRAR AHORA'),

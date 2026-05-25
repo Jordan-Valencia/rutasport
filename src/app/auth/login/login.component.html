@@ -60,8 +60,16 @@
         </button>
       </div>
 
+      <!-- Forgot password -->
+      <div class="anim-f3 mb-6 -mt-2 text-right">
+        <a routerLink="/recuperar"
+           class="text-[11px] font-semibold text-white/25 hover:text-[#E31C1C] transition-colors tracking-wide">
+          ¿Olvidaste tu contraseña?
+        </a>
+      </div>
+
       <!-- CTA -->
-      <div class="anim-f3">
+      <div class="anim-f4">
         <button type="submit" class="cta-btn" [disabled]="loading()">
           @if (loading()) {
             <span class="flex items-center justify-center gap-3">
