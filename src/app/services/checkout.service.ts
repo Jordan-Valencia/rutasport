@@ -70,6 +70,8 @@ export class CheckoutService {
     } catch (err: any) {
       if (err?.status === 409 && err?.error?.outOfStock?.length) {
         this.outOfStockItems.set(err.error.outOfStock)
+      } else if (err?.error?.error) {
+        this.error.set(err.error.error)
       } else {
         this.error.set('Error al procesar el pago. Intenta de nuevo.')
       }

@@ -118,7 +118,7 @@ export class EpaycoService {
       checkout_version: '2',
       name: 'RutaSport',
       currency: (params.currency ?? 'COP').toUpperCase(),
-      amount: String(params.amount),
+      amount: params.amount,
       description: params.description,
       invoice: params.invoice,
       lang: (this.config.lang ?? 'ES').toUpperCase(),
@@ -126,13 +126,8 @@ export class EpaycoService {
       ip: params.ip ?? '0.0.0.0',
       response: params.responseUrl,
       confirmation: params.confirmationUrl,
-      test: String(this.config.test).toLowerCase(),
       extra1: params.invoice,
-      ...(params.billing?.email ? {
-        billing: params.billing,
-        nameBilling: params.billing.name ?? '',
-        emailBilling: params.billing.email,
-      } : {}),
+      ...(params.billing?.email ? { billing: params.billing } : {}),
     }
 
     const resp = await fetch(`${APIFY_URL}/payment/session/create`, {
@@ -152,10 +147,12 @@ export class EpaycoService {
     const json = await resp.json() as {
       success: boolean
       data?: { sessionId: string; token?: string }
+      textResponse?: string
     }
 
     if (!json.success || !json.data?.sessionId) {
-      throw new EpaycoError('ePayco no devolvió un sessionId válido')
+      const detail = json.textResponse ? `: ${json.textResponse}` : ''
+      throw new EpaycoError(`ePayco no devolvió un sessionId válido${detail}`)
     }
 
     return { sessionId: json.data.sessionId }

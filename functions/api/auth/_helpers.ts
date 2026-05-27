@@ -1,5 +1,8 @@
 export interface Env {
   DB: D1Database
+  GMAIL_USER?: string
+  GMAIL_APP_PASSWORD?: string
+  RESEND_API_KEY?: string
 }
 
 export interface UserRow {

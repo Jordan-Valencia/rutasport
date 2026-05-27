@@ -1,0 +1,629 @@
+{
+  "routes": [
+    {
+      "routePath": "/api/admin/banners/:id",
+      "mountPath": "/api/admin/banners",
+      "method": "DELETE",
+      "module": [
+        "api/admin/banners/[id].ts:onRequestDelete"
+      ]
+    },
+    {
+      "routePath": "/api/admin/banners/:id",
+      "mountPath": "/api/admin/banners",
+      "method": "PUT",
+      "module": [
+        "api/admin/banners/[id].ts:onRequestPut"
+      ]
+    },
+    {
+      "routePath": "/api/admin/brands/:id",
+      "mountPath": "/api/admin/brands",
+      "method": "DELETE",
+      "module": [
+        "api/admin/brands/[id].ts:onRequestDelete"
+      ]
+    },
+    {
+      "routePath": "/api/admin/brands/:id",
+      "mountPath": "/api/admin/brands",
+      "method": "PUT",
+      "module": [
+        "api/admin/brands/[id].ts:onRequestPut"
+      ]
+    },
+    {
+      "routePath": "/api/admin/categories/:id",
+      "mountPath": "/api/admin/categories",
+      "method": "DELETE",
+      "module": [
+        "api/admin/categories/[id].ts:onRequestDelete"
+      ]
+    },
+    {
+      "routePath": "/api/admin/categories/:id",
+      "mountPath": "/api/admin/categories",
+      "method": "PUT",
+      "module": [
+        "api/admin/categories/[id].ts:onRequestPut"
+      ]
+    },
+    {
+      "routePath": "/api/admin/heroes/:id",
+      "mountPath": "/api/admin/heroes",
+      "method": "DELETE",
+      "module": [
+        "api/admin/heroes/[id].ts:onRequestDelete"
+      ]
+    },
+    {
+      "routePath": "/api/admin/heroes/:id",
+      "mountPath": "/api/admin/heroes",
+      "method": "PUT",
+      "module": [
+        "api/admin/heroes/[id].ts:onRequestPut"
+      ]
+    },
+    {
+      "routePath": "/api/admin/inventory/:id",
+      "mountPath": "/api/admin/inventory",
+      "method": "GET",
+      "module": [
+        "api/admin/inventory/[id].ts:onRequestGet"
+      ]
+    },
+    {
+      "routePath": "/api/admin/inventory/:id",
+      "mountPath": "/api/admin/inventory",
+      "method": "PUT",
+      "module": [
+        "api/admin/inventory/[id].ts:onRequestPut"
+      ]
+    },
+    {
+      "routePath": "/api/admin/orders/:id",
+      "mountPath": "/api/admin/orders",
+      "method": "PUT",
+      "module": [
+        "api/admin/orders/[id].ts:onRequestPut"
+      ]
+    },
+    {
+      "routePath": "/api/admin/products/:id",
+      "mountPath": "/api/admin/products",
+      "method": "DELETE",
+      "module": [
+        "api/admin/products/[id].ts:onRequestDelete"
+      ]
+    },
+    {
+      "routePath": "/api/admin/products/:id",
+      "mountPath": "/api/admin/products",
+      "method": "PUT",
+      "module": [
+        "api/admin/products/[id].ts:onRequestPut"
+      ]
+    },
+    {
+      "routePath": "/api/admin/sports/:id",
+      "mountPath": "/api/admin/sports",
+      "method": "DELETE",
+      "module": [
+        "api/admin/sports/[id].ts:onRequestDelete"
+      ]
+    },
+    {
+      "routePath": "/api/admin/sports/:id",
+      "mountPath": "/api/admin/sports",
+      "method": "PUT",
+      "module": [
+        "api/admin/sports/[id].ts:onRequestPut"
+      ]
+    },
+    {
+      "routePath": "/api/admin/users/:id",
+      "mountPath": "/api/admin/users",
+      "method": "PUT",
+      "module": [
+        "api/admin/users/[id].ts:onRequestPut"
+      ]
+    },
+    {
+      "routePath": "/api/auth/orders/:id",
+      "mountPath": "/api/auth/orders",
+      "method": "GET",
+      "module": [
+        "api/auth/orders/[id].ts:onRequestGet"
+      ]
+    },
+    {
+      "routePath": "/api/auth/orders/:id",
+      "mountPath": "/api/auth/orders",
+      "method": "OPTIONS",
+      "module": [
+        "api/auth/orders/[id].ts:onRequestOptions"
+      ]
+    },
+    {
+      "routePath": "/api/auth/orders/:id",
+      "mountPath": "/api/auth/orders",
+      "method": "POST",
+      "module": [
+        "api/auth/orders/[id].ts:onRequestPost"
+      ]
+    },
+    {
+      "routePath": "/api/admin/analytics",
+      "mountPath": "/api/admin",
+      "method": "GET",
+      "module": [
+        "api/admin/analytics.ts:onRequestGet"
+      ]
+    },
+    {
+      "routePath": "/api/admin/banners",
+      "mountPath": "/api/admin",
+      "method": "GET",
+      "module": [
+        "api/admin/banners.ts:onRequestGet"
+      ]
+    },
+    {
+      "routePath": "/api/admin/banners",
+      "mountPath": "/api/admin",
+      "method": "POST",
+      "module": [
+        "api/admin/banners.ts:onRequestPost"
+      ]
+    },
+    {
+      "routePath": "/api/admin/brands",
+      "mountPath": "/api/admin",
+      "method": "GET",
+      "module": [
+        "api/admin/brands.ts:onRequestGet"
+      ]
+    },
+    {
+      "routePath": "/api/admin/brands",
+      "mountPath": "/api/admin",
+      "method": "POST",
+      "module": [
+        "api/admin/brands.ts:onRequestPost"
+      ]
+    },
+    {
+      "routePath": "/api/admin/categories",
+      "mountPath": "/api/admin",
+      "method": "GET",
+      "module": [
+        "api/admin/categories.ts:onRequestGet"
+      ]
+    },
+    {
+      "routePath": "/api/admin/categories",
+      "mountPath": "/api/admin",
+      "method": "POST",
+      "module": [
+        "api/admin/categories.ts:onRequestPost"
+      ]
+    },
+    {
+      "routePath": "/api/admin/genders",
+      "mountPath": "/api/admin",
+      "method": "GET",
+      "module": [
+        "api/admin/genders.ts:onRequestGet"
+      ]
+    },
+    {
+      "routePath": "/api/admin/heroes",
+      "mountPath": "/api/admin",
+      "method": "GET",
+      "module": [
+        "api/admin/heroes.ts:onRequestGet"
+      ]
+    },
+    {
+      "routePath": "/api/admin/heroes",
+      "mountPath": "/api/admin",
+      "method": "POST",
+      "module": [
+        "api/admin/heroes.ts:onRequestPost"
+      ]
+    },
+    {
+      "routePath": "/api/admin/orders",
+      "mountPath": "/api/admin",
+      "method": "GET",
+      "module": [
+        "api/admin/orders.ts:onRequestGet"
+      ]
+    },
+    {
+      "routePath": "/api/admin/products",
+      "mountPath": "/api/admin",
+      "method": "GET",
+      "module": [
+        "api/admin/products.ts:onRequestGet"
+      ]
+    },
+    {
+      "routePath": "/api/admin/products",
+      "mountPath": "/api/admin",
+      "method": "POST",
+      "module": [
+        "api/admin/products.ts:onRequestPost"
+      ]
+    },
+    {
+      "routePath": "/api/admin/sports",
+      "mountPath": "/api/admin",
+      "method": "GET",
+      "module": [
+        "api/admin/sports.ts:onRequestGet"
+      ]
+    },
+    {
+      "routePath": "/api/admin/sports",
+      "mountPath": "/api/admin",
+      "method": "POST",
+      "module": [
+        "api/admin/sports.ts:onRequestPost"
+      ]
+    },
+    {
+      "routePath": "/api/admin/upload",
+      "mountPath": "/api/admin",
+      "method": "DELETE",
+      "module": [
+        "api/admin/upload.ts:onRequestDelete"
+      ]
+    },
+    {
+      "routePath": "/api/admin/upload",
+      "mountPath": "/api/admin",
+      "method": "GET",
+      "module": [
+        "api/admin/upload.ts:onRequestGet"
+      ]
+    },
+    {
+      "routePath": "/api/admin/upload",
+      "mountPath": "/api/admin",
+      "method": "POST",
+      "module": [
+        "api/admin/upload.ts:onRequestPost"
+      ]
+    },
+    {
+      "routePath": "/api/admin/upload-url",
+      "mountPath": "/api/admin",
+      "method": "POST",
+      "module": [
+        "api/admin/upload-url.ts:onRequestPost"
+      ]
+    },
+    {
+      "routePath": "/api/admin/users",
+      "mountPath": "/api/admin",
+      "method": "GET",
+      "module": [
+        "api/admin/users.ts:onRequestGet"
+      ]
+    },
+    {
+      "routePath": "/api/admin/videos",
+      "mountPath": "/api/admin",
+      "method": "DELETE",
+      "module": [
+        "api/admin/videos.ts:onRequestDelete"
+      ]
+    },
+    {
+      "routePath": "/api/admin/videos",
+      "mountPath": "/api/admin",
+      "method": "GET",
+      "module": [
+        "api/admin/videos.ts:onRequestGet"
+      ]
+    },
+    {
+      "routePath": "/api/admin/videos",
+      "mountPath": "/api/admin",
+      "method": "POST",
+      "module": [
+        "api/admin/videos.ts:onRequestPost"
+      ]
+    },
+    {
+      "routePath": "/api/analytics/pageview",
+      "mountPath": "/api/analytics",
+      "method": "OPTIONS",
+      "module": [
+        "api/analytics/pageview.ts:onRequestOptions"
+      ]
+    },
+    {
+      "routePath": "/api/analytics/pageview",
+      "mountPath": "/api/analytics",
+      "method": "POST",
+      "module": [
+        "api/analytics/pageview.ts:onRequestPost"
+      ]
+    },
+    {
+      "routePath": "/api/auth/forgot-password",
+      "mountPath": "/api/auth",
+      "method": "OPTIONS",
+      "module": [
+        "api/auth/forgot-password.ts:onRequestOptions"
+      ]
+    },
+    {
+      "routePath": "/api/auth/forgot-password",
+      "mountPath": "/api/auth",
+      "method": "POST",
+      "module": [
+        "api/auth/forgot-password.ts:onRequestPost"
+      ]
+    },
+    {
+      "routePath": "/api/auth/login",
+      "mountPath": "/api/auth",
+      "method": "OPTIONS",
+      "module": [
+        "api/auth/login.ts:onRequestOptions"
+      ]
+    },
+    {
+      "routePath": "/api/auth/login",
+      "mountPath": "/api/auth",
+      "method": "POST",
+      "module": [
+        "api/auth/login.ts:onRequestPost"
+      ]
+    },
+    {
+      "routePath": "/api/auth/logout",
+      "mountPath": "/api/auth",
+      "method": "OPTIONS",
+      "module": [
+        "api/auth/logout.ts:onRequestOptions"
+      ]
+    },
+    {
+      "routePath": "/api/auth/logout",
+      "mountPath": "/api/auth",
+      "method": "POST",
+      "module": [
+        "api/auth/logout.ts:onRequestPost"
+      ]
+    },
+    {
+      "routePath": "/api/auth/me",
+      "mountPath": "/api/auth",
+      "method": "GET",
+      "module": [
+        "api/auth/me.ts:onRequestGet"
+      ]
+    },
+    {
+      "routePath": "/api/auth/me",
+      "mountPath": "/api/auth",
+      "method": "OPTIONS",
+      "module": [
+        "api/auth/me.ts:onRequestOptions"
+      ]
+    },
+    {
+      "routePath": "/api/auth/orders",
+      "mountPath": "/api/auth",
+      "method": "GET",
+      "module": [
+        "api/auth/orders.ts:onRequestGet"
+      ]
+    },
+    {
+      "routePath": "/api/auth/orders",
+      "mountPath": "/api/auth",
+      "method": "OPTIONS",
+      "module": [
+        "api/auth/orders.ts:onRequestOptions"
+      ]
+    },
+    {
+      "routePath": "/api/auth/password",
+      "mountPath": "/api/auth",
+      "method": "OPTIONS",
+      "module": [
+        "api/auth/password.ts:onRequestOptions"
+      ]
+    },
+    {
+      "routePath": "/api/auth/password",
+      "mountPath": "/api/auth",
+      "method": "PUT",
+      "module": [
+        "api/auth/password.ts:onRequestPut"
+      ]
+    },
+    {
+      "routePath": "/api/auth/profile",
+      "mountPath": "/api/auth",
+      "method": "GET",
+      "module": [
+        "api/auth/profile.ts:onRequestGet"
+      ]
+    },
+    {
+      "routePath": "/api/auth/profile",
+      "mountPath": "/api/auth",
+      "method": "OPTIONS",
+      "module": [
+        "api/auth/profile.ts:onRequestOptions"
+      ]
+    },
+    {
+      "routePath": "/api/auth/profile",
+      "mountPath": "/api/auth",
+      "method": "PUT",
+      "module": [
+        "api/auth/profile.ts:onRequestPut"
+      ]
+    },
+    {
+      "routePath": "/api/auth/register",
+      "mountPath": "/api/auth",
+      "method": "OPTIONS",
+      "module": [
+        "api/auth/register.ts:onRequestOptions"
+      ]
+    },
+    {
+      "routePath": "/api/auth/register",
+      "mountPath": "/api/auth",
+      "method": "POST",
+      "module": [
+        "api/auth/register.ts:onRequestPost"
+      ]
+    },
+    {
+      "routePath": "/api/auth/reset-password",
+      "mountPath": "/api/auth",
+      "method": "OPTIONS",
+      "module": [
+        "api/auth/reset-password.ts:onRequestOptions"
+      ]
+    },
+    {
+      "routePath": "/api/auth/reset-password",
+      "mountPath": "/api/auth",
+      "method": "POST",
+      "module": [
+        "api/auth/reset-password.ts:onRequestPost"
+      ]
+    },
+    {
+      "routePath": "/api/epayco/transaction",
+      "mountPath": "/api/epayco",
+      "method": "GET",
+      "module": [
+        "api/epayco/transaction.ts:onRequestGet"
+      ]
+    },
+    {
+      "routePath": "/api/epayco/transaction",
+      "mountPath": "/api/epayco",
+      "method": "OPTIONS",
+      "module": [
+        "api/epayco/transaction.ts:onRequestOptions"
+      ]
+    },
+    {
+      "routePath": "/api/epayco/webhook",
+      "mountPath": "/api/epayco",
+      "method": "POST",
+      "module": [
+        "api/epayco/webhook.ts:onRequestPost"
+      ]
+    },
+    {
+      "routePath": "/api/products/:id",
+      "mountPath": "/api/products",
+      "method": "GET",
+      "module": [
+        "api/products/[id].ts:onRequestGet"
+      ]
+    },
+    {
+      "routePath": "/api/banners",
+      "mountPath": "/api",
+      "method": "GET",
+      "module": [
+        "api/banners.ts:onRequestGet"
+      ]
+    },
+    {
+      "routePath": "/api/brands",
+      "mountPath": "/api",
+      "method": "GET",
+      "module": [
+        "api/brands.ts:onRequestGet"
+      ]
+    },
+    {
+      "routePath": "/api/categories",
+      "mountPath": "/api",
+      "method": "GET",
+      "module": [
+        "api/categories.ts:onRequestGet"
+      ]
+    },
+    {
+      "routePath": "/api/genders",
+      "mountPath": "/api",
+      "method": "GET",
+      "module": [
+        "api/genders.ts:onRequestGet"
+      ]
+    },
+    {
+      "routePath": "/api/heroes",
+      "mountPath": "/api",
+      "method": "GET",
+      "module": [
+        "api/heroes.ts:onRequestGet"
+      ]
+    },
+    {
+      "routePath": "/api/orders",
+      "mountPath": "/api",
+      "method": "OPTIONS",
+      "module": [
+        "api/orders.ts:onRequestOptions"
+      ]
+    },
+    {
+      "routePath": "/api/orders",
+      "mountPath": "/api",
+      "method": "POST",
+      "module": [
+        "api/orders.ts:onRequestPost"
+      ]
+    },
+    {
+      "routePath": "/api/products",
+      "mountPath": "/api",
+      "method": "GET",
+      "module": [
+        "api/products.ts:onRequestGet"
+      ]
+    },
+    {
+      "routePath": "/api/sports",
+      "mountPath": "/api",
+      "method": "GET",
+      "module": [
+        "api/sports.ts:onRequestGet"
+      ]
+    },
+    {
+      "routePath": "/images/:path*",
+      "mountPath": "/images",
+      "method": "GET",
+      "module": [
+        "images/[[path]].ts:onRequestGet"
+      ]
+    },
+    {
+      "routePath": "/videos/:path*",
+      "mountPath": "/videos",
+      "method": "GET",
+      "module": [
+        "videos/[[path]].ts:onRequestGet"
+      ]
+    }
+  ],
+  "baseURL": "/"
+}

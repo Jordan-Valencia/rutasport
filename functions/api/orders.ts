@@ -144,7 +144,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ env, request }) => {
     )
   } catch (e: any) {
     return new Response(
-      JSON.stringify({ error: e.message ?? 'Error interno' }),
+      JSON.stringify({ error: e.message ?? 'Error interno', name: e.name, stack: e.stack }),
       { status: 500, headers }
     )
   }

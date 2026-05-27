@@ -11,9 +11,12 @@
     "db:init:FRESH_ONLY": "wrangler d1 execute rutasport --local --file=DB/init-db.sql",
     "db:migrate:008": "wrangler d1 execute rutasport --local --file=DB/migrations/008_junction_tables.sql",
     "db:migrate:010": "wrangler d1 execute rutasport --local --file=DB/migrations/010_orders.sql",
+    "db:migrate:local": "wrangler d1 execute rutasport --local --file=DB/drizzle/0005_password_reset_tokens.sql",
     "pages:dev": "wrangler pages dev --proxy 4200 --port 8788",
     "cf": "wrangler pages dev --proxy 4200 --port 8788",
-    "deploy:cf": "wrangler pages deploy dist/CalzadoAndres/browser --project-name rutasport --branch main"
+    "deploy:cf": "wrangler pages deploy dist/CalzadoAndres/browser --project-name rutasport --branch main",
+    "deploy:migrate": "wrangler d1 execute rutasport --remote --file=DB/drizzle/0005_password_reset_tokens.sql",
+    "deploy:all": "npm run build && npm run deploy:migrate && npm run deploy:cf"
   },
   "private": true,
   "packageManager": "npm@11.9.0",
@@ -54,6 +57,6 @@
     "tailwindcss": "^4.1.12",
     "typescript": "~5.9.2",
     "vitest": "^4.0.8",
-    "wrangler": "^4.83.0"
+    "wrangler": "^4.94.0"
   }
 }
