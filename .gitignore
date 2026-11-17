@@ -45,3 +45,18 @@ __screenshots__/
 Thumbs.db
 
 /modelos
+
+# --- Secrets & local state ---
+.dev.vars
+.wrangler/
+
+# --- AI tooling artifacts ---
+.agents/
+.claude/
+.opencode/
+graphify-out/
+skills-lock.json
+
+# --- Logs & scratch ---
+*.log
+wrangler-*.txt
