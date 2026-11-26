@@ -23,10 +23,6 @@ export const routes: Routes = [
     loadComponent: () => import('./terminos/terminos.component').then(m => m.TerminosComponent),
   },
   {
-    path: 'pago/exitoso',
-    loadComponent: () => import('./pago/exitoso/exitoso.component').then(m => m.PagoExitosoComponent),
-  },
-  {
     path: 'login',
     loadComponent: () => import('./auth/login/login.component').then(m => m.LoginComponent),
   },
