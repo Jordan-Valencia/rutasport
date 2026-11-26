@@ -32,8 +32,6 @@
     "@leeoniya/ufuzzy": "^1.0.19",
     "@libsql/client": "^0.17.2",
     "drizzle-orm": "^0.45.2",
-    "epayco-checkout-community-sdk": "^1.0.1",
-    "epayco-sdk-node": "^1.4.4",
     "express": "^5.1.0",
     "gsap": "^3.15.0",
     "nodemailer": "^8.0.8",
