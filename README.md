@@ -1,6 +1,6 @@
 # RutaSport — Tienda en línea de artículos deportivos
 
-Aplicación **e-commerce en producción** para un cliente real, desarrollada de punta a punta: catálogo, carrito, órdenes, autenticación y pago en línea. Desplegada en **Cloudflare** con renderizado del lado del servidor (SSR).
+Aplicación **e-commerce en producción** para un cliente real, desarrollada de punta a punta: catálogo, carrito, autenticación y pedidos por WhatsApp. Desplegada en **Cloudflare** con renderizado del lado del servidor (SSR).
 
 > 🌐 Producción: **[ruta-sport.com](https://ruta-sport.com)**
 
@@ -9,9 +9,9 @@ Aplicación **e-commerce en producción** para un cliente real, desarrollada de 
 ## Características
 
 - **Catálogo** con filtros por deporte, género, novedades y más vendidos, con búsqueda difusa (fuzzy search).
-- **Carrito de compras** y flujo de **órdenes**.
+- **Carrito de compras**: solo aparecen los productos que el cliente va agregando, con modelo, talla, cantidad y precio.
 - **Autenticación de usuarios** y **recuperación de contraseña**.
-- **Pago en línea** integrado con **Epayco**.
+- **Pedidos por WhatsApp**: el botón **PAGAR** abre el chat con el pedido exacto ya escrito; la tienda cuadra el pago y el envío. No requiere login ni pasarela de pago.
 - **Correos transaccionales** (confirmaciones, recuperación de cuenta).
 - **Panel administrativo** para gestión de productos e inventario.
 - **SSR** (renderizado en servidor) para SEO y carga inicial rápida.
@@ -23,7 +23,7 @@ Aplicación **e-commerce en producción** para un cliente real, desarrollada de 
 | Front-end | Angular 21, TypeScript, Tailwind CSS v4, GSAP |
 | Back-end / API | Cloudflare Pages Functions (Workers), Express |
 | Base de datos | Cloudflare D1 (SQLite) + Drizzle ORM |
-| Pagos | Epayco |
+| Pedidos | WhatsApp (`wa.me`) |
 | Email | Nodemailer |
 | Deploy | Cloudflare Pages / Workers (Wrangler) |
 | Pruebas | Vitest |
@@ -68,13 +68,11 @@ npm run cf
 Crea un archivo **`.dev.vars`** (no se sube al repositorio) con:
 
 ```
-EPAYCO_PUBLIC_KEY=
-EPAYCO_PRIVATE_KEY=
-EPAYCO_CUSTOMER_ID=
-EPAYCO_TEST=true
 GMAIL_USER=
 GMAIL_APP_PASSWORD=
 ```
+
+Ya no se requieren credenciales de pasarela de pago: el pedido se confirma por WhatsApp al **315 132 2221**.
 
 ## Scripts útiles
 
