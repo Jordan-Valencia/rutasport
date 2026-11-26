@@ -4,8 +4,6 @@ import { formatCOP } from '../shared/cop.pipe'
 
 export const RUTASPORT_WHATSAPP_NUMBER = '573151322221'
 
-const CONTACT_GREETING = 'Hola RutaSport, tengo una pregunta sobre un producto.'
-
 @Injectable({ providedIn: 'root' })
 export class WhatsappService {
   buildOrderMessage(items: CartItem[]): string {
@@ -43,10 +41,6 @@ export class WhatsappService {
     return this.buildUrl(this.buildOrderMessage(items))
   }
 
-  buildContactUrl(): string {
-    return this.buildUrl(CONTACT_GREETING)
-  }
-
   private open(url: string): void {
     if (typeof window === 'undefined') return
     window.open(url, '_blank', 'noopener,noreferrer')
@@ -54,9 +48,5 @@ export class WhatsappService {
 
   openCheckout(items: CartItem[]): void {
     this.open(this.buildCheckoutUrl(items))
-  }
-
-  openContact(): void {
-    this.open(this.buildContactUrl())
   }
 }

@@ -55,11 +55,4 @@ describe('WhatsappService', () => {
     expect(encoded).toBeDefined()
     expect(decodeURIComponent(encoded!)).toBe(service.buildOrderMessage(items))
   })
-
-  it('el boton de contacto usa el mismo numero y un saludo', () => {
-    const url = service.buildContactUrl()
-
-    expect(url).toContain(`wa.me/${RUTASPORT_WHATSAPP_NUMBER}`)
-    expect(decodeURIComponent(url.split('?text=')[1]!)).toContain('Hola RutaSport')
-  })
 })
